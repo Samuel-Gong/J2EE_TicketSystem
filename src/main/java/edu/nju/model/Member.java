@@ -11,12 +11,16 @@ import javax.persistence.*;
  */
 @NamedQueries({
         @NamedQuery(
-                name = "get_member_by_id",
+                name = "get_member_by_mail",
                 query = "from Member where mail = :mail"
         ),
         @NamedQuery(
                 name = "disqulify",
                 query = "update Member m set m.qualified = 0 where m.mail = :mail"
+        ),
+        @NamedQuery(
+                name = "get_mailKey_by_mail",
+                query = "select mailKey from Member where mail = :mail"
         )
 })
 
@@ -58,7 +62,7 @@ public class Member {
     /**
      * 验证密钥
      */
-    private int key;
+    private int mailKey;
 
     public Member() {
     }
@@ -121,11 +125,11 @@ public class Member {
         this.confirmed = activated;
     }
 
-    public int getKey() {
-        return key;
+    public int getMailKey() {
+        return mailKey;
     }
 
-    public void setKey(int key) {
-        this.key = key;
+    public void setMailKey(int key) {
+        this.mailKey = key;
     }
 }

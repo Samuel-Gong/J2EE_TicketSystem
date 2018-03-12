@@ -6,10 +6,9 @@
 
   Description:  售票网站主页
 --%>
-<!DOCTYPE html>
-<html lang="zh-CN">
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
+<html>
 <head>
-    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
@@ -27,7 +26,7 @@
             padding-right: 7%;
         }
 
-        .modal-dialog .login_btn,.reg_btn {
+        .modal-dialog .login_btn, .reg_btn {
             width: 35%;
         }
 
@@ -54,10 +53,12 @@
             <a class="navbar-brand" href="#">小麦网</a>
         </div>
 
+        <p id="user-mail" class="navbar-text hidden">哈哈哈</p>
+
         <!-- 导航内容 -->
         <ul class="nav navbar-nav">
-            <li><a href="#" data-toggle="modal" data-target="#loginModal">登录</a></li>
-            <li><a href="#" data-toggle="modal" data-target="#registerModal">注册</a></li>
+            <li id="login-li"><a href="#" data-toggle="modal" data-target="#loginModal">登录</a></li>
+            <li id="register-li"><a href="#" data-toggle="modal" data-target="#registerModal">注册</a></li>
 
             <!-- 导航栏中的下拉菜单 注意下拉菜单的toggle是a标签 而不是button标签 -->
             <!-- dropdown begin -->
@@ -95,7 +96,7 @@
                 <form id="login_form" action="/member/login" method="post">
                     <div class="input-group">
                         <span class="input-group-addon">邮箱</span>
-                        <input type="text" class="form-control" name="name" placeholder="请输入邮箱">
+                        <input type="text" class="form-control" name="mail" placeholder="请输入邮箱">
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">密码</span>
@@ -124,15 +125,15 @@
                 <form id="reg_form" action="/member/register" method="post">
                     <div class="input-group">
                         <span class="input-group-addon">邮箱</span>
-                        <input type="email" class="form-control" name="reg_mail" placeholder="请输入验证邮箱">
+                        <input type="email" class="form-control" name="mail" placeholder="请输入验证邮箱">
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">密码</span>
-                        <input type="password" class="form-control" name="reg_password" placeholder="请输入密码">
+                        <input type="password" class="form-control" name="password" placeholder="请输入密码">
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">确认密码</span>
-                        <input type="password" class="form-control" name="reg_password_confirm" placeholder="请确认密码">
+                        <input type="password" class="form-control" placeholder="请确认密码">
                     </div>
                 </form>
             </div>
@@ -153,12 +154,24 @@
 <script>
     $(document).ready(function () {
         $("#login_btn").on("click", function () {
-           $("#login_form").submit();
+            $("#login_form").submit();
         });
 
         $("#reg_btn").on("click", function () {
             $("#reg_form").submit();
-        })
+        });
+
+        if (${sessionScope.containsKey("mail")}) {
+            console.log("contains mail");
+            console.log("${sessionScope.get("mail")}");
+            var user_mail = $("#user-mail");
+            user_mail.removeClass("hidden");
+            user_mail.addClass("show");
+            user_mail.text("${sessionScope.get("mail")}");
+
+            $("#login-li").addClass("hidden");
+            $("#register-li").addClass("hidden");
+        }
     });
 </script>
 </body>

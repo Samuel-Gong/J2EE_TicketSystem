@@ -12,10 +12,10 @@ public interface MemberDao {
 
     /**
      * 查看会员资料
-     * @param id 会员id
+     * @param mail 会员邮箱
      * @return 会员对象
      */
-    Member getMember(String id);
+    Member getMember(String mail);
 
     /**
      * 添加一个会员
@@ -26,10 +26,10 @@ public interface MemberDao {
 
     /**
      * 会员取消资格
-     * @param id 会员id
+     * @param 邮箱 会员邮箱
      * @return 取消资格影响行数
      */
-    int disqulify(String id);
+    int disqulify(String 邮箱);
 
     /**
      * 修改会员信息
@@ -39,4 +39,10 @@ public interface MemberDao {
     boolean updateInfo(Member member);
 
 
+    /**
+     * 获取会员的邮箱密钥
+     * @param mail 会员邮箱
+     * @return 邮箱密钥
+     */
+    int getMailKey(String mail);
 }

@@ -19,17 +19,19 @@ public interface MemberService {
 
     /**
      * 邮箱验证
+     * @param mail  邮箱
+     * @param mailKey   邮箱密钥
      * @return 是否验证成功
      */
-    boolean mailConfirm(String mail);
+    boolean mailConfirm(String mail, int mailKey);
 
     /**
      * 登录
-     * @param id 会员id
+     * @param mail 会员邮箱
      * @param password 密码
      * @return 是否登录成功
      */
-    boolean logIn(String id, String password);
+    boolean logIn(String mail, String password);
 
     /**
      * 修改会员信息

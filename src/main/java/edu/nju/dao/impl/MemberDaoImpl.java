@@ -15,12 +15,12 @@ import org.hibernate.Transaction;
 public class MemberDaoImpl implements MemberDao {
 
     @Override
-    public Member getMember(String id) {
+    public Member getMember(String mail) {
         Session session = HibernateUtil.currentSession();
         Transaction tx = session.beginTransaction();
 
-        Member member = session.createNamedQuery("get_member_by_id", Member.class)
-                .setParameter("id", id)
+        Member member = session.createNamedQuery("get_member_by_mail", Member.class)
+                .setParameter("mail", mail)
                 .getSingleResult();
 
         tx.commit();
@@ -43,13 +43,13 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public int disqulify(String id) {
+    public int disqulify(String mail) {
 
         Session session = HibernateUtil.currentSession();
         Transaction tx = session.beginTransaction();
 
         int result = session.createNamedQuery("disqulify")
-                .setParameter("id", id)
+                .setParameter("mail", mail)
                 .executeUpdate();
 
         tx.commit();
@@ -70,5 +70,21 @@ public class MemberDaoImpl implements MemberDao {
         HibernateUtil.closeSession();
 
         return true;
+    }
+
+    @Override
+    public int getMailKey(String mail) {
+
+        Session session = HibernateUtil.currentSession();
+        Transaction tx = session.beginTransaction();
+
+        int mailKey = session.createNamedQuery("get_mailKey_by_mail", Integer.class)
+                .setParameter("mail", mail)
+                .getSingleResult();
+
+        tx.commit();
+        HibernateUtil.closeSession();
+
+        return mailKey;
     }
 }

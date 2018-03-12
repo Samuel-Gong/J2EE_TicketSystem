@@ -17,36 +17,30 @@ public class MemberServiceImpl implements MemberService {
 
     private MemberDao memberDao;
 
-    private static final String DOMAIN = "localhost:8888//member/mailConfirm?";
+    private static final String DOMAIN = "http://localhost:8888/member/confirmMail?";
 
     @Override
     public boolean register(Member member) {
 
-        //TODO 生成密钥
-        member.setKey(generateKey());
+        //生成密钥
+        member.setMailKey(generateKey());
+        //资格设置为true
+        member.setQualified(true);
 
-        String msg = DOMAIN + "mail" + "=" + "&&" + "key" + "=" + member.getKey();
+        String msg = DOMAIN + "mail" + "=" + member.getMail() + "&&" + "mailKey" + "=" + member.getMailKey();
 
         //返回是否注册成功，且邮件是否发送成功
         return memberDao.addMember(member) && MailUtil.sendMail(member.getMail(), msg);
     }
 
-    /**
-     * 生成验证邮箱的公钥
-     * @return 公钥的数字
-     */
-    private int generateKey() {
-        return new Random().nextInt();
+    @Override
+    public boolean mailConfirm(String mail, int mailKey) {
+        return mailKey == memberDao.getMember(mail).getMailKey();
     }
 
     @Override
-    public boolean mailConfirm(String mail) {
-        return false;
-    }
-
-    @Override
-    public boolean logIn(String id, String password) {
-        return false;
+    public boolean logIn(String mail, String password) {
+        return password.equals(memberDao.getMember(mail).getPassword());
     }
 
     @Override
@@ -60,5 +54,13 @@ public class MemberServiceImpl implements MemberService {
 
     public void setMemberDao(MemberDao memberDao) {
         this.memberDao = memberDao;
+    }
+
+    /**
+     * 生成验证邮箱的公钥
+     * @return 公钥的数字
+     */
+    private int generateKey() {
+        return new Random().nextInt();
     }
 }

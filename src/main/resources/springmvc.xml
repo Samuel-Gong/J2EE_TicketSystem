@@ -21,6 +21,9 @@
         <!--</property>-->
     <!--</bean>-->
 
+    <!-- 设置default jsp -->
+    <mvc:view-controller path="/" view-name="index"/>
+
     <!-- 使用注解开发，不用配置controller，需要配置一个组件扫描器 -->
     <context:component-scan base-package="edu.nju.controller"/>
     <context:annotation-config/>
@@ -70,7 +73,7 @@
         <!-- 文件的后缀名 -->
         <property name="suffix" value=".jsp"/>
         <!-- 视图解析器的优先级，数字越大，优先级越低 -->
-        <property name="order" value="2"/>
+        <property name="order" value="1"/>
     </bean>
 
 </beans>
