@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Normalize -->
+    <link href="../../css/normalize.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- btn-group begin -->
+<div class="btn-group">
+    <button type="button" class="btn btn-default">按钮1</button>
+    <button type="button" class="btn btn-success">按钮2</button>
+
+    <!-- 将下拉按钮嵌套在按钮组里面时，应该用btn-group替换dropdown -->
+    <div class="btn-group">
+        <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">城市
+            <span class="caret"></span>
+        </button>
+        <ol class="dropdown-menu">
+            <li>
+                <a>1</a>
+            </li>
+            <li>
+                <a>2</a>
+            </li>
+        </ol>
+    </div>
+</div>
+<!-- btn-group end -->
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="../../js/jquery-3.3.1.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="../../js/bootstrap.min.js"></script>
+</body>
+</html>

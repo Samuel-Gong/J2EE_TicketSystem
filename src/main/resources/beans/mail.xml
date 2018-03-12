@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.163.com"/>
+        <property name="port" value="25"/>
+        <property name="username" value="a52212498@163.com"/>
+        <property name="password" value="gong15123537637"/>
+
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.starttls.required">true</prop>
+                <prop key="mail.smtp.timeout">25000</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- 自定义电子邮件模版 -->
+    <bean id="customeMailMessage"
+          class="org.springframework.mail.SimpleMailMessage">
+
+        <property name="from" value="a52212498@163.com" />
+        <property name="subject" value="注册验证" />
+        <property name="text">
+            <value>
+                <![CDATA[
+            您好，这是一封验证邮件，点击下方链接，验证该邮箱。
+			验证地址 : %s
+		]]>
+            </value>
+        </property>
+    </bean>
+
+    <bean id="mailUtil" class="edu.nju.util.MailUtil">
+        <property name="mailSender" ref="mailSender"/>
+        <property name="simpleMailMessage" ref="customeMailMessage"/>
+    </bean>
+
+</beans>

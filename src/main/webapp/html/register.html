@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+
+    <!-- Normalize -->
+    <link href="../css/normalize.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .login_header {
+            height: 88px;
+            border-bottom: 1px solid #f5f5f5;
+            background-color: #ffffff;
+        }
+
+        .wrap {
+            width: 1000px;
+            margin: 0 auto;
+            padding: 20px 0;
+            background-color: #ffffff;
+        }
+
+        .header_left:after {
+            content: "";
+            display: block;
+            clear: both;
+        }
+
+        .header_left .header_logo {
+            width: 146px;
+            height: 47px;
+            padding-right: 20px;
+            overflow: hidden;
+            float: left;
+            display: inline-block;
+            background: url(//dui.dmcdn.cn/dm_2015/index/img/logo-334-120.png) no-repeat;
+            background-size: 126px 47px;
+        }
+
+        .header_logo img {
+            display: none;
+        }
+
+        .header_left .header_title {
+            line-height: 47px;
+            font-size: 28px;
+            color: #333;
+            font-family: Microsoft YaHei;
+            border-left: 1px solid #e5e5e5;
+            padding-left: 20px;
+            margin: 0;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+
+<!-- header begin -->
+<header class="login_header">
+    <div class="wrap">
+        <div class="header_left">
+            <a class="header_logo" href="http://www.damai.cn" title="大麦"></a>
+            <h1 class="header_title">账户注册</h1>
+        </div>
+    </div>
+</header>
+<!-- header end -->
+
+<!-- reg-body begin -->
+<!--<div class="main clearfix">-->
+    <!--<div class="login_box">-->
+        <!--<div class="login_inner">-->
+            <!--<div class="login_change">-->
+                <!--<form action="#" method="post" id="myform">-->
+                    <!--<div class="login_reg">-->
+                        <!--<ul class="reg_list">-->
+                            <!--<li>-->
+                                <!--<div id="m_account" class="reg_inner w_378" style="position:relative; z-index:1">-->
+                                    <!--<span class="reg_email"></span>-->
+                                    <!--<div id="box">-->
+                                        <!--<div id="select" onchange="select_change">-->
+                                            <!--<h3>-->
+                                                <!--<i class="m_china"></i>-->
+                                                <!--<b class="fl" style="display:none;">中国</b>-->
+                                                <!--<b class="fr" style="display: block;">+86</b>-->
+                                            <!--</h3>-->
+                                            <!--<div class="hide">-->
+                                                <!--<p>-->
+                                                    <!--<i class="m_china"></i>-->
+                                                    <!--<b class="fl">中国</b>-->
+                                                    <!--<b class="fr">+86</b>-->
+                                                <!--</p>-->
+                                                <!--<p>-->
+                                                    <!--<i class="m_hongkong"></i>-->
+                                                    <!--<b class="fl">香港</b>-->
+                                                    <!--<b class="fr">+852</b>-->
+                                                <!--</p>-->
+                                                <!--<p>-->
+                                                    <!--<i class="m_macao"></i>-->
+                                                    <!--<b class="fl">澳门</b>-->
+                                                    <!--<b class="fr">+853</b>-->
+                                                <!--</p>-->
+                                                <!--<p>-->
+                                                    <!--<i class="m_taiwan"></i>-->
+                                                    <!--<b class="fl">台湾</b>-->
+                                                    <!--<b class="fr">+886</b>-->
+                                                <!--</p>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</div>-->
+
+                                    <!--<input type="text" class="text" name="user_Email" id="user_Email" value="请输入手机号码" onblur="if(this.value=='') {this.value='请输入手机号码';}" onfocus="if(this.value=='请输入手机号码') {this.value='';}" style="width:130px; position: absolute; top:10px; left:205px;">-->
+                                    <!--<strong class="reg_icon" style=" display:none;"></strong>-->
+                                <!--</div>-->
+                                <!--<p class="reg_tips" id="email_tips" style="display: none;"></p>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<div class="reg_inner">-->
+                                    <!--<span class="reg_password"></span>-->
+                                    <!--<input type="text" id="txt_pass" class="text" maxlength="16" value="登录密码" onblur="if(this.value=='') {this.value='登录密码';}" onfocus="if(this.value=='登录密码') {this.value='';}" style="width: 312px; display: block;"><input type="password" id="user_PassWord" name="user_PassWord" class="text" maxlength="16" style="width: 312px; display: none;">-->
+                                    <!--<strong class="reg_icon" style=" display:none;"></strong>-->
+                                    <!--<p class="reg_letter" id="capsLock_tips" style=" display:none;">键盘大写锁定被打开，请注意大小写</p>-->
+                                <!--</div>-->
+                                <!--<p class="reg_tips" id="pass_tips" style="display: none;"></p>-->
+                                <!--<div class="reg_strong" style=" width:500px; display:none;">-->
+                                    <!--<span id="strong_1">弱</span>-->
+                                    <!--<span id="strong_2">中</span>-->
+                                    <!--<span id="strong_3">强</span>-->
+                                <!--</div>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<div class="reg_inner">-->
+                                    <!--<span class="reg_password"></span>-->
+                                    <!--<input type="text" id="txt_pass2" class="text" maxlength="16" value="确认密码" onblur="if(this.value=='') {this.value='确认密码';}" onfocus="if(this.value=='确认密码') {this.value='';}" style="width: 312px; display: block;"><input type="password" id="user_PassWord2" name="user_PassWord2" class="text" maxlength="16" style="width: 312px; display: none;">-->
+                                    <!--<strong class="reg_icon" style=" display:none;"></strong>-->
+                                <!--</div>-->
+                                <!--<p class="reg_tips" id="pass_tips_ag" style="display: none;"></p>-->
+                            <!--</li>-->
+                            <!--<li>-->
+                                <!--<input type="hidden" id="csessionid" name="csessionid">-->
+                                <!--<input type="hidden" id="sig" name="sig">-->
+                                <!--<input type="hidden" id="alitoken" name="alitoken">-->
+                                <!--<input type="hidden" id="scene" name="scene">-->
+                                <!--<div class="reg_inner">-->
+                                    <!--<span class="reg_check"></span>-->
+                                <!--</div>-->
+                                <!--<div id="dom_id" class="nc-container" data-nc-idx="1">-->
+                                    <!--<div id="nc_1_wrapper" class="nc_wrapper">-->
+                                        <!--<div id="nc_1_n1t" class="nc_scale">-->
+                                            <!--<div id="nc_1__bg" class="nc_bg" style="width: 0px;"></div>-->
+                                            <!--<span id="nc_1_n1z" class="nc_iconfont btn_slide" style="left: 0px;"></span>-->
+                                            <!--<div id="nc_1__scale_text" class="scale_text slidetounlock"><span class="nc-lang-cnt" data-nc-lang="_startTEXT">请按住滑块，拖动到最右边</span></div>-->
+                                            <!--<div id="nc_1_clickCaptcha" class="clickCaptcha">-->
+                                                <!--<div class="clickCaptcha_text">-->
+                                                    <!--<b id="nc_1__captcha_text" class="nc_captch_text"></b>-->
+                                                    <!--<i id="nc_1__btn_2" class="nc_iconfont nc_btn_2 btn_refresh"></i>-->
+                                                <!--</div>-->
+                                                <!--<div class="clickCaptcha_img"></div>-->
+                                                <!--<div class="clickCaptcha_btn"></div>-->
+                                            <!--</div>-->
+                                            <!--<div id="nc_1_imgCaptcha" class="imgCaptcha">-->
+                                                <!--<div class="imgCaptcha_text"><input id="nc_1_captcha_input" maxlength="6" type="text" style="ime-mode:disabled"></div>-->
+                                                <!--<div class="imgCaptcha_img" id="nc_1__imgCaptcha_img"></div>-->
+                                                <!--<i id="nc_1__btn_1" class="nc_iconfont nc_btn_1 btn_refresh" onclick="document.getElementById('nc_1__imgCaptcha_img').children[0].click()"></i>-->
+                                                <!--<div class="imgCaptcha_btn">-->
+                                                    <!--<div id="nc_1__captcha_img_text" class="nc_captcha_img_text"></div>-->
+                                                    <!--<div id="nc_1_scale_submit" class="nc_scale_submit"></div>-->
+                                                <!--</div>-->
+                                            <!--</div>-->
+                                            <!--<div id="nc_1_cc" class="nc-cc"></div>-->
+                                            <!--<i id="nc_1__voicebtn" tabindex="0" role="button" class="nc_voicebtn nc_iconfont" style="display:none"></i>-->
+                                            <!--<b id="nc_1__helpbtn" class="nc_helpbtn"><span class="nc-lang-cnt" data-nc-lang="_learning">了解新功能</span></b>-->
+                                        <!--</div>-->
+                                        <!--<div id="nc_1__voice" class="nc_voice"></div>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                                <!--<p class="reg_tips" id="pic_code_tips" style=" display:none;"></p>-->
+                            <!--</li>-->
+                            <!--<li id="verify_phone">-->
+                                <!--<div class="reg_inner" style="position:static !important">-->
+                                    <!--<span class="reg_mess"></span>-->
+                                    <!--<input type="text" name="mcode" id="mobile_verifyCode" class="text" maxlength="6" value="短信验证码" onblur="if(this.value=='') {this.value='短信验证码';}" onfocus="if(this.value=='短信验证码') {this.value='';}" style="width:160px;">-->
+                                <!--</div>-->
+                                <!--<a id="get_verifyCode" class="login_btn3 ml5" href="javascript:void(0)">获取验证码</a>-->
+                                <!--<p class="reg_tips" id="phoneVerify" style="display: none;"></p>-->
+                            <!--</li>-->
+
+                        <!--</ul>-->
+
+                        <!--<p class="reg_tips" id="pic_code_tips" style=" display:none;"></p>-->
+
+                        <!--<input type="button" id="_regbtn" class="login_btn mt5 mb5 z-dis" value="立即注册" onclick="CheckSubmit()">-->
+
+                        <!--<p class="reg_txt">-->
+                            <!--<label class="checkbox">-->
+                                <!--<input type="checkbox" id="checkbox" name="checkbox">-->
+                                <!--<span>-->
+                  <!--&lt;!&ndash; 我已阅读并同意<a href="http://help.damai.cn/damai/contents/288/2216.html" target="_blank">《大麦网会员服务条款》</a> &ndash;&gt;-->
+                  <!--我已阅读并同意<a href="https://x.damai.cn/markets/app/agreement" target="_blank">《大麦网会员服务协议》</a>与<a href="https://x.damai.cn/markets/app/clause" target="_blank">《隐私权专项条款》</a>-->
+                <!--</span>-->
+                            <!--</label>-->
+                        <!--</p>-->
+
+                    <!--</div>-->
+                <!--</form>-->
+                <!--<div class="login_reg">-->
+                    <!--<ul class="reg_list" id="form_inputs">-->
+                        <!--<li id="regLoginCode" style=" display:none;">-->
+                            <!--<div class="reg_inner">-->
+                                <!--<span class="reg_check"></span>-->
+                                <!--<input type="text" class="text" name="reg_code" id="reg_code" maxlength="4" value="验证码" onblur="if(this.value=='') {this.value='验证码';}" onfocus="if(this.value=='验证码') {this.value='';}" style="width:160px;">-->
+                                <!--<strong class="reg_icon" id="reg_login_code_tips" style=" display:none;"></strong>-->
+                            <!--</div>-->
+                            <!--<span class="reg_img">-->
+                <!--<img id="cImg" src="/VerifyShow.aspx" onclick="this.src='/VerifyShow.aspx?d='+new Date().toLocaleString()" style=" cursor:pointer; vertical-align:middle; float:left;" alt="点击获取验证码" width="96" height="45">-->
+              <!--</span>-->
+                            <!--<a class="reg_else" href="javascript:void(0)" onclick="document.getElementById('cImg').src='/VerifyShow.aspx?d='+new Date().toLocaleString()">换一换</a>-->
+                            <!--<p class="reg_tips" id="reg_codemsg" style="display:none;"></p>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+
+
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+
+    <!--</div>-->
+
+<!--</div>-->
+<!-- reg-body end -->
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="../js/jquery-3.3.1.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="../js/bootstrap.min.js"></script>
+
+</body>
+</html>
