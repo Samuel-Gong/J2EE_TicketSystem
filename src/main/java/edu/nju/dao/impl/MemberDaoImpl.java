@@ -5,6 +5,7 @@ import edu.nju.model.Member;
 import edu.nju.util.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author Shenmiu
@@ -12,6 +13,7 @@ import org.hibernate.Transaction;
  * <p>
  * MemberDao接口实现
  */
+@Repository("memberDao")
 public class MemberDaoImpl implements MemberDao {
 
     @Override
@@ -48,7 +50,7 @@ public class MemberDaoImpl implements MemberDao {
         Session session = HibernateUtil.currentSession();
         Transaction tx = session.beginTransaction();
 
-        int result = session.createNamedQuery("disqulify")
+        int result = session.createNamedQuery("disqualify")
                 .setParameter("mail", mail)
                 .executeUpdate();
 
@@ -59,7 +61,7 @@ public class MemberDaoImpl implements MemberDao {
     }
 
     @Override
-    public boolean updateInfo(Member member) {
+    public boolean updateMember(Member member) {
 
         Session session = HibernateUtil.currentSession();
         Transaction tx = session.beginTransaction();

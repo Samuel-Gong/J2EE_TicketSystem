@@ -1,9 +1,11 @@
-package edu.nju.bo.impl;
+package edu.nju.service.impl;
 
-import edu.nju.bo.MemberService;
 import edu.nju.dao.MemberDao;
 import edu.nju.model.Member;
+import edu.nju.service.MemberService;
 import edu.nju.util.MailUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Random;
 
@@ -13,8 +15,10 @@ import java.util.Random;
  *
  * Member业务逻辑实现
  */
+@Service("memberService")
 public class MemberServiceImpl implements MemberService {
 
+    @Autowired
     private MemberDao memberDao;
 
     private static final String DOMAIN = "http://localhost:8888/member/confirmMail?";
@@ -44,8 +48,23 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean updateInfo(Member member) {
+    public boolean modifyPassword(String mail, String oldPassword, String newPassword) {
+        Member member = memberDao.getMember(mail);
+        if(oldPassword.equals(member.getPassword())){
+            member.setPassword(newPassword);
+            return updateInfo(member);
+        }
         return false;
+    }
+
+    @Override
+    public boolean disqualify(String mail) {
+        return memberDao.disqulify(mail) > 0;
+    }
+
+    @Override
+    public boolean updateInfo(Member member) {
+        return memberDao.updateMember(member);
     }
 
     public MemberDao getMemberDao() {

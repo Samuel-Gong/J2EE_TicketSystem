@@ -1,23 +1,51 @@
 package edu.nju.model;
 
-import edu.nju.model.embedable.Address;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.annotation.JSONType;
+import org.hibernate.annotations.NamedQueries;
+import org.hibernate.annotations.NamedQuery;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Shenmiu
  * @date 2018/03/04
+ * <p>
+ * 场馆
  */
+@NamedQueries({
+        @NamedQuery(
+                name = "get_venue_by_id",
+                query = "from Venue where id = :id"
+        )
+})
+
 @Entity
 @Table(name = "venue")
+@JSONType(orders = {"id", "name", "city", "password", "rowNum", "columnNum"})
 public class Venue {
 
     /**
      * 7位场馆编号
+     * <p>
+     * 使用主键自增策略
      */
     @Id
     @Column(length = 7)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    /**
+     * 场馆名称
+     */
+    private String name;
+
+    /**
+     * 城市
+     */
+    private String city;
 
     /**
      * 密码
@@ -25,22 +53,33 @@ public class Venue {
     private String password;
 
     /**
-     * 地址
+     * 行数
      */
-    @Embedded
-    private Address address;
+    private int rowNum;
 
     /**
-     * 座位分布，json存储
+     * 列数
      */
-    @Column(name = "seat_distribution")
-    private String seatDistribution;
+    private int columnNum;
 
-    public String getId() {
+    /**
+     * 座位分布
+     */
+    @OneToMany(mappedBy = "venue", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private List<VenueSeat> seatMap = new ArrayList<>();
+
+    /**
+     * 场馆计划
+     */
+    @JSONField(serialize = false, deserialize = false)
+    @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VenuePlan> venuePlans = new ArrayList<>();
+
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -52,19 +91,51 @@ public class Venue {
         this.password = password;
     }
 
-    public Address getAddress() {
-        return address;
+    public List<VenueSeat> getSeatMap() {
+        return seatMap;
     }
 
-    public void setAddress(Address address) {
-        this.address = address;
+    public void setSeatMap(List<VenueSeat> seatMap) {
+        this.seatMap = seatMap;
     }
 
-    public String getSeatDistribution() {
-        return seatDistribution;
+    public String getName() {
+        return name;
     }
 
-    public void setSeatDistribution(String seatDistribution) {
-        this.seatDistribution = seatDistribution;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public int getRowNum() {
+        return rowNum;
+    }
+
+    public void setRowNum(int rowNum) {
+        this.rowNum = rowNum;
+    }
+
+    public int getColumnNum() {
+        return columnNum;
+    }
+
+    public void setColumnNum(int columnNum) {
+        this.columnNum = columnNum;
+    }
+
+    public List<VenuePlan> getVenuePlans() {
+        return venuePlans;
+    }
+
+    public void setVenuePlans(List<VenuePlan> venuePlans) {
+        this.venuePlans = venuePlans;
     }
 }

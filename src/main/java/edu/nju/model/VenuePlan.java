@@ -1,9 +1,9 @@
 package edu.nju.model;
 
-import edu.nju.model.embedable.PlanPK;
 import edu.nju.util.ShowType;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 /**
  * @author Shenmiu
@@ -16,16 +16,30 @@ import javax.persistence.*;
 public class VenuePlan {
 
     /**
-     * 场馆编号和日期作为联合主键
+     * 场馆计划的id
      */
-    @EmbeddedId
-    private PlanPK planPK;
+    @Id
+    private int venuePlanId;
 
     /**
-     * 场馆价格分布，json格式存储
+     * 场馆计划开始时间
      */
-    @Column(name = "price_distribution")
-    private String priceDistribution;
+    private LocalDateTime begin;
+
+    /**
+     * 场馆计划结束时间
+     */
+    private LocalDateTime end;
+
+    /**
+     * 与场馆多对一，外键为场馆编号
+     */
+    @ManyToOne
+    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
+    private Venue venue;
+
+    @OneToOne(mappedBy = "venuePlan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private SeatType seatType;
 
     /**
      * 演出类型

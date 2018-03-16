@@ -1,4 +1,4 @@
-package edu.nju.model.embedable;
+package edu.nju.model.embeddable;
 
 import javax.persistence.Embeddable;
 import java.io.Serializable;

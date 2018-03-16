@@ -939,249 +939,355 @@
     <table id="238" parent="12" name="order">
       <Engine>MyISAM</Engine>
     </table>
-    <table id="239" parent="12" name="ticket">
+    <table id="239" parent="12" name="seat_type">
       <Engine>MyISAM</Engine>
     </table>
-    <table id="240" parent="12" name="venue">
+    <table id="240" parent="12" name="ticket">
       <Engine>MyISAM</Engine>
     </table>
-    <table id="241" parent="12" name="venue_plan">
+    <table id="241" parent="12" name="venue">
       <Engine>MyISAM</Engine>
     </table>
-    <column id="242" parent="235" name="id">
+    <table id="242" parent="12" name="venue_plan">
+      <Engine>MyISAM</Engine>
+    </table>
+    <table id="243" parent="12" name="venue_plan_seat">
+      <Engine>MyISAM</Engine>
+    </table>
+    <table id="244" parent="12" name="venue_seat">
+      <Engine>MyISAM</Engine>
+    </table>
+    <column id="245" parent="235" name="id">
       <Position>1</Position>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="243" parent="235" name="balance">
+    <column id="246" parent="235" name="balance">
       <Position>2</Position>
       <DataType>double|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="244" parent="235" name="password">
+    <column id="247" parent="235" name="password">
       <Position>3</Position>
       <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="245" parent="235" name="PRIMARY">
+    <key id="248" parent="235" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="246" parent="236" name="id">
+    <column id="249" parent="236" name="id">
       <Position>1</Position>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="247" parent="236" name="password">
+    <column id="250" parent="236" name="password">
       <Position>2</Position>
       <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="248" parent="236" name="PRIMARY">
+    <key id="251" parent="236" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="249" parent="237" name="mail">
+    <column id="252" parent="237" name="mail">
       <Position>1</Position>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="250" parent="237" name="confirmed">
+    <column id="253" parent="237" name="confirmed">
       <Position>2</Position>
       <DataType>bit(1)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="251" parent="237" name="mailKey">
+    <column id="254" parent="237" name="mailKey">
       <Position>3</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="252" parent="237" name="password">
+    <column id="255" parent="237" name="password">
       <Position>4</Position>
       <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="253" parent="237" name="points">
+    <column id="256" parent="237" name="points">
       <Position>5</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="254" parent="237" name="qualified">
+    <column id="257" parent="237" name="qualified">
       <Position>6</Position>
       <DataType>bit(1)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="255" parent="237" name="totalComsumption">
-      <Position>7</Position>
-      <DataType>double|0</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <key id="256" parent="237" name="PRIMARY">
+    <key id="258" parent="237" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>mail</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="257" parent="238" name="orderID">
+    <column id="259" parent="238" name="orderId">
       <Position>1</Position>
       <DataType>varchar(255)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="258" parent="238" name="create_time">
+    <column id="260" parent="238" name="create_time">
       <Position>2</Position>
       <DataType>datetime|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="259" parent="238" name="memberID">
+    <column id="261" parent="238" name="order_status">
       <Position>3</Position>
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
+      <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="260" parent="238" name="order_status">
+    <column id="262" parent="238" name="memberId">
       <Position>4</Position>
       <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="261" parent="238" name="venueID">
+    <column id="263" parent="238" name="venueId">
       <Position>5</Position>
-      <DataType>varchar(7)|0</DataType>
+      <DataType>int(11)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="262" parent="238" name="PRIMARY">
+    <index id="264" parent="238" name="FK_MEMBER">
+      <ColNames>memberId</ColNames>
+    </index>
+    <index id="265" parent="238" name="FK_VENUE">
+      <ColNames>venueId</ColNames>
+    </index>
+    <key id="266" parent="238" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
-      <ColNames>orderID</ColNames>
+      <ColNames>orderId</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="263" parent="239" name="c">
+    <column id="267" parent="239" name="typeChar">
       <Position>1</Position>
-      <DataType>int(11)|0</DataType>
+      <DataType>char(1)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="264" parent="239" name="orderNum">
+    <column id="268" parent="239" name="venuePlanId">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="265" parent="239" name="row">
+    <column id="269" parent="239" name="description">
       <Position>3</Position>
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
+      <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="266" parent="239" name="price">
+    <column id="270" parent="239" name="price">
       <Position>4</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="267" parent="239" name="column">
-      <Position>5</Position>
+    <index id="271" parent="239" name="UK_9kwhs8c7how5rf9r1fqeauv22">
+      <ColNames>venuePlanId</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="272" parent="239" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>typeChar
+venuePlanId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <key id="273" parent="239" name="UK_9kwhs8c7how5rf9r1fqeauv22">
+      <ColNames>venuePlanId</ColNames>
+      <UnderlyingIndexName>UK_9kwhs8c7how5rf9r1fqeauv22</UnderlyingIndexName>
+    </key>
+    <column id="274" parent="240" name="column">
+      <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="268" parent="239" name="PRIMARY">
+    <column id="275" parent="240" name="orderNum">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="276" parent="240" name="row">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="277" parent="240" name="price">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="278" parent="240" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
-      <ColNames>c
+      <ColNames>column
 orderNum
 row</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="269" parent="240" name="id">
+    <column id="279" parent="241" name="id">
       <Position>1</Position>
-      <DataType>varchar(7)|0</DataType>
+      <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
+      <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="270" parent="240" name="password">
+    <column id="280" parent="241" name="city">
       <Position>2</Position>
       <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="271" parent="240" name="name">
+    <column id="281" parent="241" name="columnNum">
       <Position>3</Position>
-      <DataType>varchar(255)|0</DataType>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="272" parent="240" name="seatMap">
+    <column id="282" parent="241" name="name">
       <Position>4</Position>
       <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="273" parent="240" name="city">
+    <column id="283" parent="241" name="password">
       <Position>5</Position>
       <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="274" parent="240" name="columnNum">
+    <column id="284" parent="241" name="rowNum">
       <Position>6</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="275" parent="240" name="rowNum">
-      <Position>7</Position>
-      <DataType>int(11)|0</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <key id="276" parent="240" name="PRIMARY">
+    <key id="285" parent="241" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="277" parent="241" name="begin">
+    <column id="286" parent="242" name="venuePlanId">
       <Position>1</Position>
-      <DataType>datetime|0</DataType>
+      <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="278" parent="241" name="end">
+    <column id="287" parent="242" name="begin">
       <Position>2</Position>
       <DataType>datetime|0</DataType>
-      <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="279" parent="241" name="venueID">
+    <column id="288" parent="242" name="description">
       <Position>3</Position>
-      <DataType>varchar(7)|0</DataType>
-      <NotNull>1</NotNull>
-      <ColumnKind>normal</ColumnKind>
-    </column>
-    <column id="280" parent="241" name="description">
-      <Position>4</Position>
       <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="281" parent="241" name="price_distribution">
+    <column id="289" parent="242" name="end">
+      <Position>4</Position>
+      <DataType>datetime|0</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="290" parent="242" name="show_type">
       <Position>5</Position>
       <DataType>varchar(255)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="282" parent="241" name="show_type">
+    <column id="291" parent="242" name="venueId">
       <Position>6</Position>
-      <DataType>varchar(255)|0</DataType>
+      <DataType>int(11)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="283" parent="241" name="PRIMARY">
+    <index id="292" parent="242" name="FK_VENUE">
+      <ColNames>venueId</ColNames>
+    </index>
+    <key id="293" parent="242" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
-      <ColNames>begin
-end
-venueID</ColNames>
+      <ColNames>venuePlanId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="294" parent="243" name="column">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="295" parent="243" name="row">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="296" parent="243" name="venuePlanId">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="297" parent="243" name="typeChar">
+      <Position>4</Position>
+      <DataType>char(1)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="298" parent="243" name="FK_VENUE_PLAN">
+      <ColNames>venuePlanId</ColNames>
+    </index>
+    <index id="299" parent="243" name="FKlcqtjv8h0akscqy1uait3w6y7">
+      <ColNames>typeChar
+venuePlanId</ColNames>
+    </index>
+    <key id="300" parent="243" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>column
+row
+venuePlanId</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="301" parent="244" name="column">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="302" parent="244" name="row">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="303" parent="244" name="venueId">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="304" parent="244" name="hasSeat">
+      <Position>4</Position>
+      <DataType>bit(1)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="305" parent="244" name="FK_VENUE">
+      <ColNames>venueId</ColNames>
+    </index>
+    <key id="306" parent="244" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>column
+row
+venueId</ColNames>
       <Primary>1</Primary>
     </key>
   </database-model>

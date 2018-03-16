@@ -17,18 +17,7 @@ public class Order {
      * 订单号
      */
     @Id
-    private String orderID;
-
-    /**
-     * 会员号
-     */
-    private int memberID;
-
-    /**
-     * 7位场馆编号
-     */
-    @Column(length = 7)
-    private String venueID;
+    private String orderId;
 
     /**
      * 订单创建时间
@@ -43,31 +32,30 @@ public class Order {
     @Enumerated(value = EnumType.STRING)
     private OrderStatus orderStatus;
 
-    public Order() {
+    //TODO
+//    @OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<VenueSeat> seatList = new ArrayList<>();
+
+    /**
+     * 与会员多对一，外键为会员id
+     */
+    @ManyToOne
+    @JoinColumn(name = "memberId", foreignKey = @ForeignKey(name = "FK_MEMBER"))
+    private Member member;
+
+    /**
+     * 与场馆多对一，外键为场馆id
+     */
+    @ManyToOne
+    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
+    private Venue venue;
+
+    public String getOrderId() {
+        return orderId;
     }
 
-    public String getOrderID() {
-        return orderID;
-    }
-
-    public void setOrderID(String orderID) {
-        this.orderID = orderID;
-    }
-
-    public int getMemberID() {
-        return memberID;
-    }
-
-    public void setMemberID(int memberID) {
-        this.memberID = memberID;
-    }
-
-    public String getVenueID() {
-        return venueID;
-    }
-
-    public void setVenueID(String venueID) {
-        this.venueID = venueID;
+    public void setOrderId(String orderID) {
+        this.orderId = orderID;
     }
 
     public OrderStatus getOrderStatus() {

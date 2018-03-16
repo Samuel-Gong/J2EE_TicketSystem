@@ -1,4 +1,4 @@
-package edu.nju.bo;
+package edu.nju.service;
 
 import edu.nju.model.Member;
 
@@ -34,10 +34,25 @@ public interface MemberService {
     boolean logIn(String mail, String password);
 
     /**
+     * 修改密码
+     * @param mail 会员邮箱
+     * @param oldPassword 原密码
+     * @param newPassword 新密码
+     * @return
+     */
+    boolean modifyPassword(String mail, String oldPassword, String newPassword);
+
+    /**
      * 修改会员信息
      * @param member 会员信息
      * @return 是否修改成功
      */
     boolean updateInfo(Member member);
 
+    /**
+     * 会员取消资格
+     * @param mail 会员邮箱
+     * @return 是否取消成功
+     */
+    boolean disqualify(String mail);
 }

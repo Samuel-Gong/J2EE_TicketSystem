@@ -2,6 +2,7 @@ package edu.nju.model;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * @author Shenmiu
@@ -15,7 +16,7 @@ import javax.persistence.*;
                 query = "from Member where mail = :mail"
         ),
         @NamedQuery(
-                name = "disqulify",
+                name = "disqualify",
                 query = "update Member m set m.qualified = 0 where m.mail = :mail"
         ),
         @NamedQuery(
@@ -50,11 +51,6 @@ public class Member {
     private int points;
 
     /**
-     * 消费总额
-     */
-    private double totalComsumption;
-
-    /**
      * 是否已经经过邮箱激活
      */
     private boolean confirmed;
@@ -63,6 +59,12 @@ public class Member {
      * 验证密钥
      */
     private int mailKey;
+
+    /**
+     * 会员的订单
+     */
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orderList;
 
     public Member() {
     }
@@ -73,7 +75,6 @@ public class Member {
 
         this.qualified = true;
         this.points = 0;
-        this.totalComsumption = 0;
         this.confirmed = false;
     }
 
@@ -107,14 +108,6 @@ public class Member {
 
     public void setPoints(int points) {
         this.points = points;
-    }
-
-    public double getTotalComsumption() {
-        return totalComsumption;
-    }
-
-    public void setTotalComsumption(double totalComsumption) {
-        this.totalComsumption = totalComsumption;
     }
 
     public boolean isConfirmed() {

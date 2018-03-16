@@ -1,6 +1,6 @@
 package edu.nju.model;
 
-import edu.nju.model.embedable.TicketPK;
+import edu.nju.model.embeddable.TicketId;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
@@ -20,7 +20,7 @@ public class Ticket {
      * 座位的行、列及所属订单号组成联合主键
      */
     @EmbeddedId
-    private TicketPK ticketPK;
+    private TicketId ticketId;
 
     /**
      * 票的单价
@@ -30,12 +30,12 @@ public class Ticket {
     public Ticket() {
     }
 
-    public TicketPK getTicketPK() {
-        return ticketPK;
+    public TicketId getTicketId() {
+        return ticketId;
     }
 
-    public void setTicketPK(TicketPK ticketPK) {
-        this.ticketPK = ticketPK;
+    public void setTicketId(TicketId ticketId) {
+        this.ticketId = ticketId;
     }
 
     public int getPrice() {

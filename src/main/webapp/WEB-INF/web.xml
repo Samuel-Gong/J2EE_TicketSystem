@@ -26,26 +26,38 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
-  <!-- 注册“ContextLoaderListener”作为第一个监听器，使Web应用程序知道Spring上下文加载程序 -->
-  <listener>
-    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-  </listener>
+    <!-- 注册“ContextLoaderListener”作为第一个监听器，使Web应用程序知道Spring上下文加载程序 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
 
-  <!-- 中央控制器 -->
-  <servlet>
-    <servlet-name>dispatcherServlet</servlet-name>
-    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-    <!-- 应用上下文 -->
-    <init-param>
-      <param-name>contextConfigLocation</param-name>
-      <param-value>WEB-INF/applicationContext.xml</param-value>
-    </init-param>
-    <load-on-startup>1</load-on-startup>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>dispatcherServlet</servlet-name>
-    <url-pattern>/</url-pattern>
-  </servlet-mapping>
+    <!-- 中央控制器 -->
+    <servlet>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!-- 应用上下文 -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>WEB-INF/applicationContext.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcherServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- 配置jsp中include html页面的编码问题 -->
+    <jsp-config>
+        <jsp-property-group>
+            <description>html encoding</description>
+            <display-name>JSPConfiguration</display-name>
+            <url-pattern>*.html</url-pattern>
+            <el-ignored>true</el-ignored>
+            <page-encoding>UTF-8</page-encoding>
+            <scripting-invalid>false</scripting-invalid>
+        </jsp-property-group>
+    </jsp-config>
 
 </web-app>
         

@@ -26,17 +26,17 @@ public interface MemberDao {
 
     /**
      * 会员取消资格
-     * @param 邮箱 会员邮箱
+     * @param mail 会员邮箱
      * @return 取消资格影响行数
      */
-    int disqulify(String 邮箱);
+    int disqulify(String mail);
 
     /**
      * 修改会员信息
      * @param member 会员资料
      * @return 修改是否成功
      */
-    boolean updateInfo(Member member);
+    boolean updateMember(Member member);
 
 
     /**

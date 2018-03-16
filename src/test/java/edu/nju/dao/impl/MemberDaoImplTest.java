@@ -1,14 +1,13 @@
-package edu.nju.dao.daoImpl;
+package edu.nju.dao.impl;
 
 import edu.nju.dao.MemberDao;
-import edu.nju.dao.impl.MemberDaoImpl;
 import edu.nju.model.Member;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 class MemberDaoImplTest {
 
@@ -17,14 +16,16 @@ class MemberDaoImplTest {
 
     @BeforeEach
     void setUp() {
-        context = new ClassPathXmlApplicationContext("beans/daos.xml");
+
+        //如果是读取/WEB-INF/applicationContext.xml
+        context = new FileSystemXmlApplicationContext("file:src/main/webapp/WEB-INF/applicationContext.xml");
         memberDao = context.getBean("memberDao", MemberDaoImpl.class);
     }
 
     @Test
     void getMember() {
-        Member member = memberDao.getMember("123");
-        Assertions.assertEquals(member.getMail(), "123@qq.com");
+        Member member = memberDao.getMember("335931662@qq.com");
+        Assertions.assertEquals(member.getMail(), "335931662@qq.com");
     }
 
     @Disabled
@@ -36,15 +37,15 @@ class MemberDaoImplTest {
 
     @Test
     void disqulify(){
-        memberDao.disqulify("123");
-        Assertions.assertEquals(false, memberDao.getMember("123").isQualified());
+        memberDao.disqulify("335931662@qq.com");
+        Assertions.assertEquals(false, memberDao.getMember("335931662@qq.com").isQualified());
     }
 
     @Test
     void updateInfo(){
-        Member member = memberDao.getMember("123");
+        Member member = memberDao.getMember("335931662@qq.com");
         member.setQualified(true);
-        memberDao.updateInfo(member);
-        Assertions.assertEquals(true, memberDao.getMember("123").isQualified());
+        memberDao.updateMember(member);
+        Assertions.assertEquals(true, memberDao.getMember("335931662@qq.com").isQualified());
     }
 }

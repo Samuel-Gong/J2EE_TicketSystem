@@ -1,4 +1,4 @@
-package edu.nju.model.embedable;
+package edu.nju.model.embeddable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -6,28 +6,36 @@ import java.io.Serializable;
 
 /**
  * @author Shenmiu
- * @date 2018/03/04
+ * @date 2018/03/15
  *
- * 票的联合主键
+ * 某个场馆计划座位的id
  */
 @Embeddable
-public class TicketPK implements Serializable{
+public class VenuePlanSeatId implements Serializable{
 
     /**
-     * 位置的行
+     * 场馆计划编号
+     */
+    private int venuePlanId;
+
+    /**
+     * 该座位所在行
      */
     private int row;
 
     /**
-     * 位置的列
+     * 该座位所在列
      */
     @Column(name = "`column`")
     private int column;
 
-    /**
-     * 所属订单号
-     */
-    private int orderNum;
+    public int getVenuePlanId() {
+        return venuePlanId;
+    }
+
+    public void setVenuePlanId(int venuePlanId) {
+        this.venuePlanId = venuePlanId;
+    }
 
     public int getRow() {
         return row;
@@ -43,13 +51,5 @@ public class TicketPK implements Serializable{
 
     public void setColumn(int column) {
         this.column = column;
-    }
-
-    public int getOrderNum() {
-        return orderNum;
-    }
-
-    public void setOrderNum(int orderNum) {
-        this.orderNum = orderNum;
     }
 }

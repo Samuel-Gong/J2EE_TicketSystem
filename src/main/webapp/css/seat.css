@@ -1,0 +1,119 @@
+body {
+    font-family: 'Lato', sans-serif;
+}
+
+a {
+    color: #b71a4c;
+}
+
+/**
+前方
+ */
+.front-indicator {
+    width: 145px;
+    background-color: #f6f6f6;
+    color: #adadad;
+    text-align: center;
+    padding: 3px;
+    margin: 10px auto;
+    border-radius: 5px;
+}
+
+/**
+DIV container where seat chart's rendered.
+ */
+div.seatCharts-container {
+
+}
+
+/**
+DIV element which serves as a row. You're most likely to edit its height.
+ */
+div.seatCharts-row {
+    display: inline-block;
+    margin: auto;
+    height: 35px;
+}
+
+/**
+appliy to both seats and spacers ( _ ).
+ */
+div.seatCharts-cell {
+    padding: 5px;
+    margin: 5px;
+    color: #182C4E;
+    height: 25px;
+    width: 25px;
+    line-height: 15px;
+}
+
+/**
+apply to seats regardless of characters
+ */
+div.seatCharts-seat {
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+/**
+apply to spacer
+ */
+div.seatCharts-space {
+    border: 1px solid #adadad;
+    border-radius: 5px;
+}
+
+/**
+row 标记， 不显示边框
+ */
+div.seatCharts-space:first-of-type {
+    border: none;
+}
+
+/**
+available seats
+ */
+div.seatCharts-seat.available {
+    background-color: #B9DEA0;
+}
+
+div.seatCharts-seat.available.default-seat {
+    background-color: #3a78c3;
+}
+
+/**
+focused seats
+ */
+div.seatCharts-seat.focused {
+    background-color: #76B474;
+}
+
+/**
+selected seats
+ */
+div.seatCharts-seat.selected {
+    background-color: #E6CAC4;
+}
+
+/**
+unavailable seats
+ */
+div.seatCharts-seat.unavailable {
+    background-color: #472B34;
+}
+
+div.seatCharts-legend {
+    padding-left: 0px;
+}
+
+/**
+UL element which holds the legend.
+ */
+ul.seatCharts-legendList {
+    padding-left: 0px;
+}
+
+span.seatCharts-legendDescription {
+    margin-left: 5px;
+    line-height: 30px;
+}

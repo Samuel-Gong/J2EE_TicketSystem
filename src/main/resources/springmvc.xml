@@ -24,8 +24,8 @@
     <!-- 设置default jsp -->
     <mvc:view-controller path="/" view-name="index"/>
 
-    <!-- 使用注解开发，不用配置controller，需要配置一个组件扫描器 -->
-    <context:component-scan base-package="edu.nju.controller"/>
+    <!-- 使用注解开发，需要配置一个组件扫描器 -->
+    <context:component-scan base-package="edu.nju"/>
     <context:annotation-config/>
 
     <!-- 启用默认配置 -->

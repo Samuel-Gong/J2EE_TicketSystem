@@ -10,8 +10,8 @@
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
         </webroots>
         <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/resources" />
           <root url="file://$MODULE_DIR$/src/main/java" />
+          <root url="file://$MODULE_DIR$/src/main/resources" />
         </sourceRoots>
       </configuration>
     </facet>
@@ -25,7 +25,7 @@
     <facet type="hibernate" name="Hibernate">
       <configuration>
         <datasource-map>
-          <unit-entry name="hibernate.cfg.xml" value="795e897a-e233-4dba-9453-54d31f8a7fd8" />
+          <unit-entry name="hibernate.cfg.xml" value="a9d097ec-9c54-4706-9c85-24022a75a473" />
           <unit-entry name="sessionFactory" />
         </datasource-map>
         <naming-strategy-map />

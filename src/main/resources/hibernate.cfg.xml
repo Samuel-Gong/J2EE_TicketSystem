@@ -7,7 +7,7 @@
 
         <!-- 数据库相关信息 -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/tickets?useSSL=false</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/tickets?useSSL=false&amp;useUnicode=true&amp;createDatabaseIfNotExist=true&amp;characterEncoding=utf-8</property>
         <property name="hibernate.connection.username">root</property>
         <property name="hibernate.connection.password">123456</property>
 
@@ -37,8 +37,16 @@
         <mapping class="edu.nju.model.Order"/>
         <mapping class="edu.nju.model.Ticket"/>
         <mapping class="edu.nju.model.Account"/>
+
+        <!-- 场馆和场馆座位分布 -->
         <mapping class="edu.nju.model.Venue"/>
+        <mapping class="edu.nju.model.VenueSeat"/>
+
+        <!-- 场馆计划、场馆计划座位、座位类型 -->
         <mapping class="edu.nju.model.VenuePlan"/>
+        <mapping class="edu.nju.model.VenuePlanSeat"/>
+        <mapping class="edu.nju.model.SeatType"/>
+
         <mapping class="edu.nju.model.Manager"/>
 
 

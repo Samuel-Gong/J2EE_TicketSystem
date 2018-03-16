@@ -9,38 +9,14 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>小麦网</title>
 
     <!-- Normalize -->
     <link href="../../css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
     <link href="../../css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-        .modal-dialog {
-            margin-top: 8%;
-            padding-left: 7%;
-            padding-right: 7%;
-        }
-
-        .modal-dialog .login_btn, .reg_btn {
-            width: 35%;
-        }
-
-        .modal-dialog form {
-            width: 80%;
-            margin-left: auto;
-            margin-right: auto;
-            margin-bottom: 5%;
-        }
-
-        .modal-dialog form .input-group {
-            margin-top: 8%;
-        }
-    </style>
+    <!-- 模态框的css -->
+    <link href="../../css/index.css" rel="stylesheet">
 </head>
 <body>
 
@@ -53,7 +29,7 @@
             <a class="navbar-brand" href="#">小麦网</a>
         </div>
 
-        <p id="user-mail" class="navbar-text hidden">哈哈哈</p>
+        <p id="user-mail" class="navbar-text hidden"></p>
 
         <!-- 导航内容 -->
         <ul class="nav navbar-nav">
@@ -68,15 +44,18 @@
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">个人信息</a></li>
+                    <li><a href="/member/myInfo">个人信息</a></li>
                     <li><a href="#">订单管理</a></li>
                     <li><a href="#">我的钱包</a></li>
                     <li><a href="#">我的优惠券</a></li>
                 </ul>
             </li>
-
-            <li><a href="#">我的订单</a></li>
             <!-- dropdown end -->
+        </ul>
+
+        <ul class="nav navbar-nav pull-right">
+            <li id="venue-login"><a href="#venueModal" data-toggle="modal">场馆登录</a></li>
+            <li id="manager-login"><a href="#managerModal" data-toggle="modal">经理登录</a></li>
         </ul>
     </div>
 </nav>
@@ -145,6 +124,75 @@
 </div>
 <!-- register模态框 end -->
 
+<!-- venue login 模态框 -->
+<div class="modal fade" id="venueModal" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- data-dismiss：关闭模态窗口 -->
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title text-center">场馆登录</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="venue-login-form" action="/venue/login" method="post">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">编号</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" name="venue-id" placeholder="请输入编号">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">密码</label>
+                        <div class="col-md-7">
+                            <input type="password" class="form-control" name="venue-password" placeholder="请输入密码">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                <button type="button" id="venue-login-btn" class="btn btn-default">登录</button>
+                <button type="button" id="venue-register-btn" class="btn btn-primary">注册</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- venue login 模态框 end -->
+
+<!-- manager login 模态框 -->
+<div class="modal fade" id="managerModal" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- data-dismiss：关闭模态窗口 -->
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title text-center">经理</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="manager-login-form" action="/manager/login" method="post">
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">账号</label>
+                        <div class="col-md-7">
+                            <input type="text" class="form-control" name="manager-id" placeholder="请输入账号">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2 control-label">密码</label>
+                        <div class="col-md-7">
+                            <input type="password" class="form-control" name="manager-password" placeholder="请输入密码">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="manager-login-btn" class="btn btn-default">登录</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- manager login 模态框 end -->
+
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="../../js/jquery-3.3.1.min.js"></script>
 
@@ -153,12 +201,30 @@
 
 <script>
     $(document).ready(function () {
+
+        //会员登录
         $("#login_btn").on("click", function () {
             $("#login_form").submit();
         });
 
+        //会员注册
         $("#reg_btn").on("click", function () {
             $("#reg_form").submit();
+        });
+
+        //场馆登录
+        $("#venue-login-btn").on("click", function () {
+           $("#venue-login-form").submit();
+        });
+
+        //场馆注册
+        $("#venue-register-btn").on("click", function () {
+            $(location).attr("href", "/venue/registerView");
+        });
+
+        //经理登录
+        $("#manager-login-btn").on("click", function () {
+           $("#manager-login-form").submit();
         });
 
         if (${sessionScope.containsKey("mail")}) {

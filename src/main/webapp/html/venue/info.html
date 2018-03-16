@@ -1,0 +1,417 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <title>场馆信息</title>
+
+    <!-- Normalize -->
+    <link href="../../css/normalize.css" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <!-- 模态框的css -->
+    <link href="../../css/index.css" rel="stylesheet">
+
+    <!-- seat css -->
+    <link href="../../css/jquery.seat-charts.css" rel="stylesheet">
+    <link href="../../css/seat.css" rel="stylesheet">
+
+    <style>
+
+        #all-venue-info {
+            padding-top: 2%;
+            margin-top: 2%;
+            border-top: #adadad solid 1px;
+        }
+
+        /*
+        左边座位信息的样式
+        */
+        #legend-info {
+            border-right: #adadad solid 1px;
+        }
+
+        #seat-operation-container {
+            margin-top: 20%;
+        }
+
+        /*
+        增加删除按钮组的上下间距
+        */
+        #add-delete-container {
+            margin-bottom: 20%;
+        }
+
+        /*
+        座位修改按钮组的样式
+        */
+        #modify-seat-btn-grp {
+            margin-left: 17%;
+        }
+
+        /*
+        右边场馆基本信息表单样式
+        */
+        #basic-info-form-container {
+            border-left: #adadad solid 1px;
+        }
+
+        #venue-basic-info-form {
+            margin-top: 30%;
+        }
+
+        #modify-basic-btn-grp {
+            margin-left: 17%;
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- nav begin -->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <!-- 导航栏头 -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">小麦网</a>
+        </div>
+
+        <!-- 导航内容 -->
+        <ul class="nav navbar-nav">
+            <li><a href="#">场馆信息</a></li>
+            <li><a href="#">发布计划</a></li>
+            <li><a href="#">现场购票</a></li>
+            <li><a href="#">检票登记</a></li>
+            <li><a href="#">场馆统计</a></li>
+        </ul>
+    </div>
+</nav>
+<!-- nav end -->
+
+<!-- container begin -->
+<div id="venue-info-container" class="container">
+    <div id="all-venue-info" class="row">
+        <div id="legend-info" class="col-md-2">
+            <div id="legend-container">
+                <div id="legend-box"></div>
+            </div>
+            <div id="seat-operation-container">
+                <fieldset id="seat-info-fieldset" disabled="disabled">
+                    <div id="add-delete-container">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary" id="add-row">增加一行</button>
+                            <button type="button" class="btn btn-primary" id="add-column">增加一列</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-warning" id="delete-row">删除一行</button>
+                            <button type="button" class="btn btn-warning" id="delete-column">删除一列</button>
+                        </div>
+                    </div>
+                </fieldset>
+                <button id="modify-seat-btn" type="button" class="btn btn-primary center-block">修改座位信息</button>
+                <div id="modify-seat-btn-grp" class="btn-group hidden">
+                    <button id="modify-seat-confirm-btn" type="button" class="btn btn-primary">保存</button>
+                    <button id="modify-seat-cancel-btn" type="button" class="btn btn-primary">取消</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div id="seat-map-container" class="text-center">
+                <div class="front-indicator">Front</div>
+                <div id="seat-map"></div>
+            </div>
+        </div>
+        <div id="basic-info-form-container" class="col-md-2">
+            <fieldset id="basic-info-fieldset" disabled>
+                <form id="venue-basic-info-form">
+                    <div class="form-group">
+                        <label class="control-label">场馆名</label>
+                        <input id="venue-name" type="text" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">城市</label>
+                        <select id="venue-city" class="form-control">
+                            <option>北京</option>
+                            <option>上海</option>
+                            <option>重庆</option>
+                            <option>南京</option>
+                        </select>
+                    </div>
+                </form>
+            </fieldset>
+            <button id="modify-basic-info-btn" type="button" class="btn btn-primary center-block">修改基本信息</button>
+            <div id="modify-basic-btn-grp" class="btn-group hidden">
+                <button id="modify-basic-confirm-btn" type="button" class="btn btn-primary">保存</button>
+                <button id="modify-basic-cancel-btn" type="button" class="btn btn-primary">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- container end -->
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="../../js/jquery-3.3.1.min.js"></script>
+
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="../../js/bootstrap.min.js"></script>
+<!-- seat js -->
+<script src="../../js/jquery.seat-charts.min.js"></script>
+
+<script>
+
+    /**
+     * 保存座位图
+     * @type {string[]} todo 从服务器接收数据
+     */
+    var seatMap = [
+        'aaaaaaaaaaaaaaa',
+        'aaaaaaaaaaaaaaa',
+        'aaaaaaaaaaaaaaa'
+    ];
+
+    /**
+     * 保存座位信息
+     * @type {{a: {classes: string}}} todo 从服务器接收数据
+     */
+    var seatInfo = {
+        a: {
+            //Custom CSS classes which should be applied to seats.
+            //'seat-red seat-big' or ['seat-red', 'seat-big']
+            // click: seat2space,
+            classes: 'default-seat'
+        }
+    };
+
+    /**
+     * 座位图例
+     * @type {{node: *|jQuery|HTMLElement, items: *[]}}
+     */
+    var legendInfo = {
+        //jQuery reference to a DIV element where legend should be rendered.
+        node: $('#legend-box'),
+        //An array of legend item details. Each array element should be a three-element array: [ character, status, description ]
+        items: [
+            ['a', 'available', '有座位']
+        ]
+    };
+
+    /**
+     * 添加一行
+     */
+    function add_row() {
+        if (seatMap.length === 15) {
+            alert("座位行数不可以大于15");
+        }
+        else {
+            //新建一行，长度与当前座位图中每一行的长度相等
+            var rowLength = seatMap[0].length;
+            var newRow = [];
+            for (var i = 0; i < rowLength; i++) {
+                newRow.push('a');
+            }
+            seatMap.push(newRow.join(""));
+            rerender();
+        }
+    }
+
+    /**
+     * 增加一列
+     */
+    function add_column() {
+        if (seatMap[0].length === 20) {
+            alert("座位列数不可以大于20");
+        }
+        else {
+            $.each(seatMap, function (index, val) {
+                seatMap[index] = val + 'a';
+            });
+            rerender();
+        }
+    }
+
+    //删除一行
+    function delete_row() {
+        if (seatMap.length === 3) {
+            alert("座位行数不可以小于3");
+        }
+        else {
+            seatMap.pop();
+        }
+        rerender();
+    }
+
+    //删除一列
+    function delete_column() {
+        if (seatMap[0].length === 10) {
+            alert("座位列数不可以小于10");
+        }
+        else {
+            $.each(seatMap, function (index, val) {
+                seatMap[index] = val.substring(0, val.length - 1);
+            });
+            rerender();
+        }
+    }
+
+    /**
+     * 将座位设置为空
+     */
+    function seat2space() {
+        var thisId = this.node().attr("id");
+        var rowAndColumn = thisId.split("_");
+        var row = rowAndColumn[0];
+        var column = rowAndColumn[1];
+
+        var row_info = seatMap[row - 1].split("");
+        row_info[column - 1] = '_';
+
+        seatMap[row - 1] = row_info.join("");
+        rerender();
+    }
+
+    /**
+     * 将空位设置为座位
+     */
+    function space2seat() {
+        var row = $(this).parent().prevAll().length + 1;
+        var column = $(this).prevAll().length;
+
+        var row_info = seatMap[row - 1].split("");
+        row_info[column - 1] = 'a';
+
+        seatMap[row - 1] = row_info.join("");
+        rerender();
+    }
+
+    /**
+     * 渲染座位
+     */
+    function renderSeats() {
+        $("#seat-map").seatCharts({
+            //必须的
+            //每个字符表示一个座位，下划线表示没有座位
+            //每一行的列数必须相等
+            map: seatMap,
+            seats: seatInfo,
+            naming: {
+                top: false,
+                //默认getId函数
+                getId: function (character, row, column) {
+                    return row + '_' + column;
+                },
+                //默认getLabel函数
+                //Labels will be displayed over seats
+                //so if you don't want any labels, just return an empty string.
+                getLabel: function (character, row, column) {
+                    return character;
+                }
+            },
+            //legend
+            legend: legendInfo,
+            click: function () {
+                if (this.status() === 'available') {
+                    return 'available';
+                } else {
+                    if (this.char() === '_') {
+                        alert(this.status() + "\n" + this.node() + "\n" + this.data() + "\n" + this.char());
+                    }
+                    // return this.style();
+                }
+            }
+        });
+    }
+
+    /**
+     * 重新渲染座位
+     */
+    function rerender() {
+        //删除原来的seat-map div
+        $("#seat-map").remove();
+        //删除座位类型的list
+        $(".seatCharts-legendList").remove();
+        //添加新的seat-map元素
+        var newSeatMap = "<div id='seat-map'></div>";
+        //将新的seat-map元素添加到外层container中
+        $("#seat-map-container").append(newSeatMap);
+        //重新渲染座位图
+        renderSeats();
+    }
+
+    $(document).ready(function () {
+
+        //导航栏的active calss 添加删除
+        $(".navbar-nav li").on("click", function () {
+            $(".navbar-nav li").removeClass("active");
+            $(this).addClass("active");
+        });
+
+        renderSeats();
+
+        $("#add-row").on("click", add_row);
+        $("#add-column").on("click", add_column);
+        $("#delete-row").on("click", delete_row);
+        $("#delete-column").on("click", delete_column);
+
+        //修改座位信息的按钮
+        $("#modify-seat-btn").on("click", function modify_seat() {
+            //修改座位信息按钮隐藏，显示保存取消按钮组
+            $(this).addClass("hidden");
+            $("#modify-seat-btn-grp").removeClass("hidden");
+            //座位信息可编辑
+            $("#seat-info-fieldset").removeAttr("disabled");
+            //空位添加由空位转换到座位的点击事件
+            $("#seat-map-container").on("click", ".seatCharts-space:empty", space2seat);
+            //座位添加由座位转换到空位的点击事件
+            seatInfo.a.click = seat2space;
+            //重新渲染
+            rerender();
+        });
+
+        //修改基本信息按钮
+        $("#modify-basic-info-btn").on("click", function modify_basic_info() {
+            //修改基本信息按钮隐藏，显示保存取消按钮组
+            $(this).addClass("hidden");
+            $("#modify-basic-btn-grp").removeClass("hidden");
+            //基本信息可编辑
+            $("#basic-info-fieldset").removeAttr("disabled");
+        });
+
+        //修改座位信息取消按钮
+        $("#modify-seat-cancel-btn").on("click", function () {
+            $("#modify-seat-btn-grp").addClass("hidden");
+            $("#modify-seat-btn").removeClass("hidden");
+            //座位信息不可编辑
+            $("#seat-info-fieldset").attr("disabled", "disabled");
+            $("#seat-map-container").off("click", ".seatCharts-space:empty", space2seat);
+            //删除座位转换到空位的点击事件
+            delete seatInfo.a.click;
+
+            //todo seatMap重新赋值为修改前的seatMap
+
+            //重新渲染
+            rerender();
+        });
+
+        //修改基本信息取消按钮
+        $("#modify-basic-cancel-btn").on("click", function () {
+            $("#modify-basic-btn-grp").addClass("hidden");
+            $("#modify-basic-info-btn").removeClass("hidden");
+            //基本信息不可编辑
+            $("#basic-info-fieldset").attr("disabled", "disabled");
+
+            //todo 基本信息赋值为修改前的信息
+        });
+
+        //todo 两个保存按钮的点击事件
+        $("#modify-seat-confirm-btn").on("click", function () {
+           //todo
+        });
+
+        $("#modify-basic-confirm-btn").on("click", function () {
+           //todo
+        });
+
+    });
+</script>
+</body>
+</html>
