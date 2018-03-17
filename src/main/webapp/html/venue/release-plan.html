@@ -1,24 +1,17 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Shenmiu
-  Date: 15/03/2018
-  Time: 17:31
-  
-  Description:  场馆信息界面
---%>
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-    <title>场馆信息</title>
+    <meta charset="utf-8">
+    <title>发布计划</title>
 
     <!-- Normalize -->
-    <link href="../../../css/normalize.css" rel="stylesheet">
+    <link href="../../css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- seat css -->
-    <link href="../../../css/jquery.seat-charts.css" rel="stylesheet">
-    <link href="../../../css/seat.css" rel="stylesheet">
+    <link href="../../css/jquery.seat-charts.css" rel="stylesheet">
+    <link href="../../css/seat.css" rel="stylesheet">
 
     <style>
 
@@ -72,7 +65,26 @@
 </head>
 <body>
 
-<%@include file="../../../html/venue/venue-nav.html" %>
+<!-- nav begin -->
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+
+        <!-- 导航栏头 -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">小麦网</a>
+        </div>
+
+        <!-- 导航内容 -->
+        <ul class="nav navbar-nav">
+            <li id="venue-info-li"><a href="#">场馆信息</a></li>
+            <li id="venue-plan-li"><a href="#">发布计划</a></li>
+            <li id="buy-ticket-li"><a href="#">现场购票</a></li>
+            <li id="check-in-li"><a href="#">检票登记</a></li>
+            <li id="venue-statistic-li"><a href="#">场馆统计</a></li>
+        </ul>
+    </div>
+</nav>
+<!-- nav end -->
 
 <!-- container begin -->
 <div id="venue-info-container" class="container">
@@ -136,21 +148,17 @@
 <!-- container end -->
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="../../../js/jquery-3.3.1.min.js"></script>
+<script src="../../js/jquery-3.3.1.min.js"></script>
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+
 <!-- seat js -->
-<script src="../../../js/jquery.seat-charts.min.js"></script>
+<script src="../../js/jquery.seat-charts.min.js"></script>
 <!-- 对座位图操作的js -->
-<script src="../../../js/seat-operation.js"></script>
+<script src="../../js/seat-operation.js"></script>
 
 <script>
-
-    /**
-     * 保存后端渲染的场馆座位及基本信息
-     */
-    var venueInfo = ${venue};
 
     /**
      * 确认/取消修改座位信息时，js共同动作
@@ -199,8 +207,8 @@
 
     $(document).ready(function () {
 
-        //导航栏中场馆信息active
-        $("#venue-info-li").addClass("active");
+        //导航栏中发布计划active
+        $("#venue-plan-li").addClass("active");
 
         //基本信息
         $("#venue-name").val(venueInfo.name);

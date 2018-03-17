@@ -1,10 +1,8 @@
 package edu.nju.model;
 
-import edu.nju.model.embeddable.SeatTypeId;
+import com.alibaba.fastjson.annotation.JSONType;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Shenmiu
@@ -14,15 +12,19 @@ import java.util.List;
  */
 @Entity
 @Table(name = "seat_type")
+@JSONType(ignores = {"venuePlan"}, orders = {"typeChar", "price", "description"})
 public class SeatType {
 
     /**
-     * 联合主键:
-     * venuePlanId  场馆计划编号
-     * typeChar     表示座位类型的字符
+     * 与场馆计划一对一，场馆计划编号作为外键，也作为主键的一部分
      */
-    @EmbeddedId
-    private SeatTypeId seatTypeId;
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "venuePlanId", foreignKey = @ForeignKey(name = "FK_VENUE_PLAN"))
+    private VenuePlan venuePlan;
+
+    @Id
+    private char typeChar;
 
     /**
      * 该类型座位的价格
@@ -34,34 +36,20 @@ public class SeatType {
      */
     private String description;
 
-    /**
-     * 与场馆计划一对一，场馆计划编号作为外键
-     */
-    @OneToOne
-    @MapsId("venuePlanId")
-    @JoinColumn(name = "venuePlanId", foreignKey = @ForeignKey(name = "FK_VENUE_PLAN"))
-    private VenuePlan venuePlan;
-
-    /**
-     * 与场馆计划的座位一对多
-     */
-    @OneToMany(mappedBy = "seatType", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VenuePlanSeat> venuePlanSeatList = new ArrayList<>();
-
-    public SeatTypeId getSeatTypeId() {
-        return seatTypeId;
-    }
-
-    public void setSeatTypeId(SeatTypeId seatTypeId) {
-        this.seatTypeId = seatTypeId;
-    }
-
     public VenuePlan getVenuePlan() {
         return venuePlan;
     }
 
     public void setVenuePlan(VenuePlan venuePlan) {
         this.venuePlan = venuePlan;
+    }
+
+    public char getTypeChar() {
+        return typeChar;
+    }
+
+    public void setTypeChar(char typeChar) {
+        this.typeChar = typeChar;
     }
 
     public int getPrice() {

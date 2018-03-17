@@ -174,8 +174,6 @@ function seatMapRow2String() {
  */
 function renderSeats() {
 
-    //将行转化为
-
     $("#seat-map").seatCharts({
         //必须的
         //每个字符表示一个座位，下划线表示没有座位

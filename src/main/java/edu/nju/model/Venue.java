@@ -2,8 +2,6 @@ package edu.nju.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import org.hibernate.annotations.NamedQueries;
-import org.hibernate.annotations.NamedQuery;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,13 +12,9 @@ import java.util.List;
  * @date 2018/03/04
  * <p>
  * 场馆
+ *
+ * JSONType： 可以指定序列化的顺序
  */
-@NamedQueries({
-        @NamedQuery(
-                name = "get_venue_by_id",
-                query = "from Venue where id = :id"
-        )
-})
 
 @Entity
 @Table(name = "venue")
