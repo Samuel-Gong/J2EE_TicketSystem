@@ -1,17 +1,17 @@
 {
-  "id":0,
-  "name":"南京大剧院",
-  "city":"南京",
-  "password":"123456",
-  "rowNum":10,
-  "columnNum":10,
-  "seatMap":[
+  "id": 0,
+  "name": "南京大剧院",
+  "city": "南京",
+  "password": "123456",
+  "rowNum": 10,
+  "columnNum": 10,
+  "seatMap": [
     {
-      "venueSeatId":{
-        "row":10,
-        "column":10
+      "venueSeatId": {
+        "row": 10,
+        "column": 10
       },
-      "hasSeat":true
+      "hasSeat": true
     }
   ]
 }

@@ -10,7 +10,6 @@
     <!-- Bootstrap -->
     <link href="../../css/bootstrap.min.css" rel="stylesheet">
     <!-- seat css -->
-    <link href="../../css/jquery.seat-charts.css" rel="stylesheet">
     <link href="../../css/seat.css" rel="stylesheet">
 
     <style>
@@ -124,7 +123,7 @@
      * 保存座位图
      * @type {string[]} todo 从服务器接收数据
      */
-    var seatMap = [
+    let seatMap = [
         'aaaaaaaaaaaaaaa',
         'aaaaaaaaaaaaaaa',
         'aaaaaaaaaaaaaaa'
@@ -134,7 +133,7 @@
      * 保存座位信息
      * @type {{a: {classes: string}}} todo 从服务器接收数据
      */
-    var seatInfo = {
+    let seatInfo = {
         a: {
             //Custom CSS classes which should be applied to seats.
             //'seat-red seat-big' or ['seat-red', 'seat-big']
@@ -148,12 +147,12 @@
      * 座位图例
      * @type {{node: *|jQuery|HTMLElement, items: *[]}}
      */
-    var legendInfo = {
+    let legendInfo = {
         //jQuery reference to a DIV element where legend should be rendered.
         node: $('#legend-box'),
         //An array of legend item details. Each array element should be a three-element array: [ character, status, description ]
         items: [
-            ['a', 'available', '有座位']
+            ['a', 'available', '有座位', '/']
         ]
     };
 
@@ -166,9 +165,9 @@
         }
         else {
             //新建一行，长度与当前座位图中每一行的长度相等
-            var rowLength = seatMap[0].length;
-            var newRow = [];
-            for (var i = 0; i < rowLength; i++) {
+            let rowLength = seatMap[0].length;
+            let newRow = [];
+            for (let i = 0; i < rowLength; i++) {
                 newRow.push('a');
             }
             seatMap.push(newRow.join(""));
@@ -219,12 +218,12 @@
      * 将座位设置为空
      */
     function seat2space() {
-        var thisId = this.node().attr("id");
-        var rowAndColumn = thisId.split("_");
-        var row = rowAndColumn[0];
-        var column = rowAndColumn[1];
+        let thisId = this.node().attr("id");
+        let rowAndColumn = thisId.split("_");
+        let row = rowAndColumn[0];
+        let column = rowAndColumn[1];
 
-        var row_info = seatMap[row - 1].split("");
+        let row_info = seatMap[row - 1].split("");
         row_info[column - 1] = '_';
 
         seatMap[row - 1] = row_info.join("");
@@ -235,10 +234,10 @@
      * 将空位设置为座位
      */
     function space2seat() {
-        var row = $(this).parent().prevAll().length + 1;
-        var column = $(this).prevAll().length;
+        let row = $(this).parent().prevAll().length + 1;
+        let column = $(this).prevAll().length;
 
-        var row_info = seatMap[row - 1].split("");
+        let row_info = seatMap[row - 1].split("");
         row_info[column - 1] = 'a';
 
         seatMap[row - 1] = row_info.join("");
@@ -292,7 +291,7 @@
         //删除座位类型的list
         $(".seatCharts-legendList").remove();
         //添加新的seat-map元素
-        var newSeatMap = "<div id='seat-map'></div>";
+        let newSeatMap = "<div id='seat-map'></div>";
         //将新的seat-map元素添加到外层container中
         $("#seat-map-container").append(newSeatMap);
         //重新渲染座位图
@@ -312,10 +311,10 @@
         $("#seat-map-container").on("click", ".seatCharts-space:empty", space2seat);
 
         $("#venue-register-btn").on("click", function () {
-            var seatMapArr = [];
+            let seatMapArr = [];
             $.each(seatMap, function (row, str) {
                 $.each(str.split(""), function (column, char) {
-                    var newVenueSeat = {
+                    let newVenueSeat = {
                         "venueSeatId": {
                             "row": row+1,
                             "column": column+1
@@ -326,7 +325,7 @@
                 });
             });
 
-            var venue = {
+            let venue = {
                 "name": $("#venue-name").val(),
                 "city": $("#venue-city").val(),
                 "password": $("#venue-password").val(),

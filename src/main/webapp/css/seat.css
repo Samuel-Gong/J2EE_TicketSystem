@@ -2,10 +2,6 @@ body {
     font-family: 'Lato', sans-serif;
 }
 
-a {
-    color: #b71a4c;
-}
-
 /**
 前方
  */
@@ -22,43 +18,139 @@ a {
 /**
 DIV container where seat chart's rendered.
  */
-div.seatCharts-container {
+.seatCharts-container {
 
 }
 
 /**
 DIV element which serves as a row. You're most likely to edit its height.
  */
-div.seatCharts-row {
+.seatCharts-row {
+    /*height: 50px;*/
     display: inline-block;
     margin: auto;
     height: 35px;
 }
 
+.seatCharts-row:after {
+    clear: both;
+}
+
 /**
 appliy to both seats and spacers ( _ ).
  */
-div.seatCharts-cell {
+.seatCharts-cell {
+
+    float: left;
+    text-align: center;
+    outline: none;
+    font-size: 13px;
     padding: 5px;
     margin: 5px;
     color: #182C4E;
     height: 25px;
     width: 25px;
     line-height: 15px;
+
+    /*鼠标放上去像手一样*/
+    cursor: pointer;
+}
+
+/**
+所有seat的可选颜色
+ */
+.seat-type-a {
+    background-color: #3a78c3;
+}
+
+.seat-type-b {
+    background-color: #006600;
+}
+
+.seat-type-c {
+    background-color: #00CC99;
+}
+
+.seat-type-d {
+    background-color: #330066;
+}
+
+.seat-type-e {
+    background-color: #333366;
+}
+
+.seat-type-f {
+    background-color: #336666;
+}
+
+.seat-type-g {
+    background-color: #996666;
+}
+
+.seat-type-h {
+    background-color: #660066;
+}
+
+.seat-type-i {
+    background-color: #CC0000;
 }
 
 /**
 apply to seats regardless of characters
+默认座位颜色
  */
-div.seatCharts-seat {
+.seatCharts-seat {
+    background-color: #3a78c3;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
     color: #FFFFFF;
-    cursor: pointer;
+}
+
+/**
+seat显示的颜色
+ */
+.seatCharts-seat.seat-type-b {
+    background-color: #006600;
+}
+
+.seatCharts-seat.seat-type-c {
+    background-color: #00CC99;
+}
+
+.seatCharts-seat.seat-type-d {
+    background-color: #330066;
+}
+
+.seatCharts-seat.seat-type-e {
+    background-color: #333366;
+}
+
+.seatCharts-seat.seat-type-f {
+    background-color: #336666;
+}
+
+.seatCharts-seat.seat-type-g {
+    background-color: #996666;
+}
+
+.seatCharts-seat.seat-type-h {
+    background-color: #660066;
+}
+
+.seatCharts-seat.seat-type-i {
+    background-color: #CC0000;
+}
+
+.seatCharts-seat:focus {
+    border: none;
 }
 
 /**
 apply to spacer
  */
-div.seatCharts-space {
+.seatCharts-space {
+    background-color: white;
     border: 1px solid #adadad;
     border-radius: 5px;
 }
@@ -66,41 +158,37 @@ div.seatCharts-space {
 /**
 row 标记， 不显示边框
  */
-div.seatCharts-space:first-of-type {
+.seatCharts-space:first-of-type {
     border: none;
 }
 
 /**
 available seats
  */
-div.seatCharts-seat.available {
-    background-color: #B9DEA0;
-}
-
-div.seatCharts-seat.available.default-seat {
-    background-color: #3a78c3;
-}
+/*div.seatCharts-seat.available {*/
+/*background-color: #B9DEA0;*/
+/*}*/
 
 /**
 focused seats
  */
-div.seatCharts-seat.focused {
-    background-color: #76B474;
-}
+/*div.seatCharts-seat.focused {*/
+/*background-color: #76B474;*/
+/*}*/
 
 /**
 selected seats
  */
-div.seatCharts-seat.selected {
-    background-color: #E6CAC4;
-}
+/*div.seatCharts-seat.selected {*/
+/*background-color: #E6CAC4;*/
+/*}*/
 
 /**
 unavailable seats
  */
-div.seatCharts-seat.unavailable {
-    background-color: #472B34;
-}
+/*div.seatCharts-seat.unavailable {*/
+/*background-color: #472B34;*/
+/*}*/
 
 div.seatCharts-legend {
     padding-left: 0px;
@@ -110,10 +198,16 @@ div.seatCharts-legend {
 UL element which holds the legend.
  */
 ul.seatCharts-legendList {
-    padding-left: 0px;
+    list-style: none;
+    padding-left: 0;
 }
 
 span.seatCharts-legendDescription {
     margin-left: 5px;
     line-height: 30px;
+}
+
+li.seatCharts-legendItem {
+    margin-top: 10px;
+    line-height: 2;
 }

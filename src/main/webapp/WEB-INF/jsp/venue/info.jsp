@@ -17,7 +17,6 @@
     <link href="../../../css/bootstrap.min.css" rel="stylesheet">
 
     <!-- seat css -->
-    <link href="../../../css/jquery.seat-charts.css" rel="stylesheet">
     <link href="../../../css/seat.css" rel="stylesheet">
 
     <style>
@@ -183,7 +182,7 @@
         //座位图复原
         initSeatMap(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
         //重新渲染
-        rerender();
+        rerenderSeats();
     }
 
     /**
@@ -230,7 +229,7 @@
                 //座位添加由座位转换到空位的点击事件
                 seatInfo.a.click = seat2space;
                 //重新渲染
-                rerender();
+                rerenderSeats();
             }
             else {
                 alert("请先保存或取消基本信息");

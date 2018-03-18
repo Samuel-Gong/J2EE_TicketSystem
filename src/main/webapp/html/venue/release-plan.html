@@ -2,18 +2,24 @@
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>发布计划</title>
 
     <!-- Normalize -->
     <link href="../../css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
     <link href="../../css/bootstrap.min.css" rel="stylesheet">
-
     <!-- seat css -->
-    <link href="../../css/jquery.seat-charts.css" rel="stylesheet">
     <link href="../../css/seat.css" rel="stylesheet">
 
+    <!-- datetimepicker css -->
+    <link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+
     <style>
+
+        .modal select {
+            border-radius: 0;
+        }
 
         #all-venue-info {
             padding-top: 2%;
@@ -21,47 +27,17 @@
             border-top: #adadad solid 1px;
         }
 
-        /*
-        左边座位信息的样式
-        */
-        #legend-info {
-            border-right: #adadad solid 1px;
+        table {
+            table-layout: fixed;
         }
 
-        #seat-operation-container {
-            margin-top: 20%;
+        td {
+            white-space: nowrap;
+            overflow: scroll;
+            /*text-overflow: ellipsis;*/
         }
-
-        /*
-        增加删除按钮组的上下间距
-        */
-        #add-delete-container {
-            margin-bottom: 20%;
-        }
-
-        /*
-        座位修改按钮组的样式
-        */
-        #modify-seat-btn-grp {
-            margin-left: 17%;
-        }
-
-        /*
-        右边场馆基本信息表单样式
-        */
-        #basic-info-form-container {
-            border-left: #adadad solid 1px;
-        }
-
-        #venue-basic-info-form {
-            margin-top: 30%;
-        }
-
-        #modify-basic-btn-grp {
-            margin-left: 17%;
-        }
-
     </style>
+
 </head>
 <body>
 
@@ -87,30 +63,69 @@
 <!-- nav end -->
 
 <!-- container begin -->
-<div id="venue-info-container" class="container">
+<div id="venue-register-container" class="container">
+    <div class="row">
+        <h2 class="text-center">发布计划</h2>
+    </div>
     <div id="all-venue-info" class="row">
-        <div id="legend-info" class="col-md-2">
-            <div id="legend-container">
-                <div id="legend-box"></div>
+        <div class="col-md-2">
+            <div id="legend-info">
+                <h3 class="text-center">座位类型</h3>
+                <table class="table table-bordered text-center">
+                    <thead>
+                    <tr>
+                        <th class="text-center">类型</th>
+                        <th class="text-center">价格</th>
+                        <th class="text-center">描述</th>
+                    </tr>
+                    </thead>
+                    <tbody id="seat-type-table-body">
+                    </tbody>
+                </table>
+                <div class="btn-group">
+                    <button type="button" class="btn-sm btn-primary" data-toggle="modal"
+                            data-target="#add-seat-type-modal">
+                        增加类型
+                    </button>
+                    <button type="button" class="btn-sm btn-primary" data-toggle="modal"
+                            data-target="#delete-seat-type-modal">删除类型
+                    </button>
+                </div>
             </div>
-            <div id="seat-operation-container">
-                <fieldset id="seat-info-fieldset" disabled="disabled">
-                    <div id="add-delete-container">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary" id="add-row">增加一行</button>
-                            <button type="button" class="btn btn-primary" id="add-column">增加一列</button>
-                        </div>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-warning" id="delete-row">删除一行</button>
-                            <button type="button" class="btn btn-warning" id="delete-column">删除一列</button>
+            <div id="plan-basic-info">
+                <h3 class="text-center">基础信息</h3>
+                <form id="venue-plan-info-form">
+                    <div class="form-group">
+                        <label class="control-label">开始时间</label>
+                        <div id="plan-begin-datetimepicker" class="input-group date">
+                            <input id="plan-begin" class="form-control" type="text" readonly>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
                         </div>
                     </div>
-                </fieldset>
-                <button id="modify-seat-btn" type="button" class="btn btn-primary center-block">修改座位信息</button>
-                <div id="modify-seat-btn-grp" class="btn-group hidden">
-                    <button id="modify-seat-confirm-btn" type="button" class="btn btn-primary">保存</button>
-                    <button id="modify-seat-cancel-btn" type="button" class="btn btn-primary">取消</button>
-                </div>
+
+                    <div class="form-group">
+                        <label class="control-label">结束时间</label>
+                        <div id="plan-end-datetimepicker" class="input-group date">
+                            <input id="plan-end" class="form-control" type="text" value="" readonly>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">演出类型</label>
+                        <select id="show-type" class="form-control">
+                            <option>演唱会</option>
+                            <option>演唱会</option>
+                            <option>演唱会</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">描述</label>
+                        <textarea id="plan-description" class="form-control" rows="5"
+                                  style="overflow: scroll; resize: none;"></textarea>
+                    </div>
+                    <button id="release-plan-btn" type="button" class="btn btn-primary center-block">发布计划</button>
+                </form>
             </div>
         </div>
         <div class="col-md-8">
@@ -119,232 +134,492 @@
                 <div id="seat-map"></div>
             </div>
         </div>
-        <div id="basic-info-form-container" class="col-md-2">
-            <fieldset id="basic-info-fieldset" disabled>
-                <form id="venue-basic-info-form">
+        <div class="col-md-2">
+            <h3 class="text-center">座位指定</h3>
+            <div>
+                <h4 class="text-center">单个座位指定</h4>
+                <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="control-label">场馆名</label>
-                        <input id="venue-name" type="text" class="form-control">
+                        <label class="col-md-4 control-label">行</label>
+                        <div class="col-md-8">
+                            <input id="single-seat-row" type="text" class="form-control" disabled>
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label">城市</label>
-                        <select id="venue-city" class="form-control">
-                            <option>北京</option>
-                            <option>上海</option>
-                            <option>重庆</option>
-                            <option>南京</option>
-                        </select>
+                        <label class="col-md-4 control-label">列</label>
+                        <div class="col-md-8">
+                            <input id="single-seat-column" type="text" class="form-control" disabled>
+                        </div>
                     </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">类型</label>
+                        <div class="col-md-8">
+                            <select id="single-seat-type-list" class="form-control"></select>
+                        </div>
+                    </div>
+                    <button id="single-seat-appoint-btn" type="button" class="btn btn-primary center-block">确认指定
+                    </button>
                 </form>
-            </fieldset>
-            <button id="modify-basic-info-btn" type="button" class="btn btn-primary center-block">修改基本信息</button>
-            <div id="modify-basic-btn-grp" class="btn-group hidden">
-                <button id="modify-basic-confirm-btn" type="button" class="btn btn-primary">保存</button>
-                <button id="modify-basic-cancel-btn" type="button" class="btn btn-primary">取消</button>
+            </div>
+            <div>
+                <h4 class="text-center">一行座位指定</h4>
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">行</label>
+                        <div class="col-md-8">
+                            <input id="whole-row" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">类型</label>
+                        <div class="col-md-8">
+                            <select id="row-seat-type-list" class="form-control"></select>
+                        </div>
+                    </div>
+                    <button id="row-seat-appoint-btn" type="button" class="btn btn-primary center-block">确认指定</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
 <!-- container end -->
 
+<!-- 增加类型模态框 begin -->
+<div id="add-seat-type-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center">增加座位类型</h4>
+            </div>
+            <div class="modal-body">
+                <form id="add-seat-type-form" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-offset-2 col-md-2">选择类型</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <select id="add-seat-type-list" class="form-control">
+                                    <option>b</option>
+                                    <option>c</option>
+                                    <option>d</option>
+                                    <option>e</option>
+                                    <option>f</option>
+                                    <option>g</option>
+                                    <option>h</option>
+                                    <option>i</option>
+                                </select>
+                                <span id="add-seat-type-color-show" class="input-group-addon"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-offset-2 col-md-2">座位价格</label>
+                        <div class="col-md-4">
+                            <input id="add-seat-type-price" type="text" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-offset-2 col-md-2">座位描述</label>
+                        <div class="col-md-4">
+                            <input id="add-seat-type-description" type="text" class="form-control">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="add-seat-type-btn" type="button" class="btn btn-primary center-block">增加类型</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 增加类型模态框 end -->
+<!-- 删除类型模态框 begin -->
+<div id="delete-seat-type-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center">删除座位类型</h4>
+            </div>
+            <div class="modal-body">
+                <form id="delte-seat-type-form" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-offset-2 col-md-2">选择类型</label>
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <select id="delete-seat-type-list" class="form-control"></select>
+                                <span id="delete-seat-type-color-show" class="input-group-addon"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-offset-2 col-md-2">座位价格</label>
+                        <div class="col-md-4">
+                            <input id="delete-seat-type-price" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-offset-2 col-md-2">座位描述</label>
+                        <div class="col-md-4">
+                            <input id="delete-seat-type-description" type="text" class="form-control" disabled>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="delete-seat-type-btn" type="button" class="btn btn-primary center-block">删除类型</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 删除类型模态框 end -->
+
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="../../js/jquery-3.3.1.min.js"></script>
-
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="../../js/bootstrap.min.js"></script>
-
 <!-- seat js -->
 <script src="../../js/jquery.seat-charts.min.js"></script>
-<!-- 对座位图操作的js -->
+<!-- datetimepicker -->
+<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+<!-- datetimepicker locale -->
+<script src="../../js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<!-- 对座位操作的js -->
 <script src="../../js/seat-operation.js"></script>
 
 <script>
 
     /**
-     * 确认/取消修改座位信息时，js共同动作
+     * addon移除当前颜色
+     *
+     * @param addon 当前的jquery对象
      */
-    function seat_info_save_cancel() {
-        $("#modify-seat-btn-grp").addClass("hidden");
-        $("#modify-seat-btn").removeClass("hidden");
-        //座位信息不可编辑
-        $("#seat-info-fieldset").attr("disabled", "disabled");
-        $("#seat-map-container").off("click", ".seatCharts-space:empty", space2seat);
-        //删除座位转换到空位的点击事件
-        delete seatInfo.a.click;
+    function addonRemoveColor(addon) {
+        addon.removeClass();
+        addon.addClass("input-group-addon");
     }
 
     /**
-     * 确认/取消修改基本信息时，js共同动作
+     * addon添加背景色
+     *
+     * @param addon 当前的addon的jquery对象
+     * @param typeChar 表示座位的字母
      */
-    function basic_info_save_cancel() {
-        $("#modify-basic-btn-grp").addClass("hidden");
-        $("#modify-basic-info-btn").removeClass("hidden");
-        //基本信息不可编辑
-        $("#basic-info-fieldset").attr("disabled", "disabled");
+    function addonAddColor(addon, typeChar) {
+        addon.addClass("seat-type-" + typeChar);
     }
 
     /**
-     * 取消修改座位信息
+     * add颜色变化
+     *
+     * @param addon 当前的addon的jquery对象
+     * @param typeChar 表示座位的字母
      */
-    function modify_seat_info_cancel() {
-        seat_info_save_cancel();
-        //座位图复原
-        initSeatMap(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
-        //重新渲染
-        rerender();
+    function addonColorChange(addon, typeChar) {
+        addonRemoveColor(addon);
+        addonAddColor(addon, typeChar);
     }
 
     /**
-     * 取消修改基本信息
+     * 往下拉框中添加一个option
+     * @param select jQuery对象
+     * @param typeChar 表示该类型的字符
      */
-    function modify_basic_info_cancel() {
-        basic_info_save_cancel();
+    function appendSeatType(select, typeChar) {
+        select.append("<option>" + typeChar + "</option>");
+    }
 
-        //基本信息复原
-        $("#venue-name").val(venueInfo.name);
-        $("#venue-city").val(venueInfo.city);
+    /**
+     * 从下拉框中删除一个option
+     * @param select 当前选中的下拉框jQuery对象
+     * @param typeChar 表示该类型的字符
+     */
+    function removeSeatType(select, typeChar) {
+        select.children().each(function () {
+            if ($(this).text() === typeChar) {
+                $(this).remove();
+                return false;
+            }
+        });
+    }
+
+    /**
+     * 清空数据及颜色
+     * @param dataContainer 数据容器
+     * @param addon 显示颜色的addon
+     */
+    function clearDataAndColor(dataContainer, addon) {
+        dataContainer.find("select,input").val("");
+        addonRemoveColor(addon);
+    }
+
+    /**
+     * 禁用该容器中的所有输入选项
+     * @param inputContainer
+     */
+    function disableInput(inputContainer) {
+        inputContainer.find("select,input").attr("disabled", "disabled");
+    }
+
+    /**
+     * 启用该容器中的所有输入选项
+     * @param inputContainer
+     */
+    function enableInput(inputContainer) {
+        inputContainer.find("select,input").removeAttr("disabled");
+    }
+
+    /**
+     * 指定单个座位类型
+     */
+    function appointSingleSeatType() {
+        let rowAndColumn = this.node().attr("id").split("_");
+        let row = rowAndColumn[0];
+        let column = rowAndColumn[1];
+
+        $("#single-seat-row").val(row);
+        $("#single-seat-column").val(column);
+
+    }
+
+    /**
+     * 渲染显示座位类型的表格
+     */
+    function renderSeatTypeTable() {
+        let body = $("#seat-type-table-body");
+        body.empty();
+        $.each(seatInfo, function (typeChar, seatType) {
+            //如果不是一个函数，说明是一个seatType
+            if (!$.isFunction(seatType)) {
+                body.append(
+                    "<tr>" +
+                    "<td class='seat-type-" + typeChar + "'" + ">" + typeChar + "</td>" +
+                    "<td>" + seatType.price + "</td>" +
+                    "<td>" + seatType.description + "</td>" +
+                    "</tr>"
+                );
+            }
+        });
     }
 
     $(document).ready(function () {
 
-        //导航栏中发布计划active
-        $("#venue-plan-li").addClass("active");
+        //todo 开始日期改变后的限制
+        //开始日期
+        $("#plan-begin-datetimepicker").datetimepicker({
+            language: 'zh-CN',          //语言
+            format: "yyyy-mm-dd hh:ii", //时间显示格式
+            weekStart: 1,               //一周开始时间
+            startDate: new Date(),      //默认开始时间，之前的时间都被disabled
+            todayBtn: 1,
+            autoclose: 1,               //当选择一个日期后是否立即关闭此日期选择器
+            todayHighlight: 1,
+            startView: 2,
+            minView: 0,
+            maxView: 3
+        });
 
-        //基本信息
-        $("#venue-name").val(venueInfo.name);
-        $("#venue-city").val(venueInfo.city);
+        //结束日期
+        $("#plan-end-datetimepicker").datetimepicker({
+            language: 'zh-CN',          //语言
+            format: "yyyy-mm-dd hh:ii", //时间显示格式
+            weekStart: 1,               //一周开始时间
+            startDate: new Date(),      //默认开始时间，之前的时间都被disabled
+            todayBtn: 1,
+            autoclose: 1,               //当选择一个日期后是否立即关闭此日期选择器
+            todayHighlight: 1,
+            startView: 2,
+            minView: 0,
+            maxView: 3
+        });
 
-        //座位信息
-        initSeatMap(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
+        //增加类型模态框显示监听
+        $("#add-seat-type-modal").on("show.bs.modal", function () {
+            //清空选择框的数据及颜色
+            clearDataAndColor($(this), $("#add-seat-type-color-show"));
+        });
+
+        //删除类型模态框显示监听
+        $("#delete-seat-type-modal").on("show.bs.modal", function () {
+            //清空选择框的数据及颜色
+            clearDataAndColor($(this), $("#delete-seat-type-color-show"));
+
+            //检查select中是否存在option
+            let deleteList = $("#delete-seat-type-list");
+            if (deleteList.children().length === 0) {
+                deleteList.attr("disabled", "disabled");
+            }
+            else {
+                deleteList.removeAttr("disabled");
+            }
+        });
+
+        //增加类型的select
+        $("#add-seat-type-list").on("change", function () {
+            addonColorChange($("#add-seat-type-color-show"), $(this).val());
+        });
+
+        //删除类型的select
+        $("#delete-seat-type-list").on("change", function () {
+            let deleteChar = $(this).val();
+            console.log("被选中将要被删除的座位类型是: " + deleteChar);
+            addonColorChange($("#delete-seat-type-color-show"), deleteChar);
+            //显示价格及其描述
+            $.each(seatInfo, function (typeChar, item) {
+                if (typeChar === deleteChar) {
+                    $("#delete-seat-type-price").val(item["price"]);
+                    $("#delete-seat-type-description").val(item["description"]);
+                }
+            });
+        });
+
+        //增加类型监听
+        $("#add-seat-type-btn").on("click", function () {
+            let char = $("#add-seat-type-list").val();
+            let price = $("#add-seat-type-price").val();
+            let description = $("#add-seat-type-description").val();
+
+            //如果有数据为空
+            if (char === null || price.trim() === "" || description.trim() === "") {
+                alert("座位类型信息不完整");
+            }
+            else {
+                //添加一个legendInfo和seatInfo
+                let newLegendInfo = [char, 'avalaible', description];
+                legendInfo.items.push(newLegendInfo);
+                seatInfo[char] = {
+                    classes: "seat-type-" + char,
+                    price: price,
+                    description: description
+                };
+
+                //当前选中option设为不可用，第一个未被disabled掉的元素设置为选中
+                let curSelectedOption = $("#add-seat-type-list").children(":selected");
+                curSelectedOption.attr("disabled", "disabled");
+                let nextSelected = curSelectedOption.siblings(":not([disabled='disabled']):first");
+
+                //还有可以添加的类型，设置显示的值
+                if (nextSelected.length === 1) {
+                    $("#add-seat-type-list").val(nextSelected.text());
+                }
+                //没有可以添加的类型，清空数据
+                else {
+                    clearDataAndColor($("#add-seat-type-modal"), $("#add-seat-type-color-show"));
+                }
+
+                //删除类型select及设置类型select增加一个选项
+                appendSeatType($("#delete-seat-type-list"), char);
+                appendSeatType($("#single-seat-type-list"), char);
+                appendSeatType($("#row-seat-type-list"), char);
+
+                //重绘
+                rerenderSeats();
+
+                //重绘表格
+                renderSeatTypeTable();
+            }
+        });
+
+        //删除类型监听
+        $("#delete-seat-type-btn").on("click", function () {
+
+            //删除选择框jqeury对象
+            let deleteSelect = $("#delete-seat-type-list");
+
+            let deleteChar = deleteSelect.val();
+
+            //todo 检查当前座位当中是否还有此类型，有的话要提示
+
+            //从legendInfo中删除这条座位类型
+            legendInfo.removeItem(deleteChar);
+            //从seatInfo中删除这条座位类型
+            seatInfo.removeTypeChar(deleteChar);
+
+            //增加类型模态框中的该选项设置为可选
+            $("#add-seat-type-list").children().each(function () {
+                if ($(this).text() === deleteChar) {
+                    $(this).removeAttr("disabled");
+                    return false;
+                }
+            });
+
+            //删除类型模态框移除当前选项，选用剩余选项的第一个选项
+            let curSelectedOption = deleteSelect.children(":selected");
+            let nextSelected = curSelectedOption.siblings(":first");
+            curSelectedOption.remove();
+
+            //还有可以添加的类型，设置显示的值
+            if (nextSelected.length === 1) {
+                // 设置select框的值，并且手动触发select框的change事件
+                deleteSelect.val(nextSelected.text());
+                deleteSelect.change();
+            }
+            //没有可以添加的类型，清空数据
+            else {
+                clearDataAndColor($("#delete-seat-type-modal"), $("#delete-seat-type-color-show"));
+            }
+
+            //设置座位的select删除一个选项
+            removeSeatType($("#single-seat-type-list"), deleteChar);
+            removeSeatType($("#row-seat-type-list"), deleteChar);
+
+            //重绘
+            rerenderSeats();
+
+            //重绘表格
+            renderSeatTypeTable();
+        });
+
+        //设置一排座位类型监听
+        $("#seat-map-container").on("click", ".seatCharts-row", function () {
+            $("#whole-row").val($(this).children(":first").text());
+        });
+
+        //todo 两个确认指定按钮的监听
+        //单个座位的确认指定按钮
+        $("#single-seat-appoint-btn").on("click", function () {
+            let row = $("#single-seat-row").val().trim();
+            let column = $("#single-seat-column").val().trim();
+
+            seatMap[row-1][column-1] = $("#single-seat-type-list").val().trim();
+            rerenderSeats();
+        });
+
+        //一排座位的确认指定按钮
+        $("#row-seat-appoint-btn").on("click", function () {
+            let row = $("#whole-row").val();
+            let type = $("#row-seat-type-list").val();
+
+            $.each(seatMap[row - 1], function (index, val) {
+                seatMap[row - 1][index] = type;
+            });
+
+            rerenderSeats();
+        });
+
+
+        //todo 页面跳转监听，提醒是否保存
+        //todo 接收后端数据，初始化座位图
+
+        /**
+         * 初始化界面要渲染的座位的信息
+         */
+
+        //初始化座位的点击事件
+        seatInfo.removeTypeChar('a');
+        seatInfo.addTypeChar('a', {
+            click: appointSingleSeatType,
+            price: "/",
+            description: "未指定"
+        });
+        //点击未指定座位设置类型监听
+        seatInfo.addClick('a', appointSingleSeatType);
+
+        //初始化座位类型
+        legendInfo.removeItem('a');
+        legendInfo.addItem(['a', 'available', '未指定']);
+
         renderSeats();
 
-        //增加/删除 行/列 按钮添加监听
-        $("#add-row").on("click", add_row);
-        $("#add-column").on("click", add_column);
-        $("#delete-row").on("click", delete_row);
-        $("#delete-column").on("click", delete_column);
-
-        //修改座位信息的按钮
-        $("#modify-seat-btn").on("click", function modify_seat() {
-            //确认没有在修改基本信息
-            if ($("#modify-basic-btn-grp").hasClass("hidden")) {
-                //修改座位信息按钮隐藏，显示保存取消按钮组
-                $(this).addClass("hidden");
-                $("#modify-seat-btn-grp").removeClass("hidden");
-                //座位信息可编辑
-                $("#seat-info-fieldset").removeAttr("disabled");
-                //空位添加由空位转换到座位的点击事件
-                $("#seat-map-container").on("click", ".seatCharts-space:empty", space2seat);
-                //座位添加由座位转换到空位的点击事件
-                seatInfo.a.click = seat2space;
-                //重新渲染
-                rerender();
-            }
-            else {
-                alert("请先保存或取消基本信息");
-            }
-
-        });
-
-        //修改基本信息按钮
-        $("#modify-basic-info-btn").on("click", function modify_basic_info() {
-            //确认没有在修改座位信息
-            if ($("#modify-seat-btn-grp").hasClass("hidden")) {
-                //修改基本信息按钮隐藏，显示保存取消按钮组
-                $(this).addClass("hidden");
-                $("#modify-basic-btn-grp").removeClass("hidden");
-                //基本信息可编辑
-                $("#basic-info-fieldset").removeAttr("disabled");
-            }
-            else {
-                alert("请先保存或取消座位信息")
-            }
-        });
-
-        //修改座位信息取消按钮
-        $("#modify-seat-cancel-btn").on("click", modify_seat_info_cancel);
-
-        //修改基本信息取消按钮
-        $("#modify-basic-cancel-btn").on("click", modify_basic_info_cancel);
-
-        //修改座位信息确认按钮
-        //更新座位信息
-        $("#modify-seat-confirm-btn").on("click", function () {
-
-            var seatMapArr = [];
-            $.each(seatMap, function (row, val) {
-                $.each(val, function (column, char) {
-                    var newVenueSeat = {
-                        "venueSeatId": {
-                            "row": row + 1,
-                            "column": column + 1,
-                        },
-                        "hasSeat": char === 'a'
-                    };
-                    seatMapArr.push(newVenueSeat);
-                });
-            });
-
-            var seatMapInfo = {
-                "venueId": ${sessionScope.venueId},
-                "rowNum": seatMap.length,
-                "columnNum": seatMap[0].length,
-                "seatMap": seatMapArr
-            };
-
-            $.ajax({
-                url: "/venue/updateSeatMap",
-                contentType: "application/json;charset=utf-8",
-                method: "post",
-                data: JSON.stringify(seatMapInfo),
-                processData: false,
-                success: function (data) {
-                    if (data === "true") {
-                        alert("更新座位信息成功");
-                        seat_info_save_cancel();
-                    }
-                    else {
-                        alert("更新座位信息出现了问题");
-                        modify_seat_info_cancel();
-                    }
-                },
-                error: function () {
-                    console.log("错误了");
-                }
-            });
-        });
-
-        //修改基本信息确认按钮
-        //更新场馆基本信息
-        $("#modify-basic-confirm-btn").on("click", function () {
-
-            var venueBasicInfoDTO = {
-                "venueId": ${sessionScope.venueId},
-                "name": $("#venue-name").val(),
-                "city": $("#venue-city").val(),
-            };
-
-            $.ajax({
-                url: "/venue/updateBasicInfo",
-                contentType: "application/json;charset=utf-8",
-                method: "post",
-                data: JSON.stringify(venueBasicInfoDTO),
-                processData: false,
-                success: function (data) {
-                    if (data === "true") {
-                        alert("更新基本信息成功");
-                        basic_info_save_cancel();
-                    }
-                    else {
-                        alert("更新基本信息出现了问题");
-                        modify_basic_info_cancel();
-                    }
-                },
-                error: function () {
-                    console.log("错误了");
-                }
-            });
-        });
+        renderSeatTypeTable();
     });
 </script>
 </body>

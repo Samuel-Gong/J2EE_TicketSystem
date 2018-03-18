@@ -17,7 +17,6 @@
     <!-- Bootstrap -->
     <link href="../../../css/bootstrap.min.css" rel="stylesheet">
     <!-- seat css -->
-    <link href="../../../css/jquery.seat-charts.css" rel="stylesheet">
     <link href="../../../css/seat.css" rel="stylesheet">
 
     <style>
