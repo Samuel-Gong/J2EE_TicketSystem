@@ -19,7 +19,7 @@ import java.time.LocalDate;
 /**
  * @author Shenmiu
  * @date 2018/03/07
- *
+ * <p>
  * 用于测试Spring的参数绑定
  */
 @Controller("bindingTestController")
@@ -32,7 +32,8 @@ public class BindingTestController {
      * int型
      */
     @RequestMapping("/intData")
-    public @ResponseBody int intData(@RequestParam(value = "intData") int a){
+    public @ResponseBody
+    int intData(@RequestParam(value = "intData") int a) {
         return a;
     }
 
@@ -40,7 +41,8 @@ public class BindingTestController {
      * float型
      */
     @RequestMapping("/floatData")
-    public @ResponseBody float floatData(@RequestParam(value = "floatData") int a){
+    public @ResponseBody
+    float floatData(@RequestParam(value = "floatData") int a) {
         return a;
     }
 
@@ -48,7 +50,8 @@ public class BindingTestController {
      * boolean
      */
     @RequestMapping("/booleanData")
-    public @ResponseBody boolean booleanData(@RequestParam(value = "booleanData") boolean a){
+    public @ResponseBody
+    boolean booleanData(@RequestParam(value = "booleanData") boolean a) {
         return a;
     }
 
@@ -58,7 +61,8 @@ public class BindingTestController {
      * Integer
      */
     @RequestMapping("/integerData")
-    public @ResponseBody Integer integerData(@RequestParam(value = "integerData") Integer a){
+    public @ResponseBody
+    Integer integerData(@RequestParam(value = "integerData") Integer a) {
         return a;
     }
 
@@ -67,7 +71,8 @@ public class BindingTestController {
      * 简单POJO
      */
     @RequestMapping("pojo")
-    public @ResponseBody User pojoData(User user){
+    public @ResponseBody
+    User pojoData(User user) {
         return user;
     }
 
@@ -75,7 +80,8 @@ public class BindingTestController {
      * 复合POJO
      */
     @RequestMapping(value = "complexPOJO", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody ComplexUser complexPOJOData(ComplexUser complexUser){
+    public @ResponseBody
+    ComplexUser complexPOJOData(ComplexUser complexUser) {
         return complexUser;
     }
 
@@ -85,7 +91,8 @@ public class BindingTestController {
      * List
      */
     @RequestMapping(value = "list", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody UserListVO listData(UserListVO userListVO){
+    public @ResponseBody
+    UserListVO listData(UserListVO userListVO) {
         return userListVO;
     }
 
@@ -93,20 +100,22 @@ public class BindingTestController {
      * Map
      */
     @RequestMapping(value = "map", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody UserMapVO mapData(UserMapVO userMapVO){
+    public @ResponseBody
+    UserMapVO mapData(UserMapVO userMapVO) {
         return userMapVO;
     }
 
     //Converter
 
     @RequestMapping(value = "stringToLocalDate")
-    public @ResponseBody String localDateData(@RequestParam("date") LocalDate date){
+    public @ResponseBody
+    String localDateData(@RequestParam("date") LocalDate date) {
         return date.toString();
     }
 
     @InitBinder
-    public void initBinder(WebDataBinder webDataBinder){
-        GenericConversionService conversionService = (GenericConversionService)webDataBinder.getConversionService();
+    public void initBinder(WebDataBinder webDataBinder) {
+        GenericConversionService conversionService = (GenericConversionService) webDataBinder.getConversionService();
 
         //Try to add converter manually, it can convert String to LocalDate successfully
         conversionService.addConverter(String.class, LocalDate.class, new LocalDateConverter("yyyy-MM-dd"));

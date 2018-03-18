@@ -7,11 +7,11 @@ import java.io.Serializable;
 /**
  * @author Shenmiu
  * @date 2018/03/04
- *
+ * <p>
  * 票的联合主键
  */
 @Embeddable
-public class TicketId implements Serializable{
+public class TicketId implements Serializable {
 
     /**
      * 位置的行

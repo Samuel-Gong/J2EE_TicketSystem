@@ -1,8 +1,8 @@
 package edu.nju.model;
 
 import edu.nju.model.embeddable.VenueSeatId;
-import edu.nju.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,16 +11,17 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 class VenueTest {
 
-    private ApplicationContext context;
+    private SessionFactory sessionFactory;
 
     @BeforeEach
     void setUp() {
-        context = new FileSystemXmlApplicationContext("src/main/webapp/WEB-INF/applicationContext.xml");
+        ApplicationContext context = new FileSystemXmlApplicationContext("src/main/webapp/WEB-INF/applicationContext.xml");
+        sessionFactory = context.getBean("sessionFactory", SessionFactory.class);
     }
 
     @Test
     void addSeat() {
-        Session session = HibernateUtil.currentSession();
+        Session session = sessionFactory.getCurrentSession();
 
         Transaction tx = session.beginTransaction();
 
@@ -39,6 +40,5 @@ class VenueTest {
         session.save(venue);
 
         tx.commit();
-        HibernateUtil.closeSession();
     }
 }

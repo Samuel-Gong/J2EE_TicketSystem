@@ -5,9 +5,10 @@ import edu.nju.dto.VenueBasicInfoDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenueSeat;
-import edu.nju.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 
@@ -20,10 +21,13 @@ import org.springframework.stereotype.Repository;
 @Repository("venueDao")
 public class VenueDaoImpl implements VenueDao {
 
+    @Autowired
+    private SessionFactory sessionFactory;
+
     @Override
     public Venue getVenue(int venueId) {
 
-        Session session = HibernateUtil.currentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         Venue venue = session.createQuery("from Venue where id = :id", Venue.class)
@@ -32,7 +36,6 @@ public class VenueDaoImpl implements VenueDao {
         assert venue != null;
 
         tx.commit();
-        HibernateUtil.closeSession();
 
         return venue;
     }
@@ -40,7 +43,7 @@ public class VenueDaoImpl implements VenueDao {
     @Override
     public String getPassword(int venueId) {
 
-        Session session = HibernateUtil.currentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         String password = session.createQuery("select password from Venue where id = :id", String.class)
@@ -48,7 +51,6 @@ public class VenueDaoImpl implements VenueDao {
                 .getSingleResult();
 
         tx.commit();
-        HibernateUtil.closeSession();
 
         return password;
     }
@@ -56,7 +58,7 @@ public class VenueDaoImpl implements VenueDao {
     @Override
     public boolean addVenue(Venue venue) {
 
-        Session session = HibernateUtil.currentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         for (VenueSeat venueSeat : venue.getSeatMap()) {
@@ -66,7 +68,6 @@ public class VenueDaoImpl implements VenueDao {
         session.save(venue);
 
         tx.commit();
-        HibernateUtil.closeSession();
 
         return true;
     }
@@ -74,7 +75,7 @@ public class VenueDaoImpl implements VenueDao {
     @Override
     public boolean updateBasicInfo(VenueBasicInfoDTO venueBasicInfo) {
 
-        Session session = HibernateUtil.currentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         int count = session.createQuery("update Venue set name = :name, city = :city " +
@@ -85,7 +86,6 @@ public class VenueDaoImpl implements VenueDao {
                 .executeUpdate();
 
         tx.commit();
-        HibernateUtil.closeSession();
 
         return count > 0;
     }
@@ -93,7 +93,7 @@ public class VenueDaoImpl implements VenueDao {
     @Override
     public boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfo) {
 
-        Session session = HibernateUtil.currentSession();
+        Session session = sessionFactory.getCurrentSession();
         Transaction tx = session.beginTransaction();
 
         //更新场馆的行和列
@@ -116,7 +116,6 @@ public class VenueDaoImpl implements VenueDao {
         }
 
         tx.commit();
-        HibernateUtil.closeSession();
 
         return venueUpdateRow > 0 && deleteCount > 0;
     }

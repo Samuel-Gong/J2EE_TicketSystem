@@ -1,19 +1,27 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
+<%--
+  Created by IntelliJ IDEA.
+  User: Shenmiu
+  Date: 18/03/2018
+  Time: 19:28
+  
+  Description:
+--%>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
+<html>
 <head>
     <meta charset="utf-8">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>发布计划</title>
 
     <!-- Normalize -->
-    <link href="../../css/normalize.css" rel="stylesheet">
+    <link href="../../../css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
     <!-- seat css -->
-    <link href="../../css/seat.css" rel="stylesheet">
+    <link href="../../../css/seat.css" rel="stylesheet">
 
     <!-- datetimepicker css -->
-    <link href="../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="../../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     <style>
 
@@ -275,17 +283,17 @@
 <!-- 删除类型模态框 end -->
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="../../js/jquery-3.3.1.min.js"></script>
+<script src="../../../js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="../../js/bootstrap.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
 <!-- seat js -->
-<script src="../../js/jquery-seat-charts.js"></script>
+<script src="../../../js/jquery-seat-charts.js"></script>
 <!-- datetimepicker -->
-<script src="../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="../../../js/bootstrap-datetimepicker.min.js"></script>
 <!-- datetimepicker locale -->
-<script src="../../js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../../js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <!-- 对座位操作的js -->
-<script src="../../js/seat-operation.js"></script>
+<script src="../../../js/seat-operation.js"></script>
 
 <script>
 
@@ -585,7 +593,21 @@
          * 初始化界面要渲染的座位的信息
          */
 
-        //todo 获取后台的数据
+        let venueInfo;
+        $.ajax({
+            url: "/venue/info",
+            method: "get",
+            async: false,     //同步请求
+            success: function (data) {
+                venueInfo = JSON.parse(data);
+            },
+            error: function () {
+                console.log("错误了");
+            }
+        });
+
+        //初始化seatMap
+        initSeatMap(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
 
         //初始化座位的点击事件
         seatInfo.removeTypeChar('a');

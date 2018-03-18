@@ -3,7 +3,7 @@ package edu.nju.BindingTest.bindingTestModel;
 /**
  * @author Shenmiu
  * @date 2018/03/07
- *
+ * <p>
  * 复合POJO
  */
 public class ComplexUser {

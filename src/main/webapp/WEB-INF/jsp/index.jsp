@@ -151,8 +151,8 @@
             </div>
             <div class="modal-footer">
                 <div class="btn-group">
-                <button type="button" id="venue-login-btn" class="btn btn-default">登录</button>
-                <button type="button" id="venue-register-btn" class="btn btn-primary">注册</button>
+                    <button type="button" id="venue-login-btn" class="btn btn-default">登录</button>
+                    <button type="button" id="venue-register-btn" class="btn btn-primary">注册</button>
                 </div>
             </div>
         </div>
@@ -214,7 +214,7 @@
 
         //场馆登录
         $("#venue-login-btn").on("click", function () {
-           $("#venue-login-form").submit();
+            $("#venue-login-form").submit();
         });
 
         //场馆注册
@@ -224,7 +224,7 @@
 
         //经理登录
         $("#manager-login-btn").on("click", function () {
-           $("#manager-login-form").submit();
+            $("#manager-login-form").submit();
         });
 
         if (${sessionScope.containsKey("mail")}) {

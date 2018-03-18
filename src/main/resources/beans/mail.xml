@@ -23,8 +23,8 @@
     <bean id="customeMailMessage"
           class="org.springframework.mail.SimpleMailMessage">
 
-        <property name="from" value="a52212498@163.com" />
-        <property name="subject" value="注册验证" />
+        <property name="from" value="a52212498@163.com"/>
+        <property name="subject" value="注册验证"/>
         <property name="text">
             <value>
                 <![CDATA[

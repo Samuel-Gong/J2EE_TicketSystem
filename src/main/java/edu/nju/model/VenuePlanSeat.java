@@ -3,6 +3,7 @@ package edu.nju.model;
 import com.alibaba.fastjson.annotation.JSONType;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author Shenmiu
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "venue_plan_seat")
 @JSONType(ignores = "venuePlan", orders = {"row", "column", "typeChar"})
-public class VenuePlanSeat {
+public class VenuePlanSeat implements Serializable {
 
     /**
      * 与场馆计划多对一
@@ -69,5 +70,37 @@ public class VenuePlanSeat {
 
     public void setTypeChar(char typeChar) {
         this.typeChar = typeChar;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        VenuePlanSeat that = (VenuePlanSeat) o;
+
+        if (row != that.row) {
+            return false;
+        }
+        if (column != that.column) {
+            return false;
+        }
+        if (typeChar != that.typeChar) {
+            return false;
+        }
+        return venuePlan.equals(that.venuePlan);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = venuePlan.hashCode();
+        result = 31 * result + row;
+        result = 31 * result + column;
+        result = 31 * result + (int) typeChar;
+        return result;
     }
 }

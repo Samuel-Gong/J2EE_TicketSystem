@@ -7,13 +7,14 @@ import edu.nju.model.Venue;
 /**
  * @author Shenmiu
  * @date 2018/03/16
- *
+ * <p>
  * 场馆数据访问接口
  */
 public interface VenueDao {
 
     /**
      * 获取场馆信息
+     *
      * @param venueId 场馆编号
      * @return 场馆信息
      */
@@ -21,6 +22,7 @@ public interface VenueDao {
 
     /**
      * 根据场馆编号获取场馆的密码
+     *
      * @param venueId 场馆编号
      * @return 场馆密码
      */
@@ -28,6 +30,7 @@ public interface VenueDao {
 
     /**
      * 添加一个场馆
+     *
      * @param venue 场馆信息
      * @return 是否添加成功
      */
@@ -35,6 +38,7 @@ public interface VenueDao {
 
     /**
      * 更新场馆基础信息
+     *
      * @param venue 场馆信息
      * @return 是否更新成功
      */
@@ -42,6 +46,7 @@ public interface VenueDao {
 
     /**
      * 更新场馆座位信息
+     *
      * @param venueSeatInfo 场馆座位信息
      * @return 更新行数
      */

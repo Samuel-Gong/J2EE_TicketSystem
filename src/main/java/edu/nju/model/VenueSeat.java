@@ -9,7 +9,7 @@ import javax.persistence.*;
 /**
  * @author Shenmiu
  * @date 2018/03/14
- *
+ * <p>
  * 只表示场馆座位的分布情况
  */
 @Entity

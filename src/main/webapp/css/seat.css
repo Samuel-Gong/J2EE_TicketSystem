@@ -19,7 +19,7 @@ body {
 DIV container where seat chart's rendered.
  */
 .seatCharts-container {
-
+    outline: none;
 }
 
 /**

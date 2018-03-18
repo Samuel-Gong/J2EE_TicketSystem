@@ -140,7 +140,7 @@
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="../../../js/bootstrap.min.js"></script>
 <!-- seat js -->
-<script src="../../../js/jquery.seat-charts.min.js"></script>
+<script src="../../../js/jquery-seat-charts.js"></script>
 <!-- 对座位图操作的js -->
 <script src="../../../js/seat-operation.js"></script>
 
@@ -149,7 +149,7 @@
     /**
      * 保存后端渲染的场馆座位及基本信息
      */
-    var venueInfo = ${venue};
+    let venueInfo;
 
     /**
      * 确认/取消修改座位信息时，js共同动作
@@ -197,6 +197,21 @@
     }
 
     $(document).ready(function () {
+
+        $.ajax({
+            url: "/venue/info",
+            method: "get",
+            async: false,     //同步请求
+            success: function (data) {
+                venueInfo = JSON.parse(data);
+            },
+            error: function () {
+                console.log("错误了");
+            }
+        });
+
+        console.log(venueInfo.name);
+        console.log(venueInfo.city);
 
         //导航栏中场馆信息active
         $("#venue-info-li").addClass("active");
@@ -262,10 +277,10 @@
         //更新座位信息
         $("#modify-seat-confirm-btn").on("click", function () {
 
-            var seatMapArr = [];
+            let seatMapArr = [];
             $.each(seatMap, function (row, val) {
                 $.each(val, function (column, char) {
-                    var newVenueSeat = {
+                    let newVenueSeat = {
                         "venueSeatId": {
                             "row": row + 1,
                             "column": column + 1,
@@ -276,7 +291,7 @@
                 });
             });
 
-            var seatMapInfo = {
+            let seatMapInfo = {
                 "venueId": ${sessionScope.venueId},
                 "rowNum": seatMap.length,
                 "columnNum": seatMap[0].length,
@@ -309,7 +324,7 @@
         //更新场馆基本信息
         $("#modify-basic-confirm-btn").on("click", function () {
 
-            var venueBasicInfoDTO = {
+            let venueBasicInfoDTO = {
                 "venueId": ${sessionScope.venueId},
                 "name": $("#venue-name").val(),
                 "city": $("#venue-city").val(),

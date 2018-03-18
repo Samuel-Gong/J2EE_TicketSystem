@@ -8,11 +8,29 @@ package edu.nju.util;
  */
 public enum ShowType {
 
+    /**
+     * 演唱会
+     */
     CONCERT("演唱会"),
+    /**
+     * 舞蹈
+     */
     DANCE("舞蹈"),
+    /**
+     * 话剧
+     */
     DRAMA("话剧"),
+    /**
+     * 足球
+     */
     SOCCER("足球"),
+    /**
+     * 篮球
+     */
     BASKETBALL("篮球"),
+    /**
+     * 位置类型
+     */
     NULL("未知");
 
     public String getValue() {

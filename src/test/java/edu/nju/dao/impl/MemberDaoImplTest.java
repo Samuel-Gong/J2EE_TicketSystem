@@ -28,7 +28,7 @@ class MemberDaoImplTest {
         Assertions.assertEquals(member.getMail(), "335931662@qq.com");
     }
 
-    @Disabled
+//    @Disabled
     @Test
     void addMember() {
         Member member = new Member("123@qq.com", "12345");
@@ -36,13 +36,13 @@ class MemberDaoImplTest {
     }
 
     @Test
-    void disqulify(){
+    void disqulify() {
         memberDao.disqulify("335931662@qq.com");
         Assertions.assertEquals(false, memberDao.getMember("335931662@qq.com").isQualified());
     }
 
     @Test
-    void updateInfo(){
+    void updateInfo() {
         Member member = memberDao.getMember("335931662@qq.com");
         member.setQualified(true);
         memberDao.updateMember(member);

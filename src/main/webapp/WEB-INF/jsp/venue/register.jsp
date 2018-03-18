@@ -122,7 +122,7 @@
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="../../../js/bootstrap.min.js"></script>
 <!-- seat js -->
-<script src="../../../js/jquery.seat-charts.min.js"></script>
+<script src="../../../js/jquery-seat-charts.js"></script>
 <!-- 对座位图操作的js -->
 <script src="../../../js/seat-operation.js"></script>
 

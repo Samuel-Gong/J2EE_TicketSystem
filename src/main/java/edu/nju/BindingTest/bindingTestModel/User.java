@@ -3,7 +3,7 @@ package edu.nju.BindingTest.bindingTestModel;
 /**
  * @author Shenmiu
  * @date 2018/03/07
- *
+ * <p>
  * 用于测试实体类绑定的POJO类
  */
 public class User {

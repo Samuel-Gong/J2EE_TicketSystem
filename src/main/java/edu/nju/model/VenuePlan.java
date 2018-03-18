@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * @author Shenmiu
  * @date 2018/03/04
- *
+ * <p>
  * 场馆计划
  */
 @Entity
@@ -24,7 +24,7 @@ public class VenuePlan {
 
     /**
      * 场馆计划的id
-     *
+     * <p>
      * 使用主键自增的策略
      */
     @Id
@@ -138,5 +138,24 @@ public class VenuePlan {
 
     public void setVenuePlanSeats(List<VenuePlanSeat> venuePlanSeats) {
         this.venuePlanSeats = venuePlanSeats;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        VenuePlan venuePlan = (VenuePlan) o;
+
+        return venuePlanId == venuePlan.venuePlanId;
+    }
+
+    @Override
+    public int hashCode() {
+        return venuePlanId;
     }
 }

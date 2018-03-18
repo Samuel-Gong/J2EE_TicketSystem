@@ -25,11 +25,11 @@
             <div class="form-group">
                 <label for="dtp_input1" class="col-md-2 control-label">DateTime Picking</label>
                 <div class="input-group date form_datetime col-md-5" data-date="1979-09-16T05:25:07Z"
-                           data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
-                <input class="form-control" size="16" type="text" value="" readonly>
-                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
-            </div>
+                     data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">
+                    <input class="form-control" size="16" type="text" value="" readonly>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+                </div>
                 <input type="hidden" id="dtp_input1" value=""/><br/>
             </div>
             <div class="form-group">
@@ -60,8 +60,6 @@
 <script src="../../js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="../../js/bootstrap.min.js"></script>
-<!-- seat js -->
-<script src="../../js/jquery.seat-charts.min.js"></script>
 <!-- datetimepicker -->
 <script src="../../js/bootstrap-datetimepicker.min.js"></script>
 <!-- datetimepicker locale -->
@@ -71,9 +69,9 @@
 
 <script>
     $('.form_datetime').datetimepicker({
-        language:  'zh-CN',
+        language: 'zh-CN',
         weekStart: 1,
-        todayBtn:  1,
+        todayBtn: 1,
         autoclose: 1,
         todayHighlight: 1,
         startView: 2,
@@ -81,9 +79,9 @@
         showMeridian: 1
     });
     $('.form_date').datetimepicker({
-        language:  'zh-CN',
+        language: 'zh-CN',
         weekStart: 1,
-        todayBtn:  1,
+        todayBtn: 1,
         autoclose: 1,
         todayHighlight: 1,
         startView: 2,
@@ -91,9 +89,9 @@
         forceParse: 0
     });
     $('.form_time').datetimepicker({
-        language:  'zh-CN',
+        language: 'zh-CN',
         weekStart: 1,
-        todayBtn:  1,
+        todayBtn: 1,
         autoclose: 1,
         todayHighlight: 1,
         startView: 1,

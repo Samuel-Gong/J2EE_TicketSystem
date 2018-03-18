@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @date 2018/03/04
  */
 @Embeddable
-public class Address implements Serializable{
+public class Address implements Serializable {
 
     /**
      * 城市

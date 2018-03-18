@@ -11,14 +11,14 @@
     <!--<mvc:annotation-driven conversion-service="myConversionService"/>-->
 
     <!--<bean id="myConversionService"-->
-          <!--class="org.springframework.format.support.FormattingConversionServiceFactoryBean">-->
-        <!--<property name="converters">-->
-            <!--<set>-->
-                <!--<bean class="edu.nju.BindingTest.converters.LocalDateConverter">-->
-                    <!--<constructor-arg value="yyyy-MM-dd"/>-->
-                <!--</bean>-->
-            <!--</set>-->
-        <!--</property>-->
+    <!--class="org.springframework.format.support.FormattingConversionServiceFactoryBean">-->
+    <!--<property name="converters">-->
+    <!--<set>-->
+    <!--<bean class="edu.nju.BindingTest.converters.LocalDateConverter">-->
+    <!--<constructor-arg value="yyyy-MM-dd"/>-->
+    <!--</bean>-->
+    <!--</set>-->
+    <!--</property>-->
     <!--</bean>-->
 
     <!-- 设置default jsp -->
@@ -62,8 +62,8 @@
 
     <!-- XML视图解析器 -->
     <!--<bean class="org.springframework.web.servlet.view.XmlViewResolver">-->
-        <!--<property name="location" value="/WEB-INF/views.xml"/>-->
-        <!--<property name="order" value="1"/>-->
+    <!--<property name="location" value="/WEB-INF/views.xml"/>-->
+    <!--<property name="order" value="1"/>-->
     <!--</bean>-->
 
     <!-- 内部资源视图解析器 -->

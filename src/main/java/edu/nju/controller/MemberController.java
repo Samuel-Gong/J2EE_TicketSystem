@@ -70,11 +70,12 @@ public class MemberController {
 
     /**
      * 查看个人信息
+     *
      * @return 个人信息页面
      */
     @GetMapping(path = "/myInfo")
     public String myInfo(@SessionAttribute("mail") String mail) {
-        if(mail != null){
+        if (mail != null) {
             return "/member/myInfo";
         }
         //TODO 错误界面

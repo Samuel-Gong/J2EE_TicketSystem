@@ -12,7 +12,7 @@ import java.util.List;
  * @date 2018/03/04
  * <p>
  * 场馆
- *
+ * <p>
  * JSONType： 可以指定序列化的顺序
  */
 

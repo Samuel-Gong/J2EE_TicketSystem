@@ -11,7 +11,7 @@ class MailUtilTest {
     private MailUtil mailUtil;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         context = new ClassPathXmlApplicationContext("beans/mail.xml");
         mailUtil = context.getBean("mailUtil", MailUtil.class);
     }

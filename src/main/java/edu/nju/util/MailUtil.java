@@ -45,7 +45,7 @@ public class MailUtil {
                     "</head>" +
                     "<body>" +
                     "<h3>验证邮箱</h3>" +
-                    "<a href=\""+ link + "\">"+link+"</a>" +
+                    "<a href=\"" + link + "\">" + link + "</a>" +
                     "</body>" +
                     "</html>", true);
 

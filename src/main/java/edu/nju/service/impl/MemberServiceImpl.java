@@ -12,7 +12,7 @@ import java.util.Random;
 /**
  * @author Shenmiu
  * @date 2018/03/04
- *
+ * <p>
  * Member业务逻辑实现
  */
 @Service("memberService")
@@ -50,7 +50,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public boolean modifyPassword(String mail, String oldPassword, String newPassword) {
         Member member = memberDao.getMember(mail);
-        if(oldPassword.equals(member.getPassword())){
+        if (oldPassword.equals(member.getPassword())) {
             member.setPassword(newPassword);
             return updateInfo(member);
         }
@@ -77,6 +77,7 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 生成验证邮箱的公钥
+     *
      * @return 公钥的数字
      */
     private int generateKey() {

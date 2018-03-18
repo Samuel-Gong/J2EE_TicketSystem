@@ -19,15 +19,15 @@ class LocalDateTest {
 
     //时区
     @Test
-    void zone(){
+    void zone() {
         ZoneId defaultZone = ZoneId.systemDefault();
         System.out.println(defaultZone);
     }
 
     //时间戳
     @Test
-    void instant(){
-        LocalDateTime localDateTime = LocalDateTime.of(2018, 10,10,10,10);
+    void instant() {
+        LocalDateTime localDateTime = LocalDateTime.of(2018, 10, 10, 10, 10);
         Instant instant = localDateTime.toInstant(ZoneOffset.UTC);
 
         System.out.println(instant.toEpochMilli());
@@ -35,15 +35,15 @@ class LocalDateTest {
 
     //format
     @Test
-    void formatLocalDateTime(){
+    void formatLocalDateTime() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        System.out.println(dateTimeFormatter.format(LocalDateTime.of(2018, 10,10,10,10)));
+        System.out.println(dateTimeFormatter.format(LocalDateTime.of(2018, 10, 10, 10, 10)));
     }
 
     //truncate
     @Test
     void localDateTimeTruncate() {
-        LocalDateTime truncate2minute = LocalDateTime.of(2018, 10,10,10,10);
+        LocalDateTime truncate2minute = LocalDateTime.of(2018, 10, 10, 10, 10);
         truncate2minute.truncatedTo(ChronoUnit.MINUTES);
         System.out.println(truncate2minute);
     }
