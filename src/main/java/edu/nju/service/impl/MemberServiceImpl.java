@@ -6,6 +6,7 @@ import edu.nju.service.MemberService;
 import edu.nju.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Random;
 
@@ -24,6 +25,7 @@ public class MemberServiceImpl implements MemberService {
     private static final String DOMAIN = "http://localhost:8888/member/confirmMail?";
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public boolean register(Member member) {
 
         //生成密钥
@@ -38,16 +40,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean mailConfirm(String mail, int mailKey) {
         return mailKey == memberDao.getMember(mail).getMailKey();
     }
 
     @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean logIn(String mail, String password) {
         return password.equals(memberDao.getMember(mail).getPassword());
     }
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public boolean modifyPassword(String mail, String oldPassword, String newPassword) {
         Member member = memberDao.getMember(mail);
         if (oldPassword.equals(member.getPassword())) {
@@ -58,21 +63,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public boolean disqualify(String mail) {
         return memberDao.disqulify(mail) > 0;
     }
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public boolean updateInfo(Member member) {
         return memberDao.updateMember(member);
-    }
-
-    public MemberDao getMemberDao() {
-        return memberDao;
-    }
-
-    public void setMemberDao(MemberDao memberDao) {
-        this.memberDao = memberDao;
     }
 
     /**

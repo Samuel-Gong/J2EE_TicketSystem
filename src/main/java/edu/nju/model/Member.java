@@ -10,21 +10,6 @@ import java.util.List;
  * <p>
  * 会员
  */
-@NamedQueries({
-        @NamedQuery(
-                name = "get_member_by_mail",
-                query = "from Member where mail = :mail"
-        ),
-        @NamedQuery(
-                name = "disqualify",
-                query = "update Member m set m.qualified = 0 where m.mail = :mail"
-        ),
-        @NamedQuery(
-                name = "get_mailKey_by_mail",
-                query = "select mailKey from Member where mail = :mail"
-        )
-})
-
 @Entity
 @Table(name = "member")
 public class Member {

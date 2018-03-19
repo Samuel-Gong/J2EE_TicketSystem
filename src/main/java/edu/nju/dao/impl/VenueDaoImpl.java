@@ -7,9 +7,11 @@ import edu.nju.model.Venue;
 import edu.nju.model.VenueSeat;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 /**
@@ -26,58 +28,27 @@ public class VenueDaoImpl implements VenueDao {
 
     @Override
     public Venue getVenue(int venueId) {
-
-        Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-
-        Venue venue = session.createQuery("from Venue where id = :id", Venue.class)
-                .setParameter("id", venueId).uniqueResult();
-
-        assert venue != null;
-
-        tx.commit();
-
-        return venue;
+        return sessionFactory.getCurrentSession().get(Venue.class, venueId);
     }
 
     @Override
     public String getPassword(int venueId) {
-
         Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
+        Query<String> query = session.createQuery("select password from Venue where id = :id", String.class)
+                .setParameter("id", venueId);
 
-        String password = session.createQuery("select password from Venue where id = :id", String.class)
-                .setParameter("id", venueId)
-                .getSingleResult();
-
-        tx.commit();
-
-        return password;
+        return query.getSingleResult();
     }
 
     @Override
     public boolean addVenue(Venue venue) {
-
-        Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-
-        for (VenueSeat venueSeat : venue.getSeatMap()) {
-            venueSeat.setVenue(venue);
-        }
-
-        session.save(venue);
-
-        tx.commit();
-
+        sessionFactory.getCurrentSession().save(venue);
         return true;
     }
 
     @Override
     public boolean updateBasicInfo(VenueBasicInfoDTO venueBasicInfo) {
-
         Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-
         int count = session.createQuery("update Venue set name = :name, city = :city " +
                 "where id = :id")
                 .setParameter("name", venueBasicInfo.getName())
@@ -85,39 +56,39 @@ public class VenueDaoImpl implements VenueDao {
                 .setParameter("id", venueBasicInfo.getVenueId())
                 .executeUpdate();
 
-        tx.commit();
-
         return count > 0;
     }
 
     @Override
-    public boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfo) {
-
+    public boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfoDTO) {
+        //todo 测试
         Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
+        for (VenueSeat venueSeat : venueSeatInfoDTO.getSeatMap()) {
+            session.update(venueSeat);
+        }
+        return true;
+    }
 
-        //更新场馆的行和列
-        int venueUpdateRow = session.createQuery("update Venue set rowNum = :rowNum, columnNum = :columnNum " +
-                "where id = :id")
-                .setParameter("rowNum", venueSeatInfo.getRowNum())
-                .setParameter("columnNum", venueSeatInfo.getColumnNum())
-                .setParameter("id", venueSeatInfo.getVenueId())
-                .executeUpdate();
-
+    @Override
+    public void deleteSeatMap(int venueId) {
         //删除座位表中该场馆的所有座位
-        int deleteCount = session.createQuery("delete from VenueSeat where venueSeatId.venueId = :venueId")
-                .setParameter("venueId", venueSeatInfo.getVenueId())
+        sessionFactory.getCurrentSession()
+                .createQuery("delete from VenueSeat where venueSeatId.venueId = :venueId")
+                .setParameter("venueId", venueId)
                 .executeUpdate();
+    }
 
-        Venue venue = session.get(Venue.class, venueSeatInfo.getVenueId());
-        for (VenueSeat venueSeat : venueSeatInfo.getSeatMap()) {
-            venueSeat.setVenue(venue);
+    @Override
+    public void addSeatMap(List<VenueSeat> seatMap) {
+        Session session = sessionFactory.getCurrentSession();
+        for (VenueSeat venueSeat : seatMap) {
             session.save(venueSeat);
         }
+    }
 
-        tx.commit();
-
-        return venueUpdateRow > 0 && deleteCount > 0;
+    @Override
+    public void updateVenue(Venue venue) {
+        sessionFactory.getCurrentSession().update(venue);
     }
 
 }

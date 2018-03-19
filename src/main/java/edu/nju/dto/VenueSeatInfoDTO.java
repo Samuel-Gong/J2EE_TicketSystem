@@ -13,7 +13,7 @@ import java.util.List;
 public class VenueSeatInfoDTO {
 
     /**
-     * 场馆的
+     * 场馆编号
      */
     private Integer venueId;
 

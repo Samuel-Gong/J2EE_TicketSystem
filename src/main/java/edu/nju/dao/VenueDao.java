@@ -3,6 +3,9 @@ package edu.nju.dao;
 import edu.nju.dto.VenueBasicInfoDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
+import edu.nju.model.VenueSeat;
+
+import java.util.List;
 
 /**
  * @author Shenmiu
@@ -45,10 +48,31 @@ public interface VenueDao {
     boolean updateBasicInfo(VenueBasicInfoDTO venue);
 
     /**
-     * 更新场馆座位信息
+     * 在行列数没有变化的情况下，单纯更新每个位置是否有座位
      *
-     * @param venueSeatInfo 场馆座位信息
-     * @return 更新行数
+     * @param venueSeatInfoDTO 更新的场馆座位信息
+     * @return 是否更新成功
      */
-    boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfo);
+    boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfoDTO);
+
+    /**
+     * 删除对应场馆编号的所有座位
+     *
+     * @param venueId 场馆编号
+     */
+    void deleteSeatMap(int venueId);
+
+    /**
+     * 添加场馆座位信息
+     *
+     * @param seatMap 场馆座位列表
+     */
+    void addSeatMap(List<VenueSeat> seatMap);
+
+    /**
+     * 更新场馆的信息
+     *
+     * @param venue 场馆信息
+     */
+    void updateVenue(Venue venue);
 }

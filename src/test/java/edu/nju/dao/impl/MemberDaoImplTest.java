@@ -4,7 +4,6 @@ import edu.nju.dao.MemberDao;
 import edu.nju.model.Member;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
@@ -28,7 +27,7 @@ class MemberDaoImplTest {
         Assertions.assertEquals(member.getMail(), "335931662@qq.com");
     }
 
-//    @Disabled
+    //    @Disabled
     @Test
     void addMember() {
         Member member = new Member("123@qq.com", "12345");

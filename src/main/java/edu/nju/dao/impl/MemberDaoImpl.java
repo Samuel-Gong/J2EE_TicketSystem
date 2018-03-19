@@ -4,7 +4,7 @@ import edu.nju.dao.MemberDao;
 import edu.nju.model.Member;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -22,70 +22,36 @@ public class MemberDaoImpl implements MemberDao {
 
     @Override
     public Member getMember(String mail) {
-        Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-
-        Member member = session.createNamedQuery("get_member_by_mail", Member.class)
-                .setParameter("mail", mail)
-                .getSingleResult();
-
-        tx.commit();
-
-        return member;
+        return sessionFactory.getCurrentSession().get(Member.class, mail);
     }
 
     @Override
     public boolean addMember(Member member) {
-        Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-
-        session.save(member);
-
-        tx.commit();
-
+        sessionFactory.getCurrentSession().save(member);
         return true;
     }
 
     @Override
     public int disqulify(String mail) {
-
         Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
+        Query query = session.createQuery("update Member m set m.qualified = 0 where m.mail = :mail")
+                .setParameter("mail", mail);
 
-        int result = session.createNamedQuery("disqualify")
-                .setParameter("mail", mail)
-                .executeUpdate();
-
-        tx.commit();
-
-        return result;
+        return query.executeUpdate();
     }
 
     @Override
     public boolean updateMember(Member member) {
-
         Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-
         session.update(member);
-
-        tx.commit();
-
         return true;
     }
 
     @Override
     public int getMailKey(String mail) {
-
         Session session = sessionFactory.getCurrentSession();
-        Transaction tx = session.beginTransaction();
-
-        int mailKey = session.createNamedQuery("get_mailKey_by_mail", Integer.class)
-                .setParameter("mail", mail)
-                .getSingleResult();
-
-        tx.commit();
-
-        return mailKey;
+        Query<Integer> query = session.createQuery("select mailKey from Member where mail = :mail", Integer.class)
+                .setParameter("mail", mail);
+        return query.getSingleResult();
     }
 }
