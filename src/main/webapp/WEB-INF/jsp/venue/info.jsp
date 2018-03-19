@@ -210,12 +210,6 @@
             }
         });
 
-        console.log(venueInfo.name);
-        console.log(venueInfo.city);
-
-        //导航栏中场馆信息active
-        $("#venue-info-li").addClass("active");
-
         //基本信息
         $("#venue-name").val(venueInfo.name);
         $("#venue-city").val(venueInfo.city);

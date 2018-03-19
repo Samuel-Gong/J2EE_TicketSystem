@@ -136,13 +136,13 @@
             <div class="modal-body">
                 <form class="form-horizontal" id="venue-login-form" action="/venue/login" method="post">
                     <div class="form-group">
-                        <label class="col-md-2 control-label">编号</label>
+                        <label class="col-md-offset-1 col-md-3 control-label">编号</label>
                         <div class="col-md-7">
                             <input type="text" class="form-control" name="venue-id" placeholder="请输入编号">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label">密码</label>
+                        <label class="col-md-offset-1 col-md-3 control-label">密码</label>
                         <div class="col-md-7">
                             <input type="password" class="form-control" name="venue-password" placeholder="请输入密码">
                         </div>
@@ -172,13 +172,13 @@
             <div class="modal-body">
                 <form class="form-horizontal" id="manager-login-form" action="/manager/login" method="post">
                     <div class="form-group">
-                        <label class="col-md-2 control-label">账号</label>
+                        <label class="col-md-offset-1 col-md-3 control-label">账号</label>
                         <div class="col-md-7">
                             <input type="text" class="form-control" name="manager-id" placeholder="请输入账号">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-md-2 control-label">密码</label>
+                        <label class="col-md-offset-1 col-md-3 control-label">密码</label>
                         <div class="col-md-7">
                             <input type="password" class="form-control" name="manager-password" placeholder="请输入密码">
                         </div>

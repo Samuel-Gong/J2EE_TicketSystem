@@ -74,7 +74,8 @@ public class VenueController {
     @GetMapping(value = "/info")
     public @ResponseBody
     Venue infoView(@SessionAttribute("venueId") int venueId) {
-        return venueService.getVenue(venueId);
+        //只需要获取带座位信息的场馆
+        return venueService.getVenueWithSeatMap(venueId);
     }
 
     /**

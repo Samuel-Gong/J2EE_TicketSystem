@@ -22,6 +22,22 @@ public interface VenueService {
     Venue getVenue(int venueId);
 
     /**
+     * 查询场馆，带上座位信息
+     *
+     * @param venueId 场馆编号
+     * @return 带有座位信息的场馆
+     */
+    Venue getVenueWithSeatMap(int venueId);
+
+    /**
+     * 查询场馆，带上计划信息
+     *
+     * @param venueId 场馆编号
+     * @return 带有场馆计划的场馆
+     */
+    Venue getVenueWithPlan(int venueId);
+
+    /**
      * 场馆注册
      *
      * @param venue 场馆信息

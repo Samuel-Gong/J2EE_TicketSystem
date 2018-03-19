@@ -3,13 +3,14 @@ package edu.nju.service.impl;
 import edu.nju.dao.VenueDao;
 import edu.nju.dto.VenueBasicInfoDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
-import edu.nju.model.Venue;
-import edu.nju.model.VenuePlan;
-import edu.nju.model.VenueSeat;
+import edu.nju.model.*;
 import edu.nju.service.VenueService;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author Shenmiu
@@ -27,6 +28,24 @@ public class VenueServiceImpl implements VenueService {
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Venue getVenue(int venueId) {
         return venueDao.getVenue(venueId);
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public Venue getVenueWithSeatMap(int venueId) {
+        Venue venue = venueDao.getVenue(venueId);
+        //强制加载seatMap
+        Hibernate.initialize(venue.getSeatMap());
+        return venue;
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public Venue getVenueWithPlan(int venueId) {
+        Venue venue = venueDao.getVenue(venueId);
+        //强制加载venuePlans
+        Hibernate.initialize(venue.getVenuePlans());
+        return venue;
     }
 
     @Override
@@ -55,7 +74,7 @@ public class VenueServiceImpl implements VenueService {
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfo) {
         //todo 测试
-        Venue venue = getVenue(venueSeatInfo.getVenueId());
+        Venue venue = getVenueWithSeatMap(venueSeatInfo.getVenueId());
         assert venue != null;
         //venueSeat和venue建立联系
         for (VenueSeat venueSeat : venueSeatInfo.getSeatMap()) {
@@ -81,7 +100,19 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     public boolean addVenuePlan(int venueId, VenuePlan venuePlan) {
-        //todo
+        //场馆计划和场馆建立联系
+        Venue venue = getVenue(venueId);
+        venuePlan.setVenue(venue);
+        //座位类型和场馆计划建立联系
+        for(SeatType seatType : venuePlan.getSeatTypes()){
+            seatType.setVenuePlan(venuePlan);
+        }
+        //场馆计划座位与场馆计划建立联系
+        for(VenuePlanSeat venuePlanSeat : venuePlan.getVenuePlanSeats()){
+             venuePlanSeat.setVenuePlan(venuePlan);
+        }
+
+        venueDao.addVenuePlan(venuePlan);
 
         return false;
     }

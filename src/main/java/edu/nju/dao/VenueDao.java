@@ -3,6 +3,7 @@ package edu.nju.dao;
 import edu.nju.dto.VenueBasicInfoDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
+import edu.nju.model.VenuePlan;
 import edu.nju.model.VenueSeat;
 
 import java.util.List;
@@ -15,6 +16,16 @@ import java.util.List;
  */
 public interface VenueDao {
 
+    //场馆
+
+    /**
+     * 添加一个场馆
+     *
+     * @param venue 场馆信息
+     * @return 是否添加成功
+     */
+    boolean addVenue(Venue venue);
+
     /**
      * 获取场馆信息
      *
@@ -24,20 +35,19 @@ public interface VenueDao {
     Venue getVenue(int venueId);
 
     /**
+     * 更新一个场馆
+     *
+     * @param venue 场馆信息
+     */
+    void updateVenue(Venue venue);
+
+    /**
      * 根据场馆编号获取场馆的密码
      *
      * @param venueId 场馆编号
      * @return 场馆密码
      */
     String getPassword(int venueId);
-
-    /**
-     * 添加一个场馆
-     *
-     * @param venue 场馆信息
-     * @return 是否添加成功
-     */
-    boolean addVenue(Venue venue);
 
     /**
      * 更新场馆基础信息
@@ -55,12 +65,7 @@ public interface VenueDao {
      */
     boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfoDTO);
 
-    /**
-     * 删除对应场馆编号的所有座位
-     *
-     * @param venueId 场馆编号
-     */
-    void deleteSeatMap(int venueId);
+    //场馆座位
 
     /**
      * 添加场馆座位信息
@@ -70,9 +75,26 @@ public interface VenueDao {
     void addSeatMap(List<VenueSeat> seatMap);
 
     /**
-     * 更新场馆的信息
+     * 删除对应场馆编号的所有座位
      *
-     * @param venue 场馆信息
+     * @param venueId 场馆编号
      */
-    void updateVenue(Venue venue);
+    void deleteSeatMap(int venueId);
+
+    //场馆计划
+
+    /**
+     * 添加场馆计划
+     *
+     * @param venuePlan 场馆计划信息
+     */
+    void addVenuePlan(VenuePlan venuePlan);
+
+    /**
+     * 获取场馆计划
+     *
+     * @param venuePlanId 场馆计划id
+     * @return 场馆计划信息
+     */
+    VenuePlan getVenuePlan(int venuePlanId);
 }

@@ -4,6 +4,7 @@ import edu.nju.dao.VenueDao;
 import edu.nju.dto.VenueBasicInfoDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
+import edu.nju.model.VenuePlan;
 import edu.nju.model.VenueSeat;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,9 +27,22 @@ public class VenueDaoImpl implements VenueDao {
     @Autowired
     private SessionFactory sessionFactory;
 
+    // Venue
+
+    @Override
+    public boolean addVenue(Venue venue) {
+        sessionFactory.getCurrentSession().save(venue);
+        return true;
+    }
+
     @Override
     public Venue getVenue(int venueId) {
         return sessionFactory.getCurrentSession().get(Venue.class, venueId);
+    }
+
+    @Override
+    public void updateVenue(Venue venue) {
+        sessionFactory.getCurrentSession().update(venue);
     }
 
     @Override
@@ -38,12 +52,6 @@ public class VenueDaoImpl implements VenueDao {
                 .setParameter("id", venueId);
 
         return query.getSingleResult();
-    }
-
-    @Override
-    public boolean addVenue(Venue venue) {
-        sessionFactory.getCurrentSession().save(venue);
-        return true;
     }
 
     @Override
@@ -57,6 +65,16 @@ public class VenueDaoImpl implements VenueDao {
                 .executeUpdate();
 
         return count > 0;
+    }
+
+    // SeatMap
+
+    @Override
+    public void addSeatMap(List<VenueSeat> seatMap) {
+        Session session = sessionFactory.getCurrentSession();
+        for (VenueSeat venueSeat : seatMap) {
+            session.save(venueSeat);
+        }
     }
 
     @Override
@@ -78,17 +96,16 @@ public class VenueDaoImpl implements VenueDao {
                 .executeUpdate();
     }
 
+    // VenuePlan
+
     @Override
-    public void addSeatMap(List<VenueSeat> seatMap) {
-        Session session = sessionFactory.getCurrentSession();
-        for (VenueSeat venueSeat : seatMap) {
-            session.save(venueSeat);
-        }
+    public void addVenuePlan(VenuePlan venuePlan) {
+        sessionFactory.getCurrentSession().save(venuePlan);
     }
 
     @Override
-    public void updateVenue(Venue venue) {
-        sessionFactory.getCurrentSession().update(venue);
+    public VenuePlan getVenuePlan(int venuePlanId) {
+        return sessionFactory.getCurrentSession().get(VenuePlan.class, venuePlanId);
     }
 
 }

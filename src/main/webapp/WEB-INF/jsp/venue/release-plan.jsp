@@ -50,24 +50,7 @@
 <body>
 
 <!-- nav begin -->
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-
-        <!-- 导航栏头 -->
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">小麦网</a>
-        </div>
-
-        <!-- 导航内容 -->
-        <ul class="nav navbar-nav">
-            <li id="venue-info-li"><a href="#">场馆信息</a></li>
-            <li id="venue-plan-li"><a href="#">发布计划</a></li>
-            <li id="buy-ticket-li"><a href="#">现场购票</a></li>
-            <li id="check-in-li"><a href="#">检票登记</a></li>
-            <li id="venue-statistic-li"><a href="#">场馆统计</a></li>
-        </ul>
-    </div>
-</nav>
+<%@include file="../../../html/venue/venue-nav.html" %>
 <!-- nav end -->
 
 <!-- container begin -->
@@ -676,9 +659,20 @@
                 "venuePlanSeats": venuePlanSeats
             };
 
-            console.log(JSON.stringify(venuePlan));
+            console.log();
 
             //todo 提交数据
+            $.ajax({
+                url: "/venue/addPlan",
+                method: "post",
+                data: JSON.stringify(venuePlan),
+                success: function (data) {
+                    console.log("成功发布");
+                },
+                error: function () {
+                    console.log("错误了");
+                }
+            });
         });
     });
 </script>
