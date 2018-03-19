@@ -17,7 +17,6 @@ public class ShowTypeSerializer implements ObjectSerializer {
 
     @Override
     public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features) throws IOException {
-        System.out.println(((ShowType) object).getValue());
         serializer.write(((ShowType) object).getValue());
     }
 }

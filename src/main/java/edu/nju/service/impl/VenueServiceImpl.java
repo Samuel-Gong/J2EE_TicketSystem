@@ -2,6 +2,7 @@ package edu.nju.service.impl;
 
 import edu.nju.dao.VenueDao;
 import edu.nju.dto.VenueBasicInfoDTO;
+import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.*;
 import edu.nju.service.VenueService;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +21,7 @@ import java.util.List;
  * 场馆业务逻辑的实现类
  */
 @Service("venueService")
+@Transactional(rollbackFor = RuntimeException.class)
 public class VenueServiceImpl implements VenueService {
 
     @Autowired
@@ -99,10 +102,12 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public boolean addVenuePlan(int venueId, VenuePlan venuePlan) {
         //场馆计划和场馆建立联系
         Venue venue = getVenue(venueId);
         venuePlan.setVenue(venue);
+
         //座位类型和场馆计划建立联系
         for(SeatType seatType : venuePlan.getSeatTypes()){
             seatType.setVenuePlan(venuePlan);
@@ -114,6 +119,46 @@ public class VenueServiceImpl implements VenueService {
 
         venueDao.addVenuePlan(venuePlan);
 
-        return false;
+        return true;
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public VenuePlan getVenuePlan(int venuePlanId) {
+        return venueDao.getVenuePlan(venuePlanId);
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public VenuePlan getVenuePlanWithVenue(int venuePlanId) {
+        VenuePlan venuePlan = venueDao.getVenuePlan(venuePlanId);
+        Hibernate.initialize(venuePlan.getVenue());
+        return venuePlan;
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public List<VenuePlanBriefDTO> getAllBriefVenuePlan(int venueId) {
+        //todo java8 stream实现
+        List<VenuePlanBriefDTO> venuePlanBriefDTOS = new ArrayList<>();
+        List<VenuePlan> venuePlans = venueDao.getAllVenuePlan(venueId);
+        for (VenuePlan venuePlan : venuePlans){
+            venuePlanBriefDTOS.add(new VenuePlanBriefDTO(venuePlan));
+        }
+        return venuePlanBriefDTOS;
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean updateVenuePlan(VenuePlan venuePlan) {
+        venueDao.updateVenuePlan(venuePlan);
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean deleteVenuePlan(VenuePlan venuePlan) {
+        venueDao.deleteVenuePlan(venuePlan);
+        return true;
     }
 }

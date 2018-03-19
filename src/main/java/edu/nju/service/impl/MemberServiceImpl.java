@@ -17,6 +17,7 @@ import java.util.Random;
  * Member业务逻辑实现
  */
 @Service("memberService")
+@Transactional(rollbackFor = RuntimeException.class)
 public class MemberServiceImpl implements MemberService {
 
     @Autowired

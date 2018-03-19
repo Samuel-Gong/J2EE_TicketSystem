@@ -61,7 +61,7 @@ public class VenuePlan {
      * 与场馆多对一，外键为场馆编号
      */
     @ManyToOne
-    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
+    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"), nullable = false)
     private Venue venue;
 
     /**
@@ -140,6 +140,7 @@ public class VenuePlan {
         this.venuePlanSeats = venuePlanSeats;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -151,11 +152,20 @@ public class VenuePlan {
 
         VenuePlan venuePlan = (VenuePlan) o;
 
-        return venuePlanId == venuePlan.venuePlanId;
+        if (!begin.equals(venuePlan.begin)) {
+            return false;
+        }
+        if (!end.equals(venuePlan.end)) {
+            return false;
+        }
+        return venue.equals(venuePlan.venue);
     }
 
     @Override
     public int hashCode() {
-        return venuePlanId;
+        int result = begin.hashCode();
+        result = 31 * result + end.hashCode();
+        result = 31 * result + venue.hashCode();
+        return result;
     }
 }

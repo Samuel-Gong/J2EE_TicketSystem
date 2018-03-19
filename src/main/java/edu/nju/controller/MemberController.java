@@ -43,7 +43,6 @@ public class MemberController {
     public String login(@RequestParam("mail") String mail, @RequestParam("password") String password, ModelMap modelMap) {
         if (memberService.logIn(mail, password)) {
             modelMap.addAttribute("mail", mail);
-            System.out.println("重定向");
             return "redirect:/index";
         }
         //TODO  错误界面

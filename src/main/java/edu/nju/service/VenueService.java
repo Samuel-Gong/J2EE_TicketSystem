@@ -1,9 +1,12 @@
 package edu.nju.service;
 
 import edu.nju.dto.VenueBasicInfoDTO;
+import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
+
+import java.util.List;
 
 /**
  * @author Shenmiu
@@ -12,6 +15,8 @@ import edu.nju.model.VenuePlan;
  * 场馆业务逻辑接口
  */
 public interface VenueService {
+
+    //场馆
 
     /**
      * 查询场馆
@@ -62,6 +67,8 @@ public interface VenueService {
      */
     boolean updateBasicInfo(VenueBasicInfoDTO venueBasicInfo);
 
+    //场馆座位
+
     /**
      * 更新场馆座位信息
      *
@@ -69,6 +76,8 @@ public interface VenueService {
      * @return 更新行数
      */
     boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfo);
+
+    //场馆计划
 
     /**
      * 添加一个场馆计划到指定编号的场馆里
@@ -78,4 +87,44 @@ public interface VenueService {
      * @return 添加是否成功
      */
     boolean addVenuePlan(int venueId, VenuePlan venuePlan);
+
+    /**
+     * 获取场馆计划
+     *
+     * @param venuePlanId 场馆计划id
+     * @return 场馆计划信息
+     */
+    VenuePlan getVenuePlan(int venuePlanId);
+
+    /**
+     * 获取场馆计划和该场馆计划对应的场馆
+     *
+     * @param venuePlanId 场馆计划编号
+     * @return 带有场馆信息的场馆计划
+     */
+    VenuePlan getVenuePlanWithVenue(int venuePlanId);
+
+    /**
+     * 获取该场馆所有的场馆计划简介
+     *
+     * @param venueId 场馆编号
+     * @return 场馆计划列表
+     */
+    List<VenuePlanBriefDTO> getAllBriefVenuePlan(int venueId);
+
+    /**
+     * 更新场馆计划
+     *
+     * @param venuePlan 场馆计划
+     * @return 更新是否成功
+     */
+    boolean updateVenuePlan(VenuePlan venuePlan);
+
+    /**
+     * 删除场馆计划
+     *
+     * @param venuePlan 场馆计划
+     * @return 删除是否成功
+     */
+    boolean deleteVenuePlan(VenuePlan venuePlan);
 }

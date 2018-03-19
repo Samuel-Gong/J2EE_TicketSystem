@@ -1,6 +1,7 @@
 package edu.nju.controller;
 
 import edu.nju.dto.VenueBasicInfoDTO;
+import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
@@ -10,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Shenmiu
@@ -42,6 +45,22 @@ public class VenueController {
     }
 
     /**
+     * 场馆查看计划视图
+     *
+     * @return 场馆所有计划列表
+     */
+    @GetMapping(value = "/planView")
+    public String planView() {
+        return "venue/plan-brief";
+    }
+
+///todo    计划详情界面
+//    @GetMapping(value = "/plan-detail/{venuePlanId}")
+//    public String planDetailView() {
+//
+//    }
+
+    /**
      * 场馆计划发布视图
      *
      * @return 场馆计划发布视图
@@ -51,6 +70,17 @@ public class VenueController {
         return "/venue/release-plan";
     }
 
+    /**
+     * 获取场馆对应的所有场馆计划
+     *
+     * @param venueId 场馆编号
+     * @return 场馆计划列表
+     */
+    @GetMapping(value = "/getAllPlan")
+    public @ResponseBody
+    List<VenuePlanBriefDTO> getVenuePlan(@SessionAttribute("venueId") int venueId) {
+        return venueService.getAllBriefVenuePlan(venueId);
+    }
 
     /**
      * 添加一个场馆计划

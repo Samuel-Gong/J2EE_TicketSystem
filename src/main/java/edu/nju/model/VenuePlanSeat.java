@@ -27,11 +27,13 @@ public class VenuePlanSeat implements Serializable {
     /**
      * 该座位所在行
      */
+    @Id
     private int row;
 
     /**
      * 该座位所在列
      */
+    @Id
     @Column(name = "`column`")
     private int column;
 

@@ -2,6 +2,7 @@ package edu.nju.dao.impl;
 
 import edu.nju.dao.VenueDao;
 import edu.nju.dto.VenueBasicInfoDTO;
+import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
@@ -106,6 +107,25 @@ public class VenueDaoImpl implements VenueDao {
     @Override
     public VenuePlan getVenuePlan(int venuePlanId) {
         return sessionFactory.getCurrentSession().get(VenuePlan.class, venuePlanId);
+    }
+
+    @Override
+    public List<VenuePlan> getAllVenuePlan(int venueId) {
+        Session session = sessionFactory.getCurrentSession();
+        Venue venue = session.get(Venue.class, venueId);
+        Query<VenuePlan> query = session.createQuery("from VenuePlan where venue = :venue", VenuePlan.class)
+                .setParameter("venue", venue);
+        return query.list();
+    }
+
+    @Override
+    public void updateVenuePlan(VenuePlan venuePlan) {
+        sessionFactory.getCurrentSession().update(venuePlan);
+    }
+
+    @Override
+    public void deleteVenuePlan(VenuePlan venuePlan) {
+        sessionFactory.getCurrentSession().delete(venuePlan);
     }
 
 }

@@ -57,6 +57,14 @@ appliy to both seats and spacers ( _ ).
 }
 
 /**
+座位类型方框显示
+ */
+.seatCharts-type-cell {
+    height: 20px;
+    width: 20px;
+}
+
+/**
 所有seat的可选颜色
  */
 .seat-type-a {

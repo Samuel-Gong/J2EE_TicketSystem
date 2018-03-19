@@ -1,11 +1,14 @@
 package edu.nju.dto;
 
+import com.alibaba.fastjson.annotation.JSONType;
+
 /**
  * @author Shenmiu
  * @date 2018/03/16
  * <p>
  * 场馆的基本信息
  */
+@JSONType(orders = {"venueId, name, city"})
 public class VenueBasicInfoDTO {
 
     /**

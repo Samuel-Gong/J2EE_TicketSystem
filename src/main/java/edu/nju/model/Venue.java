@@ -63,10 +63,10 @@ public class Venue {
     private List<VenueSeat> seatMap = new ArrayList<>();
 
     /**
-     * 场馆计划
+     * 场馆计划，与venue没有级联关系
      */
     @JSONField(serialize = false, deserialize = false)
-    @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "venue", orphanRemoval = true)
     private List<VenuePlan> venuePlans = new ArrayList<>();
 
     public int getId() {
@@ -131,5 +131,24 @@ public class Venue {
 
     public void setVenuePlans(List<VenuePlan> venuePlans) {
         this.venuePlans = venuePlans;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o){
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()){
+            return false;
+        }
+
+        Venue venue = (Venue) o;
+
+        return id == venue.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 }

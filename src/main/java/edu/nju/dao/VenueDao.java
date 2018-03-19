@@ -1,6 +1,7 @@
 package edu.nju.dao;
 
 import edu.nju.dto.VenueBasicInfoDTO;
+import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
@@ -97,4 +98,26 @@ public interface VenueDao {
      * @return 场馆计划信息
      */
     VenuePlan getVenuePlan(int venuePlanId);
+
+    /**
+     * 获取该场馆所有的场馆计划，不含座位类型和座位表
+     *
+     * @param venueId 场馆编号
+     * @return 所有的场馆计划列表
+     */
+    List<VenuePlan> getAllVenuePlan(int venueId);
+
+    /**
+     * 更新场馆计划
+     *
+     * @param venuePlan 场馆计划信息
+     */
+    void updateVenuePlan(VenuePlan venuePlan);
+
+    /**
+     * 删除场馆计划
+     *
+     * @param venuePlan 场馆计划
+     */
+    void deleteVenuePlan(VenuePlan venuePlan);
 }

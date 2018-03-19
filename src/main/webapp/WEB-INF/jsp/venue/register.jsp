@@ -142,10 +142,10 @@
 
         //注册按钮点击后，将数据封装成JSON对象传给后端
         $("#venue-register-btn").on("click", function () {
-            var seatMapArr = [];
+            let seatMapArr = [];
             $.each(seatMap, function (row, val) {
                 $.each(val, function (column, char) {
-                    var newVenueSeat = {
+                    let newVenueSeat = {
                         "venueSeatId": {
                             "row": row + 1,
                             "column": column + 1
@@ -156,7 +156,7 @@
                 });
             });
 
-            var venue = {
+            let venue = {
                 "name": $("#venue-name").val(),
                 "city": $("#venue-city").val(),
                 "password": $("#venue-password").val(),

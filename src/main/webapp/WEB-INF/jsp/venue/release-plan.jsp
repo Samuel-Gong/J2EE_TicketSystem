@@ -4,7 +4,7 @@
   Date: 18/03/2018
   Time: 19:28
   
-  Description:
+  Description: 发布计划视图
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <html>
@@ -63,6 +63,23 @@
     </div>
     <div id="all-venue-info" class="row">
         <div class="col-md-2">
+            <h4 class="text-center">选中类型</h4>
+            <form id="seat-type-form">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="seat-type-options" value="a" checked>a
+                    </label>
+                    <div class="seatCharts-type-cell seat-type-a pull-right"></div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-8">
+            <div id="seat-map-container" class="text-center">
+                <div class="front-indicator">Front</div>
+                <div id="seat-map"></div>
+            </div>
+        </div>
+        <div class="col-md-2">
             <div id="legend-info">
                 <h3 class="text-center">座位类型</h3>
                 <table class="table table-bordered text-center">
@@ -118,58 +135,6 @@
                         <textarea id="plan-description" class="form-control" rows="5"
                                   style="overflow: scroll; resize: none;"></textarea>
                     </div>
-                </form>
-            </div>
-        </div>
-        <div class="col-md-8">
-            <div id="seat-map-container" class="text-center">
-                <div class="front-indicator">Front</div>
-                <div id="seat-map"></div>
-            </div>
-        </div>
-        <div class="col-md-2">
-            <h3 class="text-center">座位指定</h3>
-            <div>
-                <h4 class="text-center">单个座位指定</h4>
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">行</label>
-                        <div class="col-md-8">
-                            <input id="single-seat-row" type="text" class="form-control" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">列</label>
-                        <div class="col-md-8">
-                            <input id="single-seat-column" type="text" class="form-control" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">类型</label>
-                        <div class="col-md-8">
-                            <select id="single-seat-type-list" class="form-control"></select>
-                        </div>
-                    </div>
-                    <button id="single-seat-appoint-btn" type="button" class="btn btn-primary center-block">确认指定
-                    </button>
-                </form>
-            </div>
-            <div>
-                <h4 class="text-center">一行座位指定</h4>
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">行</label>
-                        <div class="col-md-8">
-                            <input id="whole-row" type="text" class="form-control" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">类型</label>
-                        <div class="col-md-8">
-                            <select id="row-seat-type-list" class="form-control"></select>
-                        </div>
-                    </div>
-                    <button id="row-seat-appoint-btn" type="button" class="btn btn-primary center-block">确认指定</button>
                 </form>
             </div>
         </div>
@@ -352,8 +317,15 @@
         let row = rowAndColumn[0];
         let column = rowAndColumn[1];
 
-        $("#single-seat-row").val(row);
-        $("#single-seat-column").val(column);
+        seatMap[row - 1][column - 1] = $("#seat-type-form :checked").val();
+
+        rerenderSeats();
+    }
+
+    /**
+     * 指定一排座位类型
+     */
+    function apponintRow() {
 
     }
 
@@ -483,10 +455,18 @@
                     clearDataAndColor($("#add-seat-type-modal"), $("#add-seat-type-color-show"));
                 }
 
-                //删除类型select及设置类型select增加一个选项
+                //删除类型select
                 appendSeatType($("#delete-seat-type-list"), char);
-                appendSeatType($("#single-seat-type-list"), char);
-                appendSeatType($("#row-seat-type-list"), char);
+
+                //左侧类型显示表单增加一个单选框
+                $("#seat-type-form").append(
+                    "<div class=\"radio\">\n" +
+                    "                    <label>\n" +
+                    "                        <input type=\"radio\" name=\"seat-type-options\" value=\"" + char + "\">" + char + "\n" +
+                    "                    </label>\n" +
+                    "                    <div class=\"seatCharts-type-cell seat-type-" + char + " pull-right\"></div>\n" +
+                    "                </div>"
+                );
 
                 //重绘
                 rerenderSeats();
@@ -535,9 +515,12 @@
                 clearDataAndColor($("#delete-seat-type-modal"), $("#delete-seat-type-color-show"));
             }
 
-            //设置座位的select删除一个选项
-            removeSeatType($("#single-seat-type-list"), deleteChar);
-            removeSeatType($("#row-seat-type-list"), deleteChar);
+            //左侧座位类型表单中移除一个单选框
+            $("#seat-type-form :radio").each(function (index, radio) {
+               if($(this).val() === deleteChar){
+                   $(this).parent().parent().remove();
+               }
+            });
 
             //重绘
             rerenderSeats();
@@ -548,29 +531,15 @@
 
         //设置一排座位类型监听
         $("#seat-map-container").on("click", ".seatCharts-row", function () {
-            $("#whole-row").val($(this).children(":first").text());
-        });
-
-        //单个座位的确认指定按钮
-        $("#single-seat-appoint-btn").on("click", function () {
-            let row = $("#single-seat-row").val().trim();
-            let column = $("#single-seat-column").val().trim();
-
-            seatMap[row - 1][column - 1] = $("#single-seat-type-list").val().trim();
-            rerenderSeats();
-        });
-
-        //一排座位的确认指定按钮
-        $("#row-seat-appoint-btn").on("click", function () {
-            let row = $("#whole-row").val().trim();
-            let type = $("#row-seat-type-list").val().trim();
+            let row = $(this).children(":first").text();
+            let type = $("#seat-type-form :checked").val();
 
             $.each(seatMap[row - 1], function (index, val) {
                 seatMap[row - 1][index] = val === '_' ? '_' : type;
             });
-
             rerenderSeats();
         });
+
 
         /**
          * 初始化界面要渲染的座位的信息
@@ -595,12 +564,11 @@
         //初始化座位的点击事件
         seatInfo.removeTypeChar('a');
         seatInfo.addTypeChar('a', {
+            //设置点击监听
             click: appointSingleSeatType,
             price: "/",
             description: "未指定"
         });
-        //点击未指定座位设置类型监听
-        seatInfo.addClick('a', appointSingleSeatType);
 
         //初始化座位类型
         legendInfo.removeItem('a');
@@ -645,7 +613,7 @@
                     venuePlanSeats.push({
                         "row": rowIndex + 1,
                         "column": columnIndex + 1,
-                        "typeChar": typeChar + 1
+                        "typeChar": typeChar
                     });
                 });
             });
@@ -659,15 +627,18 @@
                 "venuePlanSeats": venuePlanSeats
             };
 
-            console.log();
+            console.log(JSON.stringify(venuePlan));
 
             //todo 提交数据
             $.ajax({
                 url: "/venue/addPlan",
                 method: "post",
+                contentType: "application/json;charset=utf-8",
                 data: JSON.stringify(venuePlan),
+                processData: false,
                 success: function (data) {
                     console.log("成功发布");
+                    $(location).attr("href", "/venue/planView")
                 },
                 error: function () {
                     console.log("错误了");
