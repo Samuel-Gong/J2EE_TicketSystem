@@ -113,6 +113,13 @@ public interface VenueService {
     List<VenuePlanBriefDTO> getAllBriefVenuePlan(int venueId);
 
     /**
+     * 获取场馆计划详情，包括场馆计划的所有信息
+     * @param venuePlanId 场馆计划Id
+     * @return 场馆计划详情
+     */
+    VenuePlan getVenuePlanDetail(int venuePlanId);
+
+    /**
      * 更新场馆计划
      *
      * @param venuePlan 场馆计划

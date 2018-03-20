@@ -1,0 +1,20 @@
+.modal select {
+    border-radius: 0;
+}
+
+#all-venue-info {
+    padding-top: 2%;
+    margin-top: 2%;
+    border-top: #adadad solid 1px;
+}
+
+table {
+    table-layout: fixed;
+}
+
+td {
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: scroll;
+    /*text-overflow: ellipsis;*/
+}

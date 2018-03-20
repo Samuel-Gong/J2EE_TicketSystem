@@ -4,7 +4,7 @@
   Date: 19/03/2018
   Time: 21:03
   
-  Description: 查看计划界面
+  Description: 查看计划简介界面
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <html>
@@ -103,10 +103,11 @@
                 );
             });
 
-            $("#plans-container").on("click", ".panel-body .btn", function () {
-                //跳转
+            $("#plans-container").on("click", ".panel-body button", function () {
+                //跳转;
                 let venuePlanId = $(this).siblings("input").val();
-                $(location).href = "/venue/plan-detail/" + venuePlanId;
+                // console.log(venuePlanId);
+                $(location).attr("href", "/venue/planView/" + venuePlanId);
             });
 
             //todo 分页

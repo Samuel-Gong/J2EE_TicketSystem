@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Shenmiu
@@ -109,12 +109,12 @@ public class VenueServiceImpl implements VenueService {
         venuePlan.setVenue(venue);
 
         //座位类型和场馆计划建立联系
-        for(SeatType seatType : venuePlan.getSeatTypes()){
+        for (SeatType seatType : venuePlan.getSeatTypes()) {
             seatType.setVenuePlan(venuePlan);
         }
         //场馆计划座位与场馆计划建立联系
-        for(VenuePlanSeat venuePlanSeat : venuePlan.getVenuePlanSeats()){
-             venuePlanSeat.setVenuePlan(venuePlan);
+        for (VenuePlanSeat venuePlanSeat : venuePlan.getVenuePlanSeats()) {
+            venuePlanSeat.setVenuePlan(venuePlan);
         }
 
         venueDao.addVenuePlan(venuePlan);
@@ -139,13 +139,21 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<VenuePlanBriefDTO> getAllBriefVenuePlan(int venueId) {
-        //todo java8 stream实现
-        List<VenuePlanBriefDTO> venuePlanBriefDTOS = new ArrayList<>();
         List<VenuePlan> venuePlans = venueDao.getAllVenuePlan(venueId);
-        for (VenuePlan venuePlan : venuePlans){
-            venuePlanBriefDTOS.add(new VenuePlanBriefDTO(venuePlan));
-        }
-        return venuePlanBriefDTOS;
+
+        return venuePlans.stream()
+                .map(VenuePlanBriefDTO::new)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public VenuePlan getVenuePlanDetail(int venuePlanId) {
+        VenuePlan venuePlan = venueDao.getVenuePlan(venuePlanId);
+        //手动初始化懒加载的关联对象
+        Hibernate.initialize(venuePlan.getSeatTypes());
+        Hibernate.initialize(venuePlan.getVenuePlanSeats());
+        return venuePlan;
     }
 
     @Override

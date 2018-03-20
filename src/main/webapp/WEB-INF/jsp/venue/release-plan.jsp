@@ -23,28 +23,8 @@
     <!-- datetimepicker css -->
     <link href="../../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
-    <style>
-
-        .modal select {
-            border-radius: 0;
-        }
-
-        #all-venue-info {
-            padding-top: 2%;
-            margin-top: 2%;
-            border-top: #adadad solid 1px;
-        }
-
-        table {
-            table-layout: fixed;
-        }
-
-        td {
-            white-space: nowrap;
-            overflow: scroll;
-            /*text-overflow: ellipsis;*/
-        }
-    </style>
+    <!-- 场馆计划发布及更新css -->
+    <link href="../../../css/plan-release-detail.css" rel="stylesheet">
 
 </head>
 <body>
@@ -56,28 +36,21 @@
 <!-- container begin -->
 <div id="venue-register-container" class="container">
     <div class="row">
-        <h2 class="text-center">发布计划</h2>
-        <button id="release-plan-btn" type="button" class="btn btn-primary col-lg-offset-9"
-                style="display: inline-block">发布计划
+        <h2 class="text-center">查看计划</h2>
+        <button id="modify-plan-btn" type="button" class="btn btn-primary col-lg-offset-9"
+                style="display: inline-block">修改计划
+        </button>
+        <button id="modify-plan-confirm-btn" type="button" class="btn btn-primary col-lg-offset-9"
+                style="display: inline-block">确认修改
         </button>
     </div>
     <div id="all-venue-info" class="row">
         <div class="col-md-2">
             <h4 class="text-center">选中类型</h4>
-            <form id="seat-type-form">
-                <div class="radio">
-                    <label>
-                        <input type="radio" name="seat-type-options" value="a" checked>a
-                    </label>
-                    <div class="seatCharts-type-cell seat-type-a pull-right"></div>
-                </div>
-            </form>
+            <%@include file="../../../html/venue/seat-type-form.html" %>
         </div>
         <div class="col-md-8">
-            <div id="seat-map-container" class="text-center">
-                <div class="front-indicator">Front</div>
-                <div id="seat-map"></div>
-            </div>
+            <%@include file="../../../html/venue/seat-map-container.html" %>
         </div>
         <div class="col-md-2">
             <div id="legend-info">
@@ -286,20 +259,6 @@
     }
 
     /**
-     * 从下拉框中删除一个option
-     * @param select 当前选中的下拉框jQuery对象
-     * @param typeChar 表示该类型的字符
-     */
-    function removeSeatType(select, typeChar) {
-        select.children().each(function () {
-            if ($(this).text() === typeChar) {
-                $(this).remove();
-                return false;
-            }
-        });
-    }
-
-    /**
      * 清空数据及颜色
      * @param dataContainer 数据容器
      * @param addon 显示颜色的addon
@@ -320,13 +279,6 @@
         seatMap[row - 1][column - 1] = $("#seat-type-form :checked").val();
 
         rerenderSeats();
-    }
-
-    /**
-     * 指定一排座位类型
-     */
-    function apponintRow() {
-
     }
 
     /**
@@ -517,9 +469,9 @@
 
             //左侧座位类型表单中移除一个单选框
             $("#seat-type-form :radio").each(function (index, radio) {
-               if($(this).val() === deleteChar){
-                   $(this).parent().parent().remove();
-               }
+                if ($(this).val() === deleteChar) {
+                    $(this).parent().parent().remove();
+                }
             });
 
             //重绘

@@ -49,7 +49,6 @@ let seatInfo = {
         //'seat-red seat-big' or ['seat-red', 'seat-big']
         //点击座位，转换为空位
         // click: seat2space,
-        classes: "",
     },
 
     /**

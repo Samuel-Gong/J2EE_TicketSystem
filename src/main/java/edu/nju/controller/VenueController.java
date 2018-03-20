@@ -1,5 +1,7 @@
 package edu.nju.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.mysql.cj.xdevapi.JsonArray;
 import edu.nju.dto.VenueBasicInfoDTO;
 import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
@@ -54,11 +56,16 @@ public class VenueController {
         return "venue/plan-brief";
     }
 
-///todo    计划详情界面
-//    @GetMapping(value = "/plan-detail/{venuePlanId}")
-//    public String planDetailView() {
-//
-//    }
+    /**
+     * 计划详情界面
+     * @return 场馆计划详情
+     */
+    @GetMapping(value = "/planView/{venuePlanId}")
+    public String planDetailView(@SessionAttribute("venueId") int venueId, @PathVariable("venuePlanId") int venuePlanId, Model model) {
+        model.addAttribute("venuePlan", JSON.toJSONString(venueService.getVenuePlanDetail(venuePlanId)));
+        model.addAttribute("venueInfo", JSON.toJSONString(venueService.getVenueWithSeatMap(venueId)));
+        return "/venue/plan-detail";
+    }
 
     /**
      * 场馆计划发布视图
