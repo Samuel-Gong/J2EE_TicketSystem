@@ -1,7 +1,6 @@
 package edu.nju.service.impl;
 
-import edu.nju.dao.MemberDao;
-import edu.nju.dao.impl.MemberDaoImpl;
+import com.alibaba.fastjson.JSON;
 import edu.nju.model.SeatType;
 import edu.nju.model.VenuePlan;
 import edu.nju.model.VenuePlanSeat;
@@ -16,8 +15,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class VenueServiceImplTest {
 
@@ -60,5 +57,11 @@ class VenueServiceImplTest {
 
         venueService.addVenuePlan(1, venuePlan);
 
+    }
+
+    @Test
+    void getComingVenuePlans(){
+//        Assertions.assertEquals(1, venueService.getComingVenuePlan().size());
+        System.out.println(JSON.toJSONString(venueService.getComingVenueBriefPlan()));
     }
 }

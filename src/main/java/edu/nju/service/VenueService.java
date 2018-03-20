@@ -134,4 +134,11 @@ public interface VenueService {
      * @return 删除是否成功
      */
     boolean deleteVenuePlan(VenuePlan venuePlan);
+
+    /**
+     * 获取当前时间往后的最近几场场馆计划简要信息
+     *
+     * @return 场馆计划传输对象
+     */
+    List<VenuePlanBriefDTO> getComingVenueBriefPlan();
 }

@@ -23,7 +23,7 @@ class VenueDaoImplTest {
     @BeforeAll
     static void setUpBeforeAll() {
         //如果是读取/WEB-INF/applicationContext.xml
-        context = new FileSystemXmlApplicationContext("file:src/main/webapp/WEB-INF/applicationContext.xml");
+        context = new FileSystemXmlApplicationContext("file:src/main/webapp/WEB-INF/dao.xml");
         venueDao = context.getBean("venueDao", VenueDaoImpl.class);
     }
 
@@ -82,6 +82,13 @@ class VenueDaoImplTest {
         venueSeats.add(venueSeat);
 
         Assertions.assertEquals(true, venueDao.updateSeatMap(venueSeatInfoDTO));
+
+    }
+
+    @Test
+    void getComingVenuePlansTotalNum(){
+
+        Assertions.assertEquals(0, venueDao.getComingVenuePlanTotalNum());
 
     }
 

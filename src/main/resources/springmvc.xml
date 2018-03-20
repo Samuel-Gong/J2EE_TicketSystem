@@ -22,7 +22,7 @@
     <!--</bean>-->
 
     <!-- 设置default jsp -->
-    <mvc:view-controller path="/" view-name="index"/>
+    <mvc:view-controller path="/" view-name="redirect:/index"/>
 
     <!-- 使用注解开发，需要配置一个组件扫描器 -->
     <context:component-scan base-package="edu.nju"/>

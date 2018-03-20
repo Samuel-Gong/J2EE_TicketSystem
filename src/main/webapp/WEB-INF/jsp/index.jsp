@@ -17,6 +17,15 @@
     <link href="../../css/bootstrap.min.css" rel="stylesheet">
     <!-- 模态框的css -->
     <link href="../../css/index.css" rel="stylesheet">
+    <!-- footer的css -->
+    <link href="../../css/footer.css" rel="stylesheet">
+
+    <style>
+        .panel {
+            margin-top: 5%;
+        }
+    </style>
+
 </head>
 <body>
 
@@ -35,22 +44,6 @@
         <ul class="nav navbar-nav">
             <li id="login-li"><a href="#" data-toggle="modal" data-target="#loginModal">登录</a></li>
             <li id="register-li"><a href="#" data-toggle="modal" data-target="#registerModal">注册</a></li>
-
-            <!-- 导航栏中的下拉菜单 注意下拉菜单的toggle是a标签 而不是button标签 -->
-            <!-- dropdown begin -->
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    我的小麦
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/member/myInfo">个人信息</a></li>
-                    <li><a href="#">订单管理</a></li>
-                    <li><a href="#">我的钱包</a></li>
-                    <li><a href="#">我的优惠券</a></li>
-                </ul>
-            </li>
-            <!-- dropdown end -->
         </ul>
 
         <ul class="nav navbar-nav pull-right">
@@ -60,6 +53,32 @@
     </div>
 </nav>
 <!-- nav end -->
+
+<div id="plans-container" class="container" style="height: 100%; overflow: scroll">
+    <div class="row">
+        <h2 class="text-center">近期演出</h2>
+    </div>
+</div>
+
+
+<%--todo 分页 --%>
+<%--<div id="pagination-container" class="container">--%>
+<%--<div class="row">--%>
+<%--<div class="col-md-offset-3 col-md-6 text-center">--%>
+<%--<ul class="pagination pagination-lg">--%>
+<%--<li><a href="#">&laquo;</a></li>--%>
+<%--<li><a href="#">1</a></li>--%>
+<%--<li><a href="#">2</a></li>--%>
+<%--<li><a href="#">3</a></li>--%>
+<%--<li><a href="#">4</a></li>--%>
+<%--<li><a href="#">5</a></li>--%>
+<%--<li><a href="#">&raquo;</a></li>--%>
+<%--</ul>--%>
+<%--</div>--%>
+<%--</div>--%>
+<%--</div>--%>
+
+<footer></footer>
 
 <!-- 模态框 -->
 <!-- login 模态框 -->
@@ -198,8 +217,10 @@
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="../../js/bootstrap.min.js"></script>
-
 <script>
+
+    let comingShows = null;
+
     $(document).ready(function () {
 
         //会员登录
@@ -238,6 +259,50 @@
             $("#login-li").addClass("hidden");
             $("#register-li").addClass("hidden");
         }
+
+        comingShows = ${comingShows};
+        console.log(comingShows);
+
+        $.each(comingShows, function (index, show) {
+            $("#plans-container").append(
+                "<div class=\"row\">\n" +
+                "    <div class=\"col-md-offset-3 col-md-6\">\n" +
+                "        <div class=\"panel panel-default\">\n" +
+                "            <div class=\"panel-body\">\n" +
+                "                <input type=\"text\" value=\"" + show.venuePlanId + "\" hidden>\n" +
+                "                <button type=\"button\" class=\"btn btn-primary pull-right\">查看详情</button>\n" +
+                "                <form class=\"form-horizontal\" role=\"form\">\n" +
+                "                    <div class=\"form-group\">\n" +
+                "                        <label class=\"col-md-offset-2 col-md-3 control-label\">开始时间：</label>\n" +
+                "                        <div class=\"col-md-4\">\n" +
+                "                            <p class=\"form-control-static\">" + show.begin + "</p>\n" +
+                "                        </div>\n" +
+                "                    </div>\n" +
+                "                    <div class=\"form-group\">\n" +
+                "                        <label class=\"col-md-offset-2 col-md-3 control-label\">结束时间：</label>\n" +
+                "                        <div class=\"col-md-4\">\n" +
+                "                            <p class=\"form-control-static\">" + show.end + "</p>\n" +
+                "                        </div>\n" +
+                "                    </div>\n" +
+                "                    <div class=\"form-group\">\n" +
+                "                        <label class=\"col-sm-offset-2 col-sm-3 control-label\">类型：</label>\n" +
+                "                        <div class=\"col-sm-4\">\n" +
+                "                            <p class=\"form-control-static\">" + show.showType + "</p>\n" +
+                "                        </div>\n" +
+                "                    </div>\n" +
+                "                    <div class=\"form-group\">\n" +
+                "                        <label class=\"col-sm-offset-2 col-sm-3 control-label\">描述：</label>\n" +
+                "                        <div class=\"col-sm-5\">\n" +
+                "                                <textarea class=\"form-control\" style=\"overflow: scroll; resize: none;\" disabled>" + show.description +
+                "                                </textarea>\n" +
+                "                        </div>\n" +
+                "                    </div>\n" +
+                "                </form>\n" +
+                "            </div>\n" +
+                "        </div>\n" +
+                "    </div>\n" +
+                "</div>");
+        });
     });
 </script>
 </body>

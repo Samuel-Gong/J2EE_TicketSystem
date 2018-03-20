@@ -120,4 +120,18 @@ public interface VenueDao {
      * @param venuePlan 场馆计划
      */
     void deleteVenuePlan(VenuePlan venuePlan);
+
+    /**
+     * 获取所有即将到来的场馆计划总数
+     *
+     * @return 即将到来的所有场馆计划总数
+     */
+    int getComingVenuePlanTotalNum();
+
+    /**
+     * 获取所有即将到来场馆计划
+     *
+     * @return 指定大小的场馆计划列表
+     */
+    List<VenuePlanBriefDTO> getComingVenuePlans();
 }

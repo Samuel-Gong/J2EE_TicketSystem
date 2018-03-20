@@ -169,4 +169,9 @@ public class VenueServiceImpl implements VenueService {
         venueDao.deleteVenuePlan(venuePlan);
         return true;
     }
+
+    @Override
+    public List<VenuePlanBriefDTO> getComingVenueBriefPlan() {
+        return venueDao.getComingVenuePlans();
+    }
 }

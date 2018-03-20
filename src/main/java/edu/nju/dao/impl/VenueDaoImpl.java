@@ -13,7 +13,9 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -128,4 +130,22 @@ public class VenueDaoImpl implements VenueDao {
         sessionFactory.getCurrentSession().delete(venuePlan);
     }
 
+    @Override
+    public int getComingVenuePlanTotalNum() {
+        Session session = sessionFactory.getCurrentSession();
+        //开始时间要在当前时间之后
+        return session.createQuery("select count(id) from VenuePlan where begin > :timeNow", Long.class)
+                .setParameter("timeNow", LocalDateTime.now())
+                .getSingleResult().intValue();
+    }
+
+    @Override
+    public List<VenuePlanBriefDTO> getComingVenuePlans() {
+        Session session = sessionFactory.getCurrentSession();
+        Query<VenuePlan> query = session.createQuery("from VenuePlan where begin > :timeNow", VenuePlan.class);
+        return query.setParameter("timeNow", LocalDateTime.now()).list()
+                .stream()
+                .map(VenuePlanBriefDTO::new)
+                .collect(Collectors.toList());
+    }
 }

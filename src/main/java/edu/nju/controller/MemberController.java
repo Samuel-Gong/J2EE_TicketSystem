@@ -81,7 +81,6 @@ public class MemberController {
         return "redirect:/error.html";
     }
 
-
     /**
      * 会员修改密码
      *
@@ -108,12 +107,6 @@ public class MemberController {
     boolean disqualify(@SessionAttribute("mail") String mail) {
 //        return true;
         return memberService.disqualify(mail);
-    }
-
-    @RequestMapping(path = "/addMember", method = RequestMethod.POST)
-    public String addMember(@ModelAttribute("SpringWeb") Member member, ModelMap modelMap) {
-        modelMap.addAttribute("member", member);
-        return "member/result";
     }
 
 }
