@@ -1,6 +1,5 @@
 package edu.nju.model;
 
-import edu.nju.model.embeddable.VenueSeatId;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -28,11 +27,8 @@ class VenueTest {
         Venue venue = new Venue();
 
         VenueSeat seat1 = new VenueSeat();
-        VenueSeatId venueSeatId = new VenueSeatId();
-        venueSeatId.setRow(10);
-        venueSeatId.setColumn(10);
-
-        seat1.setVenueSeatId(venueSeatId);
+        seat1.setRow(10);
+        seat1.setColumn(10);
 
         seat1.setVenue(venue);
         venue.getSeatMap().add(seat1);

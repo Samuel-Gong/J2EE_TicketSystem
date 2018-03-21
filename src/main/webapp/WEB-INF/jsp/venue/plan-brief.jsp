@@ -27,7 +27,7 @@
 </head>
 <body>
 <%-- nav begin --%>
-<%@include file="../../../html/venue/venue-nav.html" %>
+<%@include file="../../../html/venue/nav.html" %>
 <%-- nav end --%>
 
 <div id="plans-container" class="container">
@@ -42,23 +42,11 @@
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="../../../js/bootstrap.min.js"></script>
 <script>
-    //todo 获取数据
 
     //声明全局变量，保存场馆计划
-    let allPlans = [];
+    let allPlans = ${venuePlans};
 
     $(document).ready(function () {
-        $.ajax({
-            url: "/venue/getAllPlan",
-            method: "get",
-            async: false,     //同步请求
-            success: function (data) {
-                allPlans = JSON.parse(data);
-            },
-            error: function () {
-                console.log("错误了");
-            }
-        });
 
         if (allPlans.length !== 0) {
             $.each(allPlans, function (index, plan) {

@@ -2,6 +2,7 @@ package edu.nju.service;
 
 import edu.nju.dto.VenueBasicInfoDTO;
 import edu.nju.dto.VenuePlanBriefDTO;
+import edu.nju.dto.VenuePlanDetailDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
@@ -97,12 +98,13 @@ public interface VenueService {
     VenuePlan getVenuePlan(int venuePlanId);
 
     /**
-     * 获取场馆计划和该场馆计划对应的场馆
+     * 根据场馆计划id获取演出的具体信息
+     * 包括行数，列数，以及座位排布
      *
-     * @param venuePlanId 场馆计划编号
-     * @return 带有场馆信息的场馆计划
+     * @param venuePlanId 场馆计划id
+     * @return 演出具体信息
      */
-    VenuePlan getVenuePlanWithVenue(int venuePlanId);
+    VenuePlanDetailDTO getVenuePlanDetail(int venuePlanId);
 
     /**
      * 获取该场馆所有的场馆计划简介
@@ -111,13 +113,6 @@ public interface VenueService {
      * @return 场馆计划列表
      */
     List<VenuePlanBriefDTO> getAllBriefVenuePlan(int venueId);
-
-    /**
-     * 获取场馆计划详情，包括场馆计划的所有信息
-     * @param venuePlanId 场馆计划Id
-     * @return 场馆计划详情
-     */
-    VenuePlan getVenuePlanDetail(int venuePlanId);
 
     /**
      * 更新场馆计划

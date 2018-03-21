@@ -1,9 +1,12 @@
 package edu.nju.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import edu.nju.util.OrderStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Shenmiu
@@ -17,24 +20,19 @@ public class Order {
      * 订单号
      */
     @Id
+    @GeneratedValue
     private String orderId;
 
     /**
      * 订单创建时间
      */
-    @Column(name = "create_time")
+    @JSONField(format = "yyyy-MM-dd HH:mm")
     private LocalDateTime createTime;
 
     /**
      * 订单状态
      */
-    @Column(name = "order_status")
-    @Enumerated(value = EnumType.STRING)
     private OrderStatus orderStatus;
-
-    //TODO
-//    @OneToMany(mappedBy = "orderId", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<VenueSeat> seatList = new ArrayList<>();
 
     /**
      * 与会员多对一，外键为会员id
@@ -49,6 +47,12 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
     private Venue venue;
+
+    /**
+     * 与场馆计划的座位一对多
+     */
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VenuePlanSeat> venuePlanSeats = new ArrayList<>();
 
     public String getOrderId() {
         return orderId;
@@ -72,5 +76,29 @@ public class Order {
 
     public void setCreateTime(LocalDateTime createTime) {
         this.createTime = createTime;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
+    }
+
+    public Venue getVenue() {
+        return venue;
+    }
+
+    public void setVenue(Venue venue) {
+        this.venue = venue;
+    }
+
+    public List<VenuePlanSeat> getVenuePlanSeats() {
+        return venuePlanSeats;
+    }
+
+    public void setVenuePlanSeats(List<VenuePlanSeat> venuePlanSeats) {
+        this.venuePlanSeats = venuePlanSeats;
     }
 }

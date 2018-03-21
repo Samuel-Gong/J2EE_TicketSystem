@@ -24,7 +24,13 @@ let seatMap = [
  }
  ]
  */
-function initSeatMap(rowNum, columnNum, seats) {
+
+/**
+ * 初始化seatMap为 rowNum * columnNum 大小的数组
+ * @param rowNum    座位行数
+ * @param columnNum 座位列数
+ */
+function initSeatMap(rowNum, columnNum) {
     seatMap = new Array(rowNum);
     $.each(seatMap, function (index, val) {
         seatMap[index] = new Array(columnNum);
@@ -32,11 +38,23 @@ function initSeatMap(rowNum, columnNum, seats) {
             seatMap[index][i] = "";
         }
     });
+}
 
+function fillSeatMapWithDefaultType(rowNum, columnNum, seats) {
+    initSeatMap(rowNum, columnNum);
     $.each(seats, function (index, seat) {
-        let seat_row = seat.venueSeatId.row;
-        let seat_column = seat.venueSeatId.column;
+        let seat_row = seat.row;
+        let seat_column = seat.column;
         seatMap[seat_row - 1][seat_column - 1] = seat.hasSeat ? 'a' : '_';
+    });
+}
+
+function fillSeatMapWithType(rowNum, columnNum, seatsWithType) {
+    initSeatMap(rowNum, columnNum);
+    $.each(seatsWithType, function (index, seat) {
+        let seat_row = seat.row;
+        let seat_column = seat.column;
+        seatMap[seat_row - 1][seat_column - 1] = seat.typeChar;
     });
 }
 

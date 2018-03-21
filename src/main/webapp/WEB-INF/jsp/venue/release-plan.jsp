@@ -30,18 +30,15 @@
 <body>
 
 <!-- nav begin -->
-<%@include file="../../../html/venue/venue-nav.html" %>
+<%@include file="../../../html/venue/nav.html" %>
 <!-- nav end -->
 
 <!-- container begin -->
 <div id="venue-register-container" class="container">
     <div class="row">
-        <h2 class="text-center">查看计划</h2>
-        <button id="modify-plan-btn" type="button" class="btn btn-primary col-lg-offset-9"
-                style="display: inline-block">修改计划
-        </button>
-        <button id="modify-plan-confirm-btn" type="button" class="btn btn-primary col-lg-offset-9"
-                style="display: inline-block">确认修改
+        <h2 class="text-center">发布计划</h2>
+        <button id="release-plan-btn" type="button" class="btn btn-primary col-lg-offset-9"
+                style="display: inline-block">发布计划
         </button>
     </div>
     <div id="all-venue-info" class="row">
@@ -497,21 +494,10 @@
          * 初始化界面要渲染的座位的信息
          */
 
-        let venueInfo;
-        $.ajax({
-            url: "/venue/info",
-            method: "get",
-            async: false,     //同步请求
-            success: function (data) {
-                venueInfo = JSON.parse(data);
-            },
-            error: function () {
-                console.log("错误了");
-            }
-        });
+        let venueInfo = ${venueInfo}
 
-        //初始化seatMap
-        initSeatMap(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
+            //初始化seatMap
+            fillSeatMapWithDefaultType(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
 
         //初始化座位的点击事件
         seatInfo.removeTypeChar('a');

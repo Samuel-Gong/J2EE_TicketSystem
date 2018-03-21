@@ -71,10 +71,13 @@
 </head>
 <body>
 
-<%@include file="../../../html/venue/venue-nav.html" %>
+<%@include file="../../../html/venue/nav.html" %>
 
 <!-- container begin -->
 <div id="venue-info-container" class="container">
+    <div class="row">
+        <h2 class="text-center">场馆信息</h2>
+    </div>
     <div id="all-venue-info" class="row">
         <div id="legend-info" class="col-md-2">
             <div id="legend-container">
@@ -147,11 +150,6 @@
 <script>
 
     /**
-     * 保存后端渲染的场馆座位及基本信息
-     */
-    let venueInfo;
-
-    /**
      * 确认/取消修改座位信息时，js共同动作
      */
     function seat_info_save_cancel() {
@@ -180,7 +178,7 @@
     function modify_seat_info_cancel() {
         seat_info_save_cancel();
         //座位图复原
-        initSeatMap(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
+        fillSeatMapWithDefaultType(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
         //重新渲染
         rerenderSeats();
     }
@@ -196,26 +194,19 @@
         $("#venue-city").val(venueInfo.city);
     }
 
-    $(document).ready(function () {
+    /**
+     * 保存后端渲染的场馆座位及基本信息
+     */
+    let venueInfo = ${venueInfo};
 
-        $.ajax({
-            url: "/venue/info",
-            method: "get",
-            async: false,     //同步请求
-            success: function (data) {
-                venueInfo = JSON.parse(data);
-            },
-            error: function () {
-                console.log("错误了");
-            }
-        });
+    $(document).ready(function () {
 
         //基本信息
         $("#venue-name").val(venueInfo.name);
         $("#venue-city").val(venueInfo.city);
 
         //座位信息
-        initSeatMap(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
+        fillSeatMapWithDefaultType(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
         renderSeats();
 
         //增加/删除 行/列 按钮添加监听

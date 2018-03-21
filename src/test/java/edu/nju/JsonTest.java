@@ -3,7 +3,6 @@ package edu.nju;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import edu.nju.model.*;
-import edu.nju.model.embeddable.VenueSeatId;
 import edu.nju.util.ShowType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -122,10 +121,8 @@ class JsonTest {
         venue.setPassword("123456");
 
         VenueSeat venueSeat = new VenueSeat();
-        VenueSeatId venueSeatId = new VenueSeatId();
-        venueSeatId.setColumn(10);
-        venueSeatId.setRow(10);
-        venueSeat.setVenueSeatId(venueSeatId);
+        venueSeat.setColumn(10);
+        venueSeat.setRow(10);
 
         venueSeat.setHasSeat(true);
 
@@ -138,10 +135,8 @@ class JsonTest {
     @Test
     void venueSeat2JsonString() {
         VenueSeat venueSeat = new VenueSeat();
-        VenueSeatId venueSeatId = new VenueSeatId();
-        venueSeatId.setColumn(10);
-        venueSeatId.setRow(10);
-        venueSeat.setVenueSeatId(venueSeatId);
+        venueSeat.setColumn(10);
+        venueSeat.setRow(10);
 
         venueSeat.setHasSeat(true);
 

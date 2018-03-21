@@ -13,6 +13,10 @@ public enum OrderStatus {
      */
     BOOKED("已预订"),
     /**
+     * 已配票
+     */
+    ARRANGED("已配票"),
+    /**
      * 已退订
      */
     RETREAT("已退订"),

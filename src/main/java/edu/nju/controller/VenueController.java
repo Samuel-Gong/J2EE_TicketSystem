@@ -1,9 +1,7 @@
 package edu.nju.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.mysql.cj.xdevapi.JsonArray;
 import edu.nju.dto.VenueBasicInfoDTO;
-import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
@@ -13,8 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.support.SessionStatus;
 
 /**
  * @author Shenmiu
@@ -27,6 +24,15 @@ public class VenueController {
 
     @Autowired
     private VenueService venueService;
+
+    /**
+     * 登出，返回主页
+     */
+    @GetMapping(value = "/logout")
+    public String logout(SessionStatus sessionStatus) {
+        sessionStatus.setComplete();
+        return "redirect:/index";
+    }
 
     /**
      * 场馆注册视图
@@ -42,7 +48,8 @@ public class VenueController {
      * @return 场馆信息视图
      */
     @GetMapping(value = "/infoView")
-    public String infoView() {
+    public String infoView(@SessionAttribute("venueId") int venueId, Model model) {
+        model.addAttribute("venueInfo", JSON.toJSONString(venueService.getVenueWithSeatMap(venueId)));
         return "/venue/info";
     }
 
@@ -52,18 +59,19 @@ public class VenueController {
      * @return 场馆所有计划列表
      */
     @GetMapping(value = "/planView")
-    public String planView() {
+    public String planView(@SessionAttribute("venueId") int venueId, Model model) {
+        model.addAttribute("venuePlans", JSON.toJSONString(venueService.getAllBriefVenuePlan(venueId)));
         return "venue/plan-brief";
     }
 
     /**
      * 计划详情界面
+     *
      * @return 场馆计划详情
      */
     @GetMapping(value = "/planView/{venuePlanId}")
-    public String planDetailView(@SessionAttribute("venueId") int venueId, @PathVariable("venuePlanId") int venuePlanId, Model model) {
-        model.addAttribute("venuePlan", JSON.toJSONString(venueService.getVenuePlanDetail(venuePlanId)));
-        model.addAttribute("venueInfo", JSON.toJSONString(venueService.getVenueWithSeatMap(venueId)));
+    public String planDetailView(@PathVariable("venuePlanId") int venuePlanId, Model model) {
+        model.addAttribute("planDetail", JSON.toJSONString(venueService.getVenuePlanDetail(venuePlanId)));
         return "/venue/plan-detail";
     }
 
@@ -73,20 +81,9 @@ public class VenueController {
      * @return 场馆计划发布视图
      */
     @GetMapping(value = "/release-plan")
-    public String releasePlanView() {
+    public String releasePlanView(@SessionAttribute("venueId") int venueId, Model model) {
+        model.addAttribute("venueInfo", JSON.toJSONString(venueService.getVenueWithSeatMap(venueId)));
         return "/venue/release-plan";
-    }
-
-    /**
-     * 获取场馆对应的所有场馆计划
-     *
-     * @param venueId 场馆编号
-     * @return 场馆计划列表
-     */
-    @GetMapping(value = "/getAllPlan")
-    public @ResponseBody
-    List<VenuePlanBriefDTO> getVenuePlan(@SessionAttribute("venueId") int venueId) {
-        return venueService.getAllBriefVenuePlan(venueId);
     }
 
     /**
@@ -100,19 +97,6 @@ public class VenueController {
     public @ResponseBody
     boolean addVenuePlan(@SessionAttribute("venueId") int venueId, @RequestBody VenuePlan venuePlan) {
         return venueService.addVenuePlan(venueId, venuePlan);
-    }
-
-    /**
-     * 获取场馆信息
-     *
-     * @param venueId 场馆编号
-     * @return 场馆信息json格式
-     */
-    @GetMapping(value = "/info")
-    public @ResponseBody
-    Venue infoView(@SessionAttribute("venueId") int venueId) {
-        //只需要获取带座位信息的场馆
-        return venueService.getVenueWithSeatMap(venueId);
     }
 
     /**

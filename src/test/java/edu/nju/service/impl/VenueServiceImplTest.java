@@ -60,6 +60,11 @@ class VenueServiceImplTest {
     }
 
     @Test
+    void getShowDetail(){
+        System.out.println(JSON.toJSONString(venueService.getVenuePlanDetail(2)));
+    }
+
+    @Test
     void getComingVenuePlans(){
 //        Assertions.assertEquals(1, venueService.getComingVenuePlan().size());
         System.out.println(JSON.toJSONString(venueService.getComingVenueBriefPlan()));

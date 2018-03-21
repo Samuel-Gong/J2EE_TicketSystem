@@ -1,6 +1,7 @@
 package edu.nju.service.impl;
 
 import edu.nju.dao.VenueDao;
+import edu.nju.dto.VenuePlanDetailDTO;
 import edu.nju.dto.VenueBasicInfoDTO;
 import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
@@ -129,11 +130,17 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
-    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public VenuePlan getVenuePlanWithVenue(int venuePlanId) {
+    public VenuePlanDetailDTO getVenuePlanDetail(int venuePlanId) {
         VenuePlan venuePlan = venueDao.getVenuePlan(venuePlanId);
-        Hibernate.initialize(venuePlan.getVenue());
-        return venuePlan;
+        Hibernate.initialize(venuePlan.getSeatTypes());
+        Hibernate.initialize(venuePlan.getVenuePlanSeats());
+
+        Venue venue = venuePlan.getVenue();
+        int venueId = venue.getId();
+        int rowNum = venue.getRowNum();
+        int columnNum = venue.getColumnNum();
+
+        return new VenuePlanDetailDTO(venueId, rowNum, columnNum, venuePlan);
     }
 
     @Override
@@ -144,16 +151,6 @@ public class VenueServiceImpl implements VenueService {
         return venuePlans.stream()
                 .map(VenuePlanBriefDTO::new)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public VenuePlan getVenuePlanDetail(int venuePlanId) {
-        VenuePlan venuePlan = venueDao.getVenuePlan(venuePlanId);
-        //手动初始化懒加载的关联对象
-        Hibernate.initialize(venuePlan.getSeatTypes());
-        Hibernate.initialize(venuePlan.getVenuePlanSeats());
-        return venuePlan;
     }
 
     @Override

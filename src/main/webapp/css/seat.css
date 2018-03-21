@@ -187,9 +187,9 @@ focused seats
 /**
 selected seats
  */
-/*div.seatCharts-seat.selected {*/
-/*background-color: #E6CAC4;*/
-/*}*/
+div.seatCharts-seat.selected {
+background-color: red;
+}
 
 /**
 unavailable seats

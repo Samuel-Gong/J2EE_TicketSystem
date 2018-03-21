@@ -38,8 +38,6 @@
             <a class="navbar-brand" href="#">小麦网</a>
         </div>
 
-        <p id="user-mail" class="navbar-text hidden"></p>
-
         <!-- 导航内容 -->
         <ul class="nav navbar-nav">
             <li id="login-li"><a href="#" data-toggle="modal" data-target="#loginModal">登录</a></li>
@@ -219,34 +217,32 @@
 <script src="../../js/bootstrap.min.js"></script>
 <script>
 
-    let comingShows = null;
+    //会员登录
+    $("#login_btn").on("click", function () {
+        $("#login_form").submit();
+    });
+
+    //会员注册
+    $("#reg_btn").on("click", function () {
+        $("#reg_form").submit();
+    });
+
+    //场馆登录
+    $("#venue-login-btn").on("click", function () {
+        $("#venue-login-form").submit();
+    });
+
+    //场馆注册
+    $("#venue-register-btn").on("click", function () {
+        $(location).attr("href", "/venue/registerView");
+    });
+
+    //经理登录
+    $("#manager-login-btn").on("click", function () {
+        $("#manager-login-form").submit();
+    });
 
     $(document).ready(function () {
-
-        //会员登录
-        $("#login_btn").on("click", function () {
-            $("#login_form").submit();
-        });
-
-        //会员注册
-        $("#reg_btn").on("click", function () {
-            $("#reg_form").submit();
-        });
-
-        //场馆登录
-        $("#venue-login-btn").on("click", function () {
-            $("#venue-login-form").submit();
-        });
-
-        //场馆注册
-        $("#venue-register-btn").on("click", function () {
-            $(location).attr("href", "/venue/registerView");
-        });
-
-        //经理登录
-        $("#manager-login-btn").on("click", function () {
-            $("#manager-login-form").submit();
-        });
 
         if (${sessionScope.containsKey("mail")}) {
             console.log("contains mail");
@@ -260,7 +256,7 @@
             $("#register-li").addClass("hidden");
         }
 
-        comingShows = ${comingShows};
+        let comingShows = ${comingShows};
         console.log(comingShows);
 
         $.each(comingShows, function (index, show) {
@@ -270,7 +266,6 @@
                 "        <div class=\"panel panel-default\">\n" +
                 "            <div class=\"panel-body\">\n" +
                 "                <input type=\"text\" value=\"" + show.venuePlanId + "\" hidden>\n" +
-                "                <button type=\"button\" class=\"btn btn-primary pull-right\">查看详情</button>\n" +
                 "                <form class=\"form-horizontal\" role=\"form\">\n" +
                 "                    <div class=\"form-group\">\n" +
                 "                        <label class=\"col-md-offset-2 col-md-3 control-label\">开始时间：</label>\n" +

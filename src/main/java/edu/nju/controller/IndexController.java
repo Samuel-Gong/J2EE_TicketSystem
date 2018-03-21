@@ -5,6 +5,7 @@ import edu.nju.service.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
@@ -14,16 +15,15 @@ import org.springframework.web.bind.annotation.SessionAttributes;
  */
 @Controller("indexController")
 @RequestMapping("/")
-@SessionAttributes(names = {"mail"}, types = {String.class})
 public class IndexController {
 
     @Autowired
     private VenueService venueService;
 
-    @RequestMapping("index")
+    @GetMapping("index")
     public String index(Model model) {
         model.addAttribute("comingShows", JSON.toJSONString(venueService.getComingVenueBriefPlan()));
-        return "index";
+        return "/index";
     }
 
 }

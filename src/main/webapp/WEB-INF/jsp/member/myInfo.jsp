@@ -32,37 +32,7 @@
 <body>
 
 <!-- nav begin -->
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-
-        <!-- 导航栏头 -->
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">小麦网</a>
-        </div>
-
-        <%-- todo 替换text为${sessionScope.mail} --%>
-        <p id="user-mail" class="navbar-text">${sessionScope.mail}</p>
-
-        <!-- 导航内容 -->
-        <ul class="nav navbar-nav">
-            <!-- 导航栏中的下拉菜单 注意下拉菜单的toggle是a标签 而不是button标签 -->
-            <!-- dropdown begin -->
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    我的小麦
-                    <b class="caret"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">个人信息</a></li>
-                    <li><a href="#">订单管理</a></li>
-                    <li><a href="#">我的钱包</a></li>
-                    <li><a href="#">我的优惠券</a></li>
-                </ul>
-            </li>
-            <!-- dropdown end -->
-        </ul>
-    </div>
-</nav>
+<%@include file="nav.jsp" %>
 <!-- nav end -->
 
 <div class="container" id="info-panel">

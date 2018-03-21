@@ -4,7 +4,6 @@ import edu.nju.dao.VenueDao;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenueSeat;
-import edu.nju.model.embeddable.VenueSeatId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
@@ -45,10 +44,8 @@ class VenueDaoImplTest {
         venue.setPassword("123456");
 
         VenueSeat venueSeat = new VenueSeat();
-        VenueSeatId venueSeatId = new VenueSeatId();
-        venueSeatId.setColumn(10);
-        venueSeatId.setRow(10);
-        venueSeat.setVenueSeatId(venueSeatId);
+        venueSeat.setColumn(10);
+        venueSeat.setRow(10);
 
         venueSeat.setHasSeat(true);
 
@@ -71,11 +68,8 @@ class VenueDaoImplTest {
         List<VenueSeat> venueSeats = new ArrayList<>();
 
         VenueSeat venueSeat = new VenueSeat();
-        VenueSeatId venueSeatId = new VenueSeatId();
-        venueSeatId.setColumn(9);
-        venueSeatId.setRow(9);
-        venueSeatId.setVenueId(2);
-        venueSeat.setVenueSeatId(venueSeatId);
+        venueSeat.setColumn(9);
+        venueSeat.setRow(9);
 
         venueSeat.setHasSeat(false);
 
@@ -86,7 +80,7 @@ class VenueDaoImplTest {
     }
 
     @Test
-    void getComingVenuePlansTotalNum(){
+    void getComingVenuePlansTotalNum() {
 
         Assertions.assertEquals(0, venueDao.getComingVenuePlanTotalNum());
 

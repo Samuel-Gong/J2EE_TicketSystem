@@ -1,17 +1,17 @@
 <%--
   Created by IntelliJ IDEA.
   User: Shenmiu
-  Date: 20/03/2018
-  Time: 22:48
+  Date: 21/03/2018
+  Time: 11:37
   
-  Description:  场馆计划详情
+  Description:
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <html>
 <head>
     <meta charset="utf-8">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>计划详情</title>
+    <title>购票</title>
 
     <!-- Normalize -->
     <link href="../../../css/normalize.css" rel="stylesheet">
@@ -19,24 +19,17 @@
     <link href="../../../css/bootstrap.min.css" rel="stylesheet">
     <!-- seat css -->
     <link href="../../../css/seat.css" rel="stylesheet">
-
-    <!-- datetimepicker css -->
-    <link href="../../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-
-    <!-- 场馆计划发布及更新css -->
-    <link href="../../../css/plan-release-detail.css" rel="stylesheet">
-
 </head>
 <body>
 
 <!-- nav begin -->
-<%@include file="../../../html/venue/nav.html" %>
+<%@include file="nav.jsp" %>
 <!-- nav end -->
 
 <!-- container begin -->
 <div id="venue-register-container" class="container">
     <div class="row">
-        <h2 class="text-center">计划详情</h2>
+        <h2 class="text-center">座位分布</h2>
     </div>
     <div id="all-venue-info" class="row">
         <div class="col-md-2">
@@ -54,13 +47,8 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-        <div class="col-md-8">
-            <%@include file="../../../html/venue/seat-map-container.html" %>
-        </div>
-        <div class="col-md-2">
             <div id="plan-basic-info">
-                <h3 class="text-center">基础信息</h3>
+                <h3 class="text-center">演出信息</h3>
                 <form id="venue-plan-info-form">
                     <div class="form-group">
                         <label class="control-label">开始时间</label>
@@ -84,6 +72,24 @@
                 </form>
             </div>
         </div>
+        <div class="col-md-8">
+            <%@include file="../../../html/venue/seat-map-container.html" %>
+        </div>
+        <div class="col-md-2">
+            <h3>购买方式</h3>
+            <form id="book-type-form">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="book-type-options" checked>选票购买
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="book-type-options">立即购买
+                    </label>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 <!-- container end -->
@@ -94,10 +100,6 @@
 <script src="../../../js/bootstrap.min.js"></script>
 <!-- seat js -->
 <script src="../../../js/jquery-seat-charts.js"></script>
-<!-- datetimepicker -->
-<script src="../../../js/bootstrap-datetimepicker.min.js"></script>
-<!-- datetimepicker locale -->
-<script src="../../../js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <!-- 对座位操作的js -->
 <script src="../../../js/seat-operation.js"></script>
 
@@ -134,10 +136,23 @@
             };
         });
 
-        //填充seatMap
-        fillSeatMapWithType(planDetail.rowNum, planDetail.columnNum, venuePlan.venuePlanSeats);
+        //初始化seatMap
+        fillSeatMapWithType(planDetail.rowNum, planDetail.columnNum, venuePlan.venue);
 
+        //改变seatMap的颜色
+        let venuePlanSeats = venuePlan.venuePlanSeats;
+        console.log(venuePlanSeats);
+
+        $.each(venuePlanSeats, function (index, planSeat) {
+            seatMap[planSeat.row - 1][planSeat.column - 1] = planSeat.typeChar;
+        });
         renderSeats();
+
+
+        let selectedSeats = [];
+        //添加点击座位修改座位的颜色
+
+        //todo 选票购买和立即购买方式的切换
     });
 </script>
 </body>

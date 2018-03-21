@@ -42,6 +42,18 @@ public class VenuePlanSeat implements Serializable {
      */
     private char typeChar;
 
+    /**
+     * 表示是否该座位是否可用
+     */
+    private boolean available;
+
+    /**
+     * 与订单的多对一，可能不存在对应的订单，指定外键为orderId
+     */
+    @ManyToOne
+    @JoinColumn(name = "orderId", foreignKey = @ForeignKey(name = "FK_ORDER"))
+    private Order order;
+
     public VenuePlan getVenuePlan() {
         return venuePlan;
     }
@@ -72,6 +84,22 @@ public class VenuePlanSeat implements Serializable {
 
     public void setTypeChar(char typeChar) {
         this.typeChar = typeChar;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 
     @Override

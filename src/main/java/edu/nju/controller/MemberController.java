@@ -1,11 +1,15 @@
 package edu.nju.controller;
 
+import com.alibaba.fastjson.JSON;
 import edu.nju.model.Member;
 import edu.nju.service.MemberService;
+import edu.nju.service.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -13,12 +17,46 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  * @date 2018/03/05
  */
 @Controller("memberController")
-@SessionAttributes(names = {"member", "mail"}, types = {Member.class, String.class})
+@SessionAttributes(names = {"mail"}, types = {String.class})
 @RequestMapping("/member")
 public class MemberController {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private VenueService venueService;
+
+    @GetMapping(path = "/booking/{venuePlanId}")
+    public String booking(@PathVariable("venuePlanId") int venuePlanId, Model model) {
+        model.addAttribute("planDetail", JSON.toJSONString(venueService.getVenuePlanDetail(venuePlanId)));
+        return "/member/booking";
+    }
+
+    /**
+     * 浏览演出
+     *
+     * @return 浏览演出的界面
+     */
+    @GetMapping(path = "/scanShow")
+    public String scanShow(Model model) {
+        model.addAttribute("comingShows", JSON.toJSONString(venueService.getComingVenueBriefPlan()));
+        return "/member/scan-shows";
+    }
+
+    /**
+     * 会员登出
+     *
+     * @param sessionStatus 会话状态
+     * @return 重定向至首页
+     */
+    @GetMapping(path = "logout")
+    public String logout(SessionStatus sessionStatus) {
+        //会员登出,完成会话
+        sessionStatus.setComplete();
+        return "redirect:/index";
+    }
+
 
     /**
      * 用户注册
@@ -37,13 +75,13 @@ public class MemberController {
      *
      * @param mail     会员邮箱
      * @param password 会员密码
-     * @return 重定向至首页
+     * @return 重定向至会员浏览场馆计划的界面
      */
     @PostMapping(path = "/login")
     public String login(@RequestParam("mail") String mail, @RequestParam("password") String password, ModelMap modelMap) {
         if (memberService.logIn(mail, password)) {
             modelMap.addAttribute("mail", mail);
-            return "redirect:/index";
+            return "redirect:scanShow";
         }
         //TODO  错误界面
         return "redirect:/error.html";

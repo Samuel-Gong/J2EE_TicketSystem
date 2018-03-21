@@ -2,9 +2,9 @@ package edu.nju.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import edu.nju.model.embeddable.VenueSeatId;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * @author Shenmiu
@@ -14,39 +14,52 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "venue_seat")
-@JSONType(orders = {"venueSeatId", "hasSeat"})
-public class VenueSeat {
+@JSONType(ignores = "venue", orders = {"row", "column", "hasSeat"})
+public class VenueSeat implements Serializable{
 
     /**
-     * 联合主键：
-     * row      行
-     * column   列
-     * venueId  场馆编号
-     */
-    @EmbeddedId
-    private VenueSeatId venueSeatId;
-
-    /**
-     * 与场馆多对一
+     * 与场馆多对一， 场馆编号作为主键一部分
      * 不序列化/反序列化场馆
      */
     @JSONField(serialize = false, deserialize = false)
-    @MapsId("venueId")
+    @Id
     @ManyToOne
     @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
     private Venue venue;
+
+    /**
+     * 行
+     */
+    @Id
+    @Column(name = "`row`")
+    private int row;
+
+    /**
+     * 列
+     */
+    @Id
+    @Column(name = "`column`")
+    private int column;
 
     /**
      * 表示该行该列是否有座位
      */
     private boolean hasSeat;
 
-    public VenueSeatId getVenueSeatId() {
-        return venueSeatId;
+    public int getRow() {
+        return row;
     }
 
-    public void setVenueSeatId(VenueSeatId venueSeatId) {
-        this.venueSeatId = venueSeatId;
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public void setColumn(int column) {
+        this.column = column;
     }
 
     public Venue getVenue() {
@@ -76,11 +89,20 @@ public class VenueSeat {
 
         VenueSeat venueSeat = (VenueSeat) o;
 
-        return venueSeatId.equals(venueSeat.venueSeatId);
+        if (row != venueSeat.row) {
+            return false;
+        }
+        if (column != venueSeat.column) {
+            return false;
+        }
+        return venue.equals(venueSeat.venue);
     }
 
     @Override
     public int hashCode() {
-        return venueSeatId.hashCode();
+        int result = venue.hashCode();
+        result = 31 * result + row;
+        result = 31 * result + column;
+        return result;
     }
 }
