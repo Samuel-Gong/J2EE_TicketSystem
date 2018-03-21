@@ -32,11 +32,13 @@ public class Order {
     /**
      * 订单状态
      */
+    @JSONField(deserialize = false)
     private OrderStatus orderStatus;
 
     /**
      * 与会员多对一，外键为会员id
      */
+    @JSONField(deserialize = false, serialize = false)
     @ManyToOne
     @JoinColumn(name = "memberId", foreignKey = @ForeignKey(name = "FK_MEMBER"))
     private Member member;
@@ -44,6 +46,7 @@ public class Order {
     /**
      * 与场馆多对一，外键为场馆id
      */
+    @JSONField(deserialize = false, serialize = false)
     @ManyToOne
     @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
     private Venue venue;
@@ -51,7 +54,7 @@ public class Order {
     /**
      * 与场馆计划的座位一对多
      */
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "order", orphanRemoval = true)
     private List<VenuePlanSeat> venuePlanSeats = new ArrayList<>();
 
     public String getOrderId() {

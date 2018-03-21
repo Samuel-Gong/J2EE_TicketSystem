@@ -1,10 +1,13 @@
 package edu.nju.controller;
 
 import com.alibaba.fastjson.JSON;
+import edu.nju.dto.MemberOrderDTO;
 import edu.nju.model.Member;
 import edu.nju.service.MemberService;
+import edu.nju.service.OrderService;
 import edu.nju.service.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -27,6 +30,46 @@ public class MemberController {
     @Autowired
     private VenueService venueService;
 
+    @Autowired
+    private OrderService orderService;
+
+    @GetMapping(path = "orders")
+    public String getOrders(@SessionAttribute("mail") String mail) {
+        return "/member/orders";
+    }
+
+    /**
+     * 用户立即购票
+     *
+     * @param memberOrderDTO 会员订单的数据传输对象
+     * @return 订单是否保存成功
+     */
+    @PostMapping(path = "/buyNowOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+    boolean buyNowOrder(@RequestBody MemberOrderDTO memberOrderDTO) {
+        //todo 保存Order
+        return true;
+    }
+
+    /**
+     * 用户选座购票
+     *
+     * @param memberOrderDTO 会员订单的数据传输对象
+     * @return 订单是否保存成功
+     */
+    @PostMapping(path = "/pickSeatOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+    boolean pickSeatOrder(@RequestBody MemberOrderDTO memberOrderDTO) {
+        //todo 保存order
+        return true;
+    }
+
+    /**
+     * 用户发起请求订票
+     *
+     * @param venuePlanId 场馆计划id
+     * @return 返回用户订票界面
+     */
     @GetMapping(path = "/booking/{venuePlanId}")
     public String booking(@PathVariable("venuePlanId") int venuePlanId, Model model) {
         model.addAttribute("planDetail", JSON.toJSONString(venueService.getVenuePlanDetail(venuePlanId)));

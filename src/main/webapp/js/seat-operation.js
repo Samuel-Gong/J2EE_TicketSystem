@@ -9,23 +9,6 @@ let seatMap = [
 ];
 
 /**
- * 根据行数和列数初始化座位图的大小
- * @param rowNum    行数
- * @param columnNum 列数
- * @param seats     座位图的json数组
- *
- "seatMap":[
- {
-   "venueSeatId":{
-     "row":10,
-     "column":10
-   },
-   "hasSeat":true
- }
- ]
- */
-
-/**
  * 初始化seatMap为 rowNum * columnNum 大小的数组
  * @param rowNum    座位行数
  * @param columnNum 座位列数
@@ -58,16 +41,12 @@ function fillSeatMapWithType(rowNum, columnNum, seatsWithType) {
     });
 }
 
+
 /**
  * 保存座位信息
  */
 let seatInfo = {
-    a: {
-        //Custom CSS classes which should be applied to seats.
-        //'seat-red seat-big' or ['seat-red', 'seat-big']
-        //点击座位，转换为空位
-        // click: seat2space,
-    },
+    a: {},
 
     /**
      * 添加一个表示座位的字符
@@ -105,6 +84,7 @@ let seatInfo = {
  * 座位图例
  */
 let legendInfo = {
+    //todo 重构legendInfo
     //jQuery reference to a DIV element where legend should be rendered.
     node: $('#legend-box'),
     //An array of legend item details. Each array element should be a three-element array: [ character, status, description ]
@@ -249,51 +229,55 @@ function seatMapRow2String() {
 }
 
 /**
+ * 座位图表有关的设置
+ */
+let seatChartsSetting = {
+    showLegendInfo: true,
+    addClick(func) {
+        this.click = func;
+    },
+    clickDoNothing() {
+        this.click = function () {
+            if (this.status() === 'available') {
+                return 'available';
+            }
+        }
+    }
+};
+
+function organizeRenderSeatInfo() {
+    seatChartsSetting.map = seatMapRow2String();
+    seatChartsSetting.seats = seatInfo;
+    seatChartsSetting.naming = {
+        top: false,
+        //默认getId函数
+        getId: function (character, row, column) {
+            return row + '_' + column;
+        },
+        //默认getLabel函数
+        //Labels will be displayed over seats
+        //so if you don't want any labels, just return an empty string.
+        getLabel: function (character, row, column) {
+            return character;
+        }
+    };
+    if (seatChartsSetting.showLegendInfo) {
+        seatChartsSetting.legend = legendInfo;
+    }
+    else {
+        delete seatChartsSetting.legend;
+    }
+
+    return seatChartsSetting;
+}
+
+let sc = null;
+
+/**
  * 渲染座位
  */
 function renderSeats() {
-    $("#seat-map").seatCharts({
-        //必须的
-        //每个字符表示一个座位，下划线表示没有座位
-        //每一行的列数必须相等
-        map: seatMapRow2String(),
-        seats: seatInfo,
-        naming: {
-            top: false,
-            //默认getId函数
-            getId: function (character, row, column) {
-                return row + '_' + column;
-            },
-            //默认getLabel函数
-            //Labels will be displayed over seats
-            //so if you don't want any labels, just return an empty string.
-            getLabel: function (character, row, column) {
-                return character;
-            }
-        },
-        //legend,  默认显示该信息
-        legend: legendInfo
-        // click: function () {
-        //     if (this.status() === 'available') {
-        //         return 'available';
-        //     } else {
-        //         if (this.char() === '_') {
-        //             alert(this.status() + "\n" + this.node() + "\n" + this.data() + "\n" + this.char());
-        //         }
-        //         // return this.style();
-        //     }
-        // }
-        ,
-        /**
-         * 是否显示legend的信息
-         * @param isShowLegend  true or false
-         */
-        showLegend(isShowLegend) {
-            if (!isShowLegend) {
-                delete this.legend;
-            }
-        }
-    });
+    sc = $("#seat-map").seatCharts(organizeRenderSeatInfo());
 }
 
 /**

@@ -45,7 +45,7 @@ public class VenuePlanSeat implements Serializable {
     /**
      * 表示是否该座位是否可用
      */
-    private boolean available;
+    private boolean available = true;
 
     /**
      * 与订单的多对一，可能不存在对应的订单，指定外键为orderId

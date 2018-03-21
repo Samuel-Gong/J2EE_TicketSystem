@@ -135,7 +135,7 @@
         });
 
         //填充seatMap
-        fillSeatMapWithType(planDetail.rowNum, planDetail.columnNum, venuePlan.venuePlanSeats);
+        fillSeatMapWithType(planDetail.rowNum, planDetail.columnNum, venuePlan.orderPlanSeats);
 
         renderSeats();
     });
