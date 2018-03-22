@@ -264,6 +264,9 @@
                 "<div class=\"row\">\n" +
                 "    <div class=\"col-md-offset-3 col-md-6\">\n" +
                 "        <div class=\"panel panel-default\">\n" +
+                "            <div class='panel-heading'>" +
+                "                <h3 class='panel-title'>" + show.description + "</h3>" +
+                "            </div>" +
                 "            <div class=\"panel-body\">\n" +
                 "                <input type=\"text\" value=\"" + show.venuePlanId + "\" hidden>\n" +
                 "                <form class=\"form-horizontal\" role=\"form\">\n" +
@@ -283,13 +286,6 @@
                 "                        <label class=\"col-sm-offset-2 col-sm-3 control-label\">类型：</label>\n" +
                 "                        <div class=\"col-sm-4\">\n" +
                 "                            <p class=\"form-control-static\">" + show.showType + "</p>\n" +
-                "                        </div>\n" +
-                "                    </div>\n" +
-                "                    <div class=\"form-group\">\n" +
-                "                        <label class=\"col-sm-offset-2 col-sm-3 control-label\">描述：</label>\n" +
-                "                        <div class=\"col-sm-5\">\n" +
-                "                                <textarea class=\"form-control\" style=\"overflow: scroll; resize: none;\" disabled>" + show.description +
-                "                                </textarea>\n" +
                 "                        </div>\n" +
                 "                    </div>\n" +
                 "                </form>\n" +

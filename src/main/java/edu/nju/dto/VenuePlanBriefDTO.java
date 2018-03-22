@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * <p>
  * 用于保存场馆计划的简介
  */
-@JSONType(orders = {"venuePlanId", "begin", "end", "showType", "description"})
+@JSONType(orders = {"venuePlanId", "name", "begin", "end", "showType", "description"})
 public class VenuePlanBriefDTO {
 
     /**
@@ -48,8 +48,8 @@ public class VenuePlanBriefDTO {
 
     public VenuePlanBriefDTO(VenuePlan venuePlan) {
         this.venuePlanId = venuePlan.getVenuePlanId();
-        this.begin= venuePlan.getBegin();
-        this.end= venuePlan.getEnd();
+        this.begin = venuePlan.getBegin();
+        this.end = venuePlan.getEnd();
         this.showType = venuePlan.getShowType();
         this.description = venuePlan.getDescription();
     }

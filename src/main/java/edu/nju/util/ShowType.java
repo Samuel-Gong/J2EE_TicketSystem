@@ -11,7 +11,7 @@ public enum ShowType {
     /**
      * 演唱会
      */
-    CONCERT("演唱会"),
+    CONCERT("音乐会"),
     /**
      * 舞蹈
      */
@@ -21,17 +21,9 @@ public enum ShowType {
      */
     DRAMA("话剧"),
     /**
-     * 足球
+     * 体育比赛
      */
-    SOCCER("足球"),
-    /**
-     * 篮球
-     */
-    BASKETBALL("篮球"),
-    /**
-     * 位置类型
-     */
-    NULL("未知");
+    SPORTS("体育比赛");
 
     public String getValue() {
         return value;
@@ -47,13 +39,10 @@ public enum ShowType {
         if (DRAMA.value.equals(value)) {
             return DRAMA;
         }
-        if (SOCCER.value.equals(value)) {
-            return SOCCER;
+        if (SPORTS.value.equals(value)) {
+            return SPORTS;
         }
-        if (BASKETBALL.value.equals(value)) {
-            return BASKETBALL;
-        }
-        return NULL;
+        return null;
     }
 
     private final String value;

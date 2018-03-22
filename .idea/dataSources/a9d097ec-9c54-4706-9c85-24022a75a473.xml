@@ -1170,111 +1170,116 @@ typeChar</ColNames>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="285" parent="243" name="show_type">
+    <column id="285" parent="243" name="name">
       <Position>5</Position>
+      <DataType>varchar(255)|0</DataType>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="286" parent="243" name="show_type">
+      <Position>6</Position>
       <DataType>int(11)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="286" parent="243" name="venueId">
-      <Position>6</Position>
+    <column id="287" parent="243" name="venueId">
+      <Position>7</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="287" parent="243" name="UK_s7b8y9rrh3k36gd8ttj7u9gx9">
+    <index id="288" parent="243" name="UK_s7b8y9rrh3k36gd8ttj7u9gx9">
       <ColNames>begin</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="288" parent="243" name="UK_os209twuoqk5v8tuxvm2hjrto">
+    <index id="289" parent="243" name="UK_os209twuoqk5v8tuxvm2hjrto">
       <ColNames>end</ColNames>
       <Unique>1</Unique>
     </index>
-    <index id="289" parent="243" name="FK_VENUE">
+    <index id="290" parent="243" name="FK_VENUE">
       <ColNames>venueId</ColNames>
     </index>
-    <key id="290" parent="243" name="PRIMARY">
+    <key id="291" parent="243" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>venuePlanId</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="291" parent="243" name="UK_s7b8y9rrh3k36gd8ttj7u9gx9">
+    <key id="292" parent="243" name="UK_s7b8y9rrh3k36gd8ttj7u9gx9">
       <ColNames>begin</ColNames>
       <UnderlyingIndexName>UK_s7b8y9rrh3k36gd8ttj7u9gx9</UnderlyingIndexName>
     </key>
-    <key id="292" parent="243" name="UK_os209twuoqk5v8tuxvm2hjrto">
+    <key id="293" parent="243" name="UK_os209twuoqk5v8tuxvm2hjrto">
       <ColNames>end</ColNames>
       <UnderlyingIndexName>UK_os209twuoqk5v8tuxvm2hjrto</UnderlyingIndexName>
     </key>
-    <column id="293" parent="244" name="row">
+    <column id="294" parent="244" name="row">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="294" parent="244" name="column">
+    <column id="295" parent="244" name="column">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="295" parent="244" name="available">
+    <column id="296" parent="244" name="available">
       <Position>3</Position>
       <DataType>bit(1)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="296" parent="244" name="typeChar">
+    <column id="297" parent="244" name="typeChar">
       <Position>4</Position>
       <DataType>char(1)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="297" parent="244" name="venuePlanId">
+    <column id="298" parent="244" name="venuePlanId">
       <Position>5</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="298" parent="244" name="orderId">
+    <column id="299" parent="244" name="orderId">
       <Position>6</Position>
       <DataType>int(11)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="299" parent="244" name="FK_ORDER">
+    <index id="300" parent="244" name="FK_ORDER">
       <ColNames>orderId</ColNames>
     </index>
-    <key id="300" parent="244" name="PRIMARY">
+    <key id="301" parent="244" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>venuePlanId
 row
 column</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="301" parent="245" name="row">
+    <column id="302" parent="245" name="row">
       <Position>1</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="302" parent="245" name="column">
+    <column id="303" parent="245" name="column">
       <Position>2</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="303" parent="245" name="hasSeat">
+    <column id="304" parent="245" name="hasSeat">
       <Position>3</Position>
       <DataType>bit(1)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="304" parent="245" name="venueId">
+    <column id="305" parent="245" name="venueId">
       <Position>4</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="305" parent="245" name="PRIMARY">
+    <key id="306" parent="245" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>venueId
 row

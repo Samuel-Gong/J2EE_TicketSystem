@@ -77,6 +77,10 @@
                 <h3 class="text-center">基础信息</h3>
                 <form id="venue-plan-info-form">
                     <div class="form-group">
+                        <label class="control-label">计划描述</label>
+                        <input type="text" id="plan-description" class="form-control" placeholder="简单描述计划">
+                    </div>
+                    <div class="form-group">
                         <label class="control-label">开始时间</label>
                         <div id="plan-begin-datetimepicker" class="input-group date">
                             <input id="plan-begin" class="form-control" type="text" readonly>
@@ -95,15 +99,11 @@
                     <div class="form-group">
                         <label class="control-label">演出类型</label>
                         <select id="show-type" class="form-control">
-                            <option>演唱会</option>
-                            <option>演唱会</option>
-                            <option>演唱会</option>
+                            <option>音乐会</option>
+                            <option>舞蹈</option>
+                            <option>话剧</option>
+                            <option>体育比赛</option>
                         </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">描述</label>
-                        <textarea id="plan-description" class="form-control" rows="5"
-                                  style="overflow: scroll; resize: none;"></textarea>
                     </div>
                 </form>
             </div>
