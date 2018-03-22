@@ -52,6 +52,11 @@ public class MemberOrderDTO {
      */
     private Integer seatNum;
 
+    /**
+     * 订单总价格
+     */
+    private Integer price;
+
     public String getMail() {
         return mail;
     }
@@ -108,6 +113,14 @@ public class MemberOrderDTO {
         this.seatNum = seatNum;
     }
 
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
     @Override
     public String toString() {
         return "MemberOrderDTO{" +
@@ -118,6 +131,7 @@ public class MemberOrderDTO {
                 ", orderPlanSeats=" + orderPlanSeats +
                 ", seatType=" + seatType +
                 ", seatNum=" + seatNum +
+                ", price=" + price +
                 '}';
     }
 }

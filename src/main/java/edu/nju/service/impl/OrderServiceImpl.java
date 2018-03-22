@@ -71,6 +71,24 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean addBuyNowOrder(MemberOrderDTO memberOrderDTO) {
-        return false;
+        Member member = memberDao.getMember(memberOrderDTO.getMail());
+        Venue venue = venueDao.getVenue(memberOrderDTO.getVenueId());
+
+        Order order = new Order();
+        //设定为当前时间
+        order.setCreateTime(LocalDateTimeUtil.now());
+        //订单状态设置为等待配票
+        order.setOrderStatus(OrderStatus.WAITING_TICKETS);
+        order.setMember(member);
+        order.setVenue(venue);
+
+        //添加一条订单
+        orderDao.addOrder(order);
+
+        //更新会员及场馆信息
+        member.getOrders().add(order);
+        venue.getOrders().add(order);
+
+        return true;
     }
 }

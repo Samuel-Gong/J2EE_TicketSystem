@@ -110,7 +110,7 @@
                 "                        <div class=\"col-md-4\">\n" +
                 "                            <p class=\"form-control-static\">" + show.begin + "</p>\n" +
                 "                        </div>\n" +
-                "                       <div class='colo-md-3'>" +
+                "                       <div class='col-md-3'>" +
                 "                            <button type='button' class='btn-sm btn-primary booking'>去买票</button>" +
                 "                       </div>" +
                 "                    </div>\n" +

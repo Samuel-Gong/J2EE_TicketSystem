@@ -27,8 +27,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="/member/myInfo">个人信息</a></li>
-                    <li><a href="#">订单管理</a></li>
-                    <li><a href="#">我的钱包</a></li>
+                    <li><a href="/member/orderManagement">订单管理</a></li>
                     <li><a href="#">我的优惠券</a></li>
                 </ul>
             </li>

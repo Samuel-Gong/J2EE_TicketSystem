@@ -9,10 +9,8 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <html>
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>小麦网</title>
+    <title>我的信息</title>
 
     <!-- Normalize -->
     <link href="../../../css/normalize.css" rel="stylesheet">
@@ -24,9 +22,6 @@
             margin-top: 6%;
         }
 
-        .sidenav {
-            border: 1px solid #efefef;
-        }
     </style>
 </head>
 <body>
@@ -37,15 +32,7 @@
 
 <div class="container" id="info-panel">
     <div class="row">
-        <div class="col-md-2 col-md-offset-1">
-            <ul class="nav nav-pills nav-stacked sidenav">
-                <li class="active"><a href="#">个人信息</a></li>
-                <li><a href="#">订单管理</a></li>
-                <li><a href="#">我的钱包</a></li>
-                <li><a href="#">我的优惠券</a></li>
-            </ul>
-        </div>
-        <div class="col-md-7 col-md-offset-1">
+        <div class="col-md-6 col-md-offset-3">
             <!-- panel begin -->
             <div class="panel panel-info">
                 <div class="panel-heading">

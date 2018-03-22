@@ -1,5 +1,6 @@
 package edu.nju.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 
 import javax.persistence.*;
@@ -13,7 +14,7 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "venue_plan_seat")
-@JSONType(ignores = "venuePlan", orders = {"row", "column", "typeChar"})
+@JSONType(ignores = {"venuePlan", "order"}, orders = {"row", "column", "typeChar"})
 public class VenuePlanSeat implements Serializable {
 
     /**
@@ -50,6 +51,7 @@ public class VenuePlanSeat implements Serializable {
     /**
      * 与订单的多对一，可能不存在对应的订单，指定外键为orderId
      */
+    @JSONField(deserialize = false, serialize = false)
     @ManyToOne
     @JoinColumn(name = "orderId", foreignKey = @ForeignKey(name = "FK_ORDER"))
     private Order order;

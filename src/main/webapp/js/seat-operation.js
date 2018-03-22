@@ -271,6 +271,14 @@ function organizeRenderSeatInfo() {
     return seatChartsSetting;
 }
 
+function setBookedSeatsUnavailable(venuePlanSeats) {
+    $.each(venuePlanSeats, function (index, seat) {
+       if(seat.available !== true){
+           sc.status(seat.row+"_"+seat.column, 'unavailable');
+       }
+    });
+}
+
 let sc = null;
 
 /**

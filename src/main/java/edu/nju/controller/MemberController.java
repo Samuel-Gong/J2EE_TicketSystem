@@ -33,10 +33,10 @@ public class MemberController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping(path = "orders")
+    @GetMapping(path = "orderManagement")
     public String getOrders(@SessionAttribute("mail") String mail, Model model) {
         //todo 获取mail相关的order
-        return "/member/orders";
+        return "member/order-management";
     }
 
     /**
@@ -48,7 +48,6 @@ public class MemberController {
     @PostMapping(path = "/pickSeatOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
     boolean pickSeatOrder(@RequestBody MemberOrderDTO memberOrderDTO) {
-        //todo 保存order
         return orderService.addPickSeatOrder(memberOrderDTO);
     }
 
@@ -61,8 +60,7 @@ public class MemberController {
     @PostMapping(path = "/buyNowOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
     boolean buyNowOrder(@RequestBody MemberOrderDTO memberOrderDTO) {
-        //todo 保存Order
-        return true;
+        return orderService.addBuyNowOrder(memberOrderDTO);
     }
 
     /**
