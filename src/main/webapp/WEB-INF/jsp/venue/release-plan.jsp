@@ -545,10 +545,10 @@
             });
 
             //根据seatMap装载具体座位及对应座位类型
-            let orderPlanSeats = [];
+            let venuePlanSeats = [];
             $.each(seatMap, function (rowIndex, rowInfo) {
                 $.each(rowInfo, function (columnIndex, typeChar) {
-                    orderPlanSeats.push({
+                    venuePlanSeats.push({
                         "row": rowIndex + 1,
                         "column": columnIndex + 1,
                         "typeChar": typeChar
@@ -562,12 +562,11 @@
                 "showType": showType,
                 "description": description,
                 "seatTypes": seatTypes,
-                "orderPlanSeats": orderPlanSeats
+                "venuePlanSeats": venuePlanSeats
             };
 
             console.log(JSON.stringify(venuePlan));
 
-            //todo 提交数据
             $.ajax({
                 url: "/venue/addPlan",
                 method: "post",

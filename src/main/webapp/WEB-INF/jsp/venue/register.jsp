@@ -130,6 +130,9 @@
 
     $(document).ready(function () {
 
+        //点击座位不发生任何事情
+        seatChartsSetting.clickDoNothing();
+
         renderSeats();
 
         $("#add-row").on("click", add_row);
@@ -146,10 +149,8 @@
             $.each(seatMap, function (row, val) {
                 $.each(val, function (column, char) {
                     let newVenueSeat = {
-                        "venueSeatId": {
-                            "row": row + 1,
-                            "column": column + 1
-                        },
+                        "row": row + 1,
+                        "column": column + 1,
                         "hasSeat": char === 'a'
                     };
                     seatMapArr.push(newVenueSeat);
@@ -164,6 +165,8 @@
                 "columnNum": seatMap[0].length,
                 "seatMap": seatMapArr
             };
+
+            console.log(JSON.stringify(venue));
 
             $.ajax({
                 url: "/venue/register",

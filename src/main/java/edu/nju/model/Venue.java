@@ -27,8 +27,9 @@ public class Venue {
      * 使用主键自增策略
      */
     @Id
-    @Column(length = 7)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(length = 7, updatable = false, nullable = false)
+    @GeneratedValue(generator = "venue_id_generator")
+    @SequenceGenerator(name = "venue_id_generator", sequenceName = "venue_id_sequence", initialValue = 1000000, allocationSize = 1)
     private int id;
 
     /**
@@ -68,6 +69,13 @@ public class Venue {
     @JSONField(serialize = false, deserialize = false)
     @OneToMany(mappedBy = "venue", orphanRemoval = true)
     private List<VenuePlan> venuePlans = new ArrayList<>();
+
+    /**
+     * 与订单一对多
+     */
+    @JSONField(serialize = false, deserialize = false)
+    @OneToMany(mappedBy = "venue")
+    private List<Order> orders = new ArrayList<>();
 
     public int getId() {
         return id;
@@ -133,12 +141,20 @@ public class Venue {
         this.venuePlans = venuePlans;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o){
+        if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()){
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 

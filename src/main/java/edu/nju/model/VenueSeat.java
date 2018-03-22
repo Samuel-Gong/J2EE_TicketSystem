@@ -15,17 +15,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "venue_seat")
 @JSONType(ignores = "venue", orders = {"row", "column", "hasSeat"})
-public class VenueSeat implements Serializable{
-
-    /**
-     * 与场馆多对一， 场馆编号作为主键一部分
-     * 不序列化/反序列化场馆
-     */
-    @JSONField(serialize = false, deserialize = false)
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
-    private Venue venue;
+public class VenueSeat implements Serializable {
 
     /**
      * 行
@@ -40,6 +30,16 @@ public class VenueSeat implements Serializable{
     @Id
     @Column(name = "`column`")
     private int column;
+
+    /**
+     * 与场馆多对一， 场馆编号作为主键一部分
+     * 不序列化/反序列化场馆
+     */
+    @JSONField(serialize = false, deserialize = false)
+    @Id
+    @ManyToOne
+    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
+    private Venue venue;
 
     /**
      * 表示该行该列是否有座位

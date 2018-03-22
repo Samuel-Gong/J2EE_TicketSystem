@@ -20,7 +20,7 @@ public class VenuePlanSeat implements Serializable {
      * 与场馆计划多对一
      */
     @Id
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venuePlanId", foreignKey = @ForeignKey(name = "FK_VENUE_PLAN"))
     private VenuePlan venuePlan;
 

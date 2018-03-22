@@ -1,5 +1,6 @@
 package edu.nju;
 
+import edu.nju.util.LocalDateTimeUtil;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -48,4 +49,8 @@ class LocalDateTest {
         System.out.println(truncate2minute);
     }
 
+    @Test
+    void now(){
+        System.out.println(LocalDateTimeUtil.now());
+    }
 }

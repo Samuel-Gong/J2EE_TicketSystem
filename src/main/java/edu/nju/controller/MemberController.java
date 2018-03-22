@@ -34,21 +34,9 @@ public class MemberController {
     private OrderService orderService;
 
     @GetMapping(path = "orders")
-    public String getOrders(@SessionAttribute("mail") String mail) {
+    public String getOrders(@SessionAttribute("mail") String mail, Model model) {
+        //todo 获取mail相关的order
         return "/member/orders";
-    }
-
-    /**
-     * 用户立即购票
-     *
-     * @param memberOrderDTO 会员订单的数据传输对象
-     * @return 订单是否保存成功
-     */
-    @PostMapping(path = "/buyNowOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody
-    boolean buyNowOrder(@RequestBody MemberOrderDTO memberOrderDTO) {
-        //todo 保存Order
-        return true;
     }
 
     /**
@@ -61,6 +49,19 @@ public class MemberController {
     public @ResponseBody
     boolean pickSeatOrder(@RequestBody MemberOrderDTO memberOrderDTO) {
         //todo 保存order
+        return orderService.addPickSeatOrder(memberOrderDTO);
+    }
+
+    /**
+     * 用户立即购票
+     *
+     * @param memberOrderDTO 会员订单的数据传输对象
+     * @return 订单是否保存成功
+     */
+    @PostMapping(path = "/buyNowOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public @ResponseBody
+    boolean buyNowOrder(@RequestBody MemberOrderDTO memberOrderDTO) {
+        //todo 保存Order
         return true;
     }
 

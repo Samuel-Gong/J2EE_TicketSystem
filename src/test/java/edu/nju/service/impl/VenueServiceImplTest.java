@@ -2,6 +2,7 @@ package edu.nju.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import edu.nju.model.SeatType;
+import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
 import edu.nju.model.VenuePlanSeat;
 import edu.nju.service.VenueService;
@@ -27,6 +28,12 @@ class VenueServiceImplTest {
         //如果是读取/WEB-INF/applicationContext.xml
         context = new FileSystemXmlApplicationContext("file:src/main/webapp/WEB-INF/applicationContext.xml");
         venueService = context.getBean("venueService", VenueService.class);
+    }
+
+    @Test
+    void register(){
+        Venue venue = new Venue();
+        venueService.register(venue);
     }
 
     @Test

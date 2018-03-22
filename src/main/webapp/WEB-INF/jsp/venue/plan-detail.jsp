@@ -109,6 +109,8 @@
 
     $(document).ready(function () {
 
+        console.log(planDetail);
+
         //设置基础信息
         $("#plan-begin").val(venuePlan.begin);
         $("#plan-end").val(venuePlan.end);
@@ -135,7 +137,7 @@
         });
 
         //填充seatMap
-        fillSeatMapWithType(planDetail.rowNum, planDetail.columnNum, venuePlan.orderPlanSeats);
+        fillSeatMapWithType(planDetail.rowNum, planDetail.columnNum, venuePlan.venuePlanSeats);
 
         renderSeats();
     });

@@ -1,7 +1,10 @@
 package edu.nju.model;
 
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 /**
@@ -36,11 +39,6 @@ public class Member {
     private int points;
 
     /**
-     * 是否已经经过邮箱激活
-     */
-    private boolean confirmed;
-
-    /**
      * 验证密钥
      */
     private int mailKey;
@@ -48,8 +46,8 @@ public class Member {
     /**
      * 会员的订单
      */
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orderList;
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<Order> orders;
 
     public Member() {
     }
@@ -60,7 +58,6 @@ public class Member {
 
         this.qualified = true;
         this.points = 0;
-        this.confirmed = false;
     }
 
     public String getPassword() {
@@ -95,19 +92,19 @@ public class Member {
         this.points = points;
     }
 
-    public boolean isConfirmed() {
-        return confirmed;
-    }
-
-    public void setConfirmed(boolean activated) {
-        this.confirmed = activated;
-    }
-
     public int getMailKey() {
         return mailKey;
     }
 
     public void setMailKey(int key) {
         this.mailKey = key;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orderList) {
+        this.orders = orderList;
     }
 }

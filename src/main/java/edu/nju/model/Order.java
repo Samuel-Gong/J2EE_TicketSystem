@@ -2,6 +2,7 @@ package edu.nju.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import edu.nju.util.OrderStatus;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,7 +22,7 @@ public class Order {
      */
     @Id
     @GeneratedValue
-    private String orderId;
+    private Integer orderId;
 
     /**
      * 订单创建时间
@@ -57,11 +58,11 @@ public class Order {
     @OneToMany(mappedBy = "order", orphanRemoval = true)
     private List<VenuePlanSeat> venuePlanSeats = new ArrayList<>();
 
-    public String getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderID) {
+    public void setOrderId(Integer orderID) {
         this.orderId = orderID;
     }
 

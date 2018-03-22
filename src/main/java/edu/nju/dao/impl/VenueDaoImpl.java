@@ -1,11 +1,12 @@
 package edu.nju.dao.impl;
 
 import edu.nju.dao.VenueDao;
+import edu.nju.dto.RowAndColumnDTO;
 import edu.nju.dto.VenueBasicInfoDTO;
-import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
+import edu.nju.model.VenuePlanSeat;
 import edu.nju.model.VenueSeat;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,8 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -94,7 +95,7 @@ public class VenueDaoImpl implements VenueDao {
     public void deleteSeatMap(int venueId) {
         //删除座位表中该场馆的所有座位
         sessionFactory.getCurrentSession()
-                .createQuery("delete from VenueSeat where venueSeatId.venueId = :venueId")
+                .createQuery("delete from VenueSeat where venue.id = :venueId ")
                 .setParameter("venueId", venueId)
                 .executeUpdate();
     }
@@ -140,12 +141,27 @@ public class VenueDaoImpl implements VenueDao {
     }
 
     @Override
-    public List<VenuePlanBriefDTO> getComingVenuePlans() {
+    public List<VenuePlan> getComingVenuePlans() {
         Session session = sessionFactory.getCurrentSession();
         Query<VenuePlan> query = session.createQuery("from VenuePlan where begin > :timeNow", VenuePlan.class);
-        return query.setParameter("timeNow", LocalDateTime.now()).list()
-                .stream()
-                .map(VenuePlanBriefDTO::new)
-                .collect(Collectors.toList());
+        return query.setParameter("timeNow", LocalDateTime.now()).list();
+
+    }
+
+    @Override
+    public List<VenuePlanSeat> getSpecificSeats(Integer venuePlanId, List<RowAndColumnDTO> orderPlanSeats) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<VenuePlanSeat> query = session.createQuery("from VenuePlanSeat " +
+                "where venuePlan.id =:venuePlanId and row =:row and column =:column ", VenuePlanSeat.class);
+
+        List<VenuePlanSeat> specificVenuePlanSeats = new ArrayList<>();
+        orderPlanSeats.forEach(rowAndColumn ->
+                specificVenuePlanSeats.add(query.setParameter("venuePlanId", venuePlanId)
+                        .setParameter("row", rowAndColumn.getRow())
+                        .setParameter("column", rowAndColumn.getColumn())
+                        .getSingleResult())
+        );
+
+        return specificVenuePlanSeats;
     }
 }

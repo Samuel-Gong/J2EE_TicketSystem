@@ -9,9 +9,9 @@ package edu.nju.util;
 public enum OrderStatus {
 
     /**
-     * 已预订
+     * 等待配票
      */
-    BOOKED("已预订"),
+    WAITING_TICKETS("等待配票"),
     /**
      * 已配票
      */
@@ -25,13 +25,29 @@ public enum OrderStatus {
      */
     COMSUMPED("已消费");
 
-    private String status;
+    private String value;
 
-    private OrderStatus(String status) {
-        this.status = status;
+    public static OrderStatus val2Status(String value) {
+        if (WAITING_TICKETS.value.equals(value)) {
+            return WAITING_TICKETS;
+        }
+        if (ARRANGED.value.equals(value)) {
+            return ARRANGED;
+        }
+        if (RETREAT.value.equals(value)) {
+            return RETREAT;
+        }
+        if (COMSUMPED.value.equals(value)) {
+            return COMSUMPED;
+        }
+        return null;
     }
 
-    public String getStatus() {
-        return status;
+    OrderStatus(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
     }
 }

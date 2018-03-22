@@ -166,7 +166,7 @@
                     "newPassword": $("#newPassword").val()
                 },
                 dataType: "text",
-                success: function (data, status) {
+                success: function (data, value) {
                     if (data === "true")
                         alert("密码修改成功");
                     else
@@ -183,7 +183,7 @@
                 url: "/member/disqualify",
                 method: "get",
                 dataType: "text",
-                success: function (data, status) {
+                success: function (data, value) {
                     if (data === "true")
                         alert("取消资格成功");
                     else

@@ -35,7 +35,6 @@
         <!-- mapping -->
         <mapping class="edu.nju.model.Member"/>
         <mapping class="edu.nju.model.Order"/>
-        <mapping class="edu.nju.model.Ticket"/>
         <mapping class="edu.nju.model.Account"/>
 
         <!-- 场馆和场馆座位分布 -->

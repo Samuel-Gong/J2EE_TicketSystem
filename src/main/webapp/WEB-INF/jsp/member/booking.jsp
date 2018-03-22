@@ -298,20 +298,26 @@
 
         console.log(JSON.stringify(data));
 
-        // $.ajax({
-        //     url: '/member/pickSeatOrder',
-        //     method: 'post',
-        //     contentType: 'application/json;charset=UTF-8',
-        //     async: false,           //同步操作
-        //     data: JSON.stringify(data),
-        //     processData: false,
-        //     success: function () {
-        //         $(location).attr("href", "/member/orders");
-        //     },
-        //     error: function () {
-        //         console.log("出错了");
-        //     }
-        // });
+        $.ajax({
+            url: '/member/pickSeatOrder',
+            method: 'post',
+            contentType: 'application/json;charset=UTF-8',
+            async: false,           //同步操作
+            data: JSON.stringify(data),
+            processData: false,
+            success: function (data) {
+                if (data === "true") {
+                    console.log("成功了");
+                    // $(location).attr("href", "/member/orders");
+                }
+                else {
+                    console.log("失败了");
+                }
+            },
+            error: function () {
+                console.log("出错了");
+            }
+        });
     });
 
     //立即购买下单按钮监听
@@ -329,7 +335,7 @@
             seatNum: seatNum,
         };
 
-        console.log(JSON.stringify(data));
+        // console.log(JSON.stringify(data));
 
         // $.ajax({
         //     url: '/order/buyNow',
@@ -338,8 +344,14 @@
         //     async: false,           //同步操作
         //     data: JSON.stringify(data),
         //     processData: false,
-        //     success: function () {
-        //         $(location).attr("href", "/member/orders");
+        //     success: function (data) {
+        //         if(data === "true"){
+        //             console.log("成功了");
+        //             // $(location).attr("href", "/member/orders");
+        //         }
+        //         else {
+        //             console.log("失败了");
+        //         }
         //     },
         //     error: function () {
         //         console.log("出错了");
@@ -348,6 +360,8 @@
     });
 
     $(document).ready(function () {
+
+        console.log(venuePlan);
 
         //设置基础信息
         $("#plan-begin").val(venuePlan.begin);

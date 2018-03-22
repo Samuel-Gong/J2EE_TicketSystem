@@ -1,9 +1,9 @@
 package edu.nju.service.impl;
 
 import edu.nju.dao.VenueDao;
-import edu.nju.dto.VenuePlanDetailDTO;
 import edu.nju.dto.VenueBasicInfoDTO;
 import edu.nju.dto.VenuePlanBriefDTO;
+import edu.nju.dto.VenuePlanDetailDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.*;
 import edu.nju.service.VenueService;
@@ -53,9 +53,9 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = Exception.class)
     public boolean register(Venue venue) {
-        //venue和venueSeat建立关系
+//        venue和venueSeat建立关系
         for (VenueSeat venueSeat : venue.getSeatMap()) {
             venueSeat.setVenue(venue);
         }
@@ -169,6 +169,9 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     public List<VenuePlanBriefDTO> getComingVenueBriefPlan() {
-        return venueDao.getComingVenuePlans();
+        return venueDao.getComingVenuePlans()
+                .stream()
+                .map(VenuePlanBriefDTO::new)
+                .collect(Collectors.toList());
     }
 }
