@@ -1,7 +1,7 @@
 package edu.nju.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import edu.nju.dto.MemberOrderDTO;
+import edu.nju.dto.TakeOrderDTO;
 import edu.nju.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,9 +24,9 @@ class OrderServiceImplTest {
     @Test
     void addPickSeatOrder() {
 
-        MemberOrderDTO memberOrderDTO = JSON.parseObject("{\"mail\":\"123@qq.com\",\"venueId\":1,\"venuePlanId\":3,\"orderPlanSeats\":[{\"row\":\"1\",\"column\":\"6\"},{\"row\":\"1\",\"column\":\"7\"},{\"row\":\"1\",\"column\":\"8\"}]}", MemberOrderDTO.class);
-        orderService.addPickSeatOrder(memberOrderDTO);
-//        memberOrderDTO.set
+        TakeOrderDTO takeOrderDTO = JSON.parseObject("{\"mail\":\"123@qq.com\",\"venueId\":1,\"venuePlanId\":3,\"orderPlanSeats\":[{\"row\":\"1\",\"column\":\"6\"},{\"row\":\"1\",\"column\":\"7\"},{\"row\":\"1\",\"column\":\"8\"}]}", TakeOrderDTO.class);
+        orderService.addPickSeatOrder(takeOrderDTO);
+//        takeOrderDTO.set
 
 //        orderService.addPickSeatOrder();
 

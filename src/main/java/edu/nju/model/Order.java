@@ -1,8 +1,8 @@
 package edu.nju.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.annotation.JSONType;
 import edu.nju.util.OrderStatus;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +15,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "`order`")
+@JSONType(ignores = {"member", "venue", "venuePlan"})
 public class Order {
 
     /**
@@ -31,31 +32,46 @@ public class Order {
     private LocalDateTime createTime;
 
     /**
+     * 订单总价
+     */
+    private int price;
+
+    /**
      * 订单状态
      */
     @JSONField(deserialize = false)
     private OrderStatus orderStatus;
 
     /**
-     * 与会员多对一，外键为会员id
+     * 座位是否固定
      */
-    @JSONField(deserialize = false, serialize = false)
-    @ManyToOne
+    private boolean seatSettled;
+
+    /**
+     * 多个订单可能对应一个会员，外键为会员id
+     */
+    @ManyToOne(optional = false)
     @JoinColumn(name = "memberId", foreignKey = @ForeignKey(name = "FK_MEMBER"))
     private Member member;
 
     /**
-     * 与场馆多对一，外键为场馆id
+     * 多个订单可能对应一个场馆，与场馆多对一，外键为场馆id
      */
-    @JSONField(deserialize = false, serialize = false)
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
     private Venue venue;
 
     /**
-     * 与场馆计划的座位一对多
+     * 多个订单可能对应一个场馆计划，外键为场馆计划id
      */
-    @OneToMany(mappedBy = "order", orphanRemoval = true)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "venuePlanId", foreignKey = @ForeignKey(name = "FK_VENUE_PLAN"))
+    private VenuePlan venuePlan;
+
+    /**
+     * 一个order可能占有多个场馆座位
+     */
+    @OneToMany(mappedBy = "order")
     private List<VenuePlanSeat> venuePlanSeats = new ArrayList<>();
 
     public Integer getOrderId() {
@@ -64,6 +80,14 @@ public class Order {
 
     public void setOrderId(Integer orderID) {
         this.orderId = orderID;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public OrderStatus getOrderStatus() {
@@ -82,6 +106,14 @@ public class Order {
         this.createTime = createTime;
     }
 
+    public boolean isSeatSettled() {
+        return seatSettled;
+    }
+
+    public void setSeatSettled(boolean pickSeat) {
+        this.seatSettled = pickSeat;
+    }
+
     public Member getMember() {
         return member;
     }
@@ -96,6 +128,14 @@ public class Order {
 
     public void setVenue(Venue venue) {
         this.venue = venue;
+    }
+
+    public VenuePlan getVenuePlan() {
+        return venuePlan;
+    }
+
+    public void setVenuePlan(VenuePlan venuePlan) {
+        this.venuePlan = venuePlan;
     }
 
     public List<VenuePlanSeat> getVenuePlanSeats() {

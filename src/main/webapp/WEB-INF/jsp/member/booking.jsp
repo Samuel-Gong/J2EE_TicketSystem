@@ -43,7 +43,7 @@
 <!-- container begin -->
 <div id="venue-register-container" class="container">
     <div class="row">
-        <h2 class="text-center">座位分布</h2>
+        <h2 id="plan-description" class="text-center"></h2>
     </div>
     <div id="all-venue-info" class="row">
         <div class="col-md-2">
@@ -77,11 +77,6 @@
                     <div class="form-group">
                         <label class="control-label">演出类型</label>
                         <input id="plan-showType" class="form-control" type="text" value="" readonly>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">描述</label>
-                        <textarea id="plan-description" class="form-control" rows="5"
-                                  style="overflow: scroll; resize: none;" readonly></textarea>
                     </div>
                 </form>
             </div>
@@ -299,6 +294,7 @@
             mail: "${sessionScope.mail}",
             venueId: planDetail.venueId,
             venuePlanId: venuePlan.venuePlanId,
+            createTime: new Date().Format("yyyy-MM-dd hh:mm:ss"),
             orderPlanSeats: orderPlanSeats,
             price: parseInt($("#pick-seat-price-show").text())
         };
@@ -315,7 +311,7 @@
             success: function (data) {
                 if (data === "true") {
                     console.log("成功了");
-                    // $(location).attr("href", "/member/orderManagement");
+                    $(location).attr("href", "/member/orderManagement");
                 }
                 else {
                     console.log("失败了");
@@ -337,6 +333,7 @@
             mail: "${sessionScope.mail}",
             venueId: planDetail.venueId,
             venuePlanId: venuePlan.venuePlanId,
+            createTime: new Date().Format("yyyy-MM-dd hh:mm:ss"),
             seatType: seatType,
             seatNum: seatNum,
             price: parseInt($("#pick-seat-price-show").text())
@@ -374,7 +371,7 @@
         $("#plan-begin").val(venuePlan.begin);
         $("#plan-end").val(venuePlan.end);
         $("#plan-showType").val(venuePlan.showType);
-        $("#plan-description").val(venuePlan.description);
+        $("#plan-description").text(venuePlan.description);
 
         //设置左侧座位类型表格的内容
         $.each(seatTypes, function (index, seatType) {

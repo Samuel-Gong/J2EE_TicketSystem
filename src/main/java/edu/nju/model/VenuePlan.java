@@ -1,10 +1,6 @@
 package edu.nju.model;
 
-import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.annotation.JSONType;
 import edu.nju.util.ShowType;
-import edu.nju.util.deserializer.ShowTypeDeserializer;
-import edu.nju.util.serializer.ShowTypeSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -19,7 +15,6 @@ import java.util.List;
  */
 @Entity
 @Table(name = "venue_plan")
-@JSONType(ignores = {"venue"}, orders = {"venuePlanId", "begin", "end", "showType", "description"})
 public class VenuePlan {
 
     /**
@@ -35,20 +30,17 @@ public class VenuePlan {
      * 场馆计划开始时间，每个计划的开始时间不可以相同
      */
     @Column(nullable = false, unique = true)
-    @JSONField(format = "yyyy-MM-dd HH:mm")
     private LocalDateTime begin;
 
     /**
      * 场馆计划结束时间，每个计划的结束时间不可以相同
      */
     @Column(nullable = false, unique = true)
-    @JSONField(format = "yyyy-MM-dd HH:mm")
     private LocalDateTime end;
 
     /**
      * 演出类型
      */
-    @JSONField(serializeUsing = ShowTypeSerializer.class, deserializeUsing = ShowTypeDeserializer.class)
     @Column(name = "show_type")
     private ShowType showType;
 
@@ -75,6 +67,13 @@ public class VenuePlan {
      */
     @OneToMany(mappedBy = "venuePlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VenuePlanSeat> venuePlanSeats = new ArrayList<>();
+
+    /**
+     * 与订单一对多
+     */
+    @OneToMany(mappedBy = "venuePlan")
+    private List<Order> orders = new ArrayList<>();
+
 
     public int getVenuePlanId() {
         return venuePlanId;
@@ -140,6 +139,13 @@ public class VenuePlan {
         this.venuePlanSeats = venuePlanSeats;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 
     @Override
     public boolean equals(Object o) {

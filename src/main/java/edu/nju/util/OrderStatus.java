@@ -9,13 +9,13 @@ package edu.nju.util;
 public enum OrderStatus {
 
     /**
-     * 等待配票
+     * 未支付
      */
-    WAITING_TICKETS("等待配票"),
+    UNPAID("未支付"),
     /**
-     * 已配票
+     * 已预订
      */
-    ARRANGED("已配票"),
+    BOOKED("已预订"),
     /**
      * 已退订
      */
@@ -28,11 +28,11 @@ public enum OrderStatus {
     private String value;
 
     public static OrderStatus val2Status(String value) {
-        if (WAITING_TICKETS.value.equals(value)) {
-            return WAITING_TICKETS;
+        if(UNPAID.value.equals(value)){
+            return UNPAID;
         }
-        if (ARRANGED.value.equals(value)) {
-            return ARRANGED;
+        if (BOOKED.value.equals(value)) {
+            return BOOKED;
         }
         if (RETREAT.value.equals(value)) {
             return RETREAT;

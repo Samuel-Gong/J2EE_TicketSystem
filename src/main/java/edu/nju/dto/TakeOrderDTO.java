@@ -2,7 +2,6 @@ package edu.nju.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import edu.nju.model.VenuePlanSeat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
  * 会员下订单时的数据传输对象
  */
 @JSONType(orders = {"mail", "venueId", "venuePlanId", "createTime", "orderPlanSeats"})
-public class MemberOrderDTO {
+public class TakeOrderDTO {
 
     /**
      * 会员邮箱
@@ -34,7 +33,7 @@ public class MemberOrderDTO {
     /**
      * 订单创建时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
     /**
@@ -123,7 +122,7 @@ public class MemberOrderDTO {
 
     @Override
     public String toString() {
-        return "MemberOrderDTO{" +
+        return "TakeOrderDTO{" +
                 "mail='" + mail + '\'' +
                 ", venueId=" + venueId +
                 ", venuePlanId=" + venuePlanId +

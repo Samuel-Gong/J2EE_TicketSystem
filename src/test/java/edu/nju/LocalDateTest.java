@@ -1,6 +1,6 @@
 package edu.nju;
 
-import edu.nju.util.LocalDateTimeUtil;
+import edu.nju.util.LocalDateUtil;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -51,6 +51,6 @@ class LocalDateTest {
 
     @Test
     void now(){
-        System.out.println(LocalDateTimeUtil.now());
+        System.out.println(LocalDateUtil.now());
     }
 }

@@ -45,7 +45,7 @@ public enum ShowType {
         return null;
     }
 
-    private final String value;
+    public final String value;
 
     ShowType(String value) {
         this.value = value;

@@ -60,7 +60,7 @@ public class VenueController {
      */
     @GetMapping(value = "/planView")
     public String planView(@SessionAttribute("venueId") int venueId, Model model) {
-        model.addAttribute("venuePlans", JSON.toJSONString(venueService.getAllBriefVenuePlan(venueId)));
+        model.addAttribute("venuePlans", venueService.getAllBriefVenuePlan(venueId));
         return "venue/plan-brief";
     }
 

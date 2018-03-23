@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: Shenmiu
@@ -56,25 +58,51 @@
     <div class="row">
         <h2 class="text-center">近期演出</h2>
     </div>
+    <c:forEach items="${comingShows}" var="show">
+        <div class="row">
+            <div class="col-md-offset-2 col-md-8">
+                <div class="panel panel-default">
+                    <div class='panel-heading'>
+                        <h3 class='panel-title'><c:out value="${show.description}"/></h3>
+                    </div>
+                    <div class="panel-body">
+                        <input type="text" value="<c:out value="${show.venuePlanId}"/>" hidden>
+                        <form class="form-horizontal" role="form">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">演出地点：</label>
+                                <div class="col-md-3">
+                                    <p class="form-control-static">
+                                        <c:out value="${show.city} ${show.venueName}"/>
+                                    </p>
+                                </div>
+                                <label class="col-md-offset-1 col-md-2 control-label">演出类型：</label>
+                                <div class="col-md-3">
+                                    <p class="form-control-static">
+                                        <c:out value="${show.showType}"/>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">开始时间：</label>
+                                <div class="col-md-3">
+                                    <p class="form-control-static">
+                                        <c:out value="${show.begin}"/>
+                                    </p>
+                                </div>
+                                <label class="col-md-offset-1 col-md-2 control-label">结束时间：</label>
+                                <div class="col-md-3">
+                                    <p class="form-control-static">
+                                        <c:out value="${show.end}"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c:forEach>
 </div>
-
-
-<%--todo 分页 --%>
-<%--<div id="pagination-container" class="container">--%>
-<%--<div class="row">--%>
-<%--<div class="col-md-offset-3 col-md-6 text-center">--%>
-<%--<ul class="pagination pagination-lg">--%>
-<%--<li><a href="#">&laquo;</a></li>--%>
-<%--<li><a href="#">1</a></li>--%>
-<%--<li><a href="#">2</a></li>--%>
-<%--<li><a href="#">3</a></li>--%>
-<%--<li><a href="#">4</a></li>--%>
-<%--<li><a href="#">5</a></li>--%>
-<%--<li><a href="#">&raquo;</a></li>--%>
-<%--</ul>--%>
-<%--</div>--%>
-<%--</div>--%>
-<%--</div>--%>
 
 <footer></footer>
 
@@ -243,7 +271,6 @@
     });
 
     $(document).ready(function () {
-
         if (${sessionScope.containsKey("mail")}) {
             console.log("contains mail");
             console.log("${sessionScope.get("mail")}");
@@ -255,45 +282,6 @@
             $("#login-li").addClass("hidden");
             $("#register-li").addClass("hidden");
         }
-
-        let comingShows = ${comingShows};
-        console.log(comingShows);
-
-        $.each(comingShows, function (index, show) {
-            $("#plans-container").append(
-                "<div class=\"row\">\n" +
-                "    <div class=\"col-md-offset-3 col-md-6\">\n" +
-                "        <div class=\"panel panel-default\">\n" +
-                "            <div class='panel-heading'>" +
-                "                <h3 class='panel-title'>" + show.description + "</h3>" +
-                "            </div>" +
-                "            <div class=\"panel-body\">\n" +
-                "                <input type=\"text\" value=\"" + show.venuePlanId + "\" hidden>\n" +
-                "                <form class=\"form-horizontal\" role=\"form\">\n" +
-                "                    <div class=\"form-group\">\n" +
-                "                        <label class=\"col-md-offset-2 col-md-3 control-label\">开始时间：</label>\n" +
-                "                        <div class=\"col-md-4\">\n" +
-                "                            <p class=\"form-control-static\">" + show.begin + "</p>\n" +
-                "                        </div>\n" +
-                "                    </div>\n" +
-                "                    <div class=\"form-group\">\n" +
-                "                        <label class=\"col-md-offset-2 col-md-3 control-label\">结束时间：</label>\n" +
-                "                        <div class=\"col-md-4\">\n" +
-                "                            <p class=\"form-control-static\">" + show.end + "</p>\n" +
-                "                        </div>\n" +
-                "                    </div>\n" +
-                "                    <div class=\"form-group\">\n" +
-                "                        <label class=\"col-sm-offset-2 col-sm-3 control-label\">类型：</label>\n" +
-                "                        <div class=\"col-sm-4\">\n" +
-                "                            <p class=\"form-control-static\">" + show.showType + "</p>\n" +
-                "                        </div>\n" +
-                "                    </div>\n" +
-                "                </form>\n" +
-                "            </div>\n" +
-                "        </div>\n" +
-                "    </div>\n" +
-                "</div>");
-        });
     });
 </script>
 </body>

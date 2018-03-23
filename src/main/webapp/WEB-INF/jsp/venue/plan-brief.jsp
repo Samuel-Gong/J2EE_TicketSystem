@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: Shenmiu
@@ -33,6 +34,50 @@
 <div id="plans-container" class="container">
     <div class="row">
         <h2 class="text-center">近期计划</h2>
+        <c:forEach items="${venuePlans}" var="plan">
+            <div class="row">
+                <div class="col-md-offset-2 col-md-8">
+                    <div class="panel panel-default">
+                        <div class='panel-heading'>
+                            <h3 class='panel-title'><c:out value="${plan.description}"/></h3>
+                        </div>
+                        <div class="panel-body">
+                            <input type="text" value="<c:out value="${plan.venuePlanId}"/>" hidden>
+                            <form class="form-horizontal" role="form">
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">演出地点：</label>
+                                    <div class="col-md-3">
+                                        <p class="form-control-static">
+                                            <c:out value="${plan.city} ${plan.venueName}"/>
+                                        </p>
+                                    </div>
+                                    <label class="col-md-offset-1 col-md-2 control-label">演出类型：</label>
+                                    <div class="col-md-3">
+                                        <p class="form-control-static">
+                                            <c:out value="${plan.showType}"/>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-3 control-label">开始时间：</label>
+                                    <div class="col-md-3">
+                                        <p class="form-control-static">
+                                            <c:out value="${plan.begin}"/>
+                                        </p>
+                                    </div>
+                                    <label class="col-md-offset-1 col-md-2 control-label">结束时间：</label>
+                                    <div class="col-md-3">
+                                        <p class="form-control-static">
+                                            <c:out value="${plan.end}"/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </c:forEach>
     </div>
 </div>
 <%@include file="../../../html/footer.html" %>
@@ -41,66 +86,5 @@
 <script src="../../../js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="../../../js/bootstrap.min.js"></script>
-<script>
-
-    //声明全局变量，保存场馆计划
-    let allPlans = ${venuePlans};
-
-    $(document).ready(function () {
-
-        if (allPlans.length !== 0) {
-            $.each(allPlans, function (index, plan) {
-                $("#plans-container").append(
-                    "<div class=\"row\">\n" +
-                    "    <div class=\"col-md-offset-3 col-md-6\">\n" +
-                    "        <div class=\"panel panel-default\">\n" +
-                    "            <div class='panel-heading'>" +
-                    "                <h3 class='panel-title'>" + plan.description + "</h3>" +
-                    "            </div>" +
-                    "            <div class=\"panel-body\">\n" +
-                    "                <input type=\"text\" value=\"" + plan.venuePlanId + "\" hidden>\n" +
-                    "                <button type=\"button\" class=\"btn btn-primary pull-right\">查看详情</button>\n" +
-                    "                <form class=\"form-horizontal\" role=\"form\">\n" +
-                    "                    <div class=\"form-group\">\n" +
-                    "                        <label class=\"col-md-offset-2 col-md-3 control-label\">开始时间：</label>\n" +
-                    "                        <div class=\"col-md-4\">\n" +
-                    "                            <p class=\"form-control-static\">" + plan.begin + "</p>\n" +
-                    "                        </div>\n" +
-                    "                    </div>\n" +
-                    "                    <div class=\"form-group\">\n" +
-                    "                        <label class=\"col-md-offset-2 col-md-3 control-label\">结束时间：</label>\n" +
-                    "                        <div class=\"col-md-4\">\n" +
-                    "                            <p class=\"form-control-static\">" + plan.end + "</p>\n" +
-                    "                        </div>\n" +
-                    "                    </div>\n" +
-                    "                    <div class=\"form-group\">\n" +
-                    "                        <label class=\"col-sm-offset-2 col-sm-3 control-label\">类型：</label>\n" +
-                    "                        <div class=\"col-sm-4\">\n" +
-                    "                            <p class=\"form-control-static\">" + plan.showType + "</p>\n" +
-                    "                        </div>\n" +
-                    "                    </div>\n" +
-                    "                </form>\n" +
-                    "            </div>\n" +
-                    "        </div>\n" +
-                    "    </div>\n" +
-                    "</div>"
-                );
-            });
-
-            $("#plans-container").on("click", ".panel-body button", function () {
-                //跳转;
-                let venuePlanId = $(this).siblings("input").val();
-                // console.log(venuePlanId);
-                $(location).attr("href", "/venue/planView/" + venuePlanId);
-            });
-
-            //todo 分页
-        }
-        else {
-            //todo 显示近期没有场馆计划
-            console.log("近期没有场馆计划");
-        }
-    });
-</script>
 </body>
 </html>

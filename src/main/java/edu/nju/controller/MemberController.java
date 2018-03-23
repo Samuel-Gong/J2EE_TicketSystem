@@ -1,7 +1,7 @@
 package edu.nju.controller;
 
 import com.alibaba.fastjson.JSON;
-import edu.nju.dto.MemberOrderDTO;
+import edu.nju.dto.TakeOrderDTO;
 import edu.nju.model.Member;
 import edu.nju.service.MemberService;
 import edu.nju.service.OrderService;
@@ -34,33 +34,34 @@ public class MemberController {
     private OrderService orderService;
 
     @GetMapping(path = "orderManagement")
-    public String getOrders(@SessionAttribute("mail") String mail, Model model) {
-        //todo 获取mail相关的order
+    public String orderManagement(@SessionAttribute("mail") String mail, Model model) {
+        //首先进去展示未支付订单
+        model.addAttribute("unpaidOrders", orderService.getUnpaidOrdersWithShowInfo(mail));
         return "member/order-management";
     }
 
     /**
      * 用户选座购票
      *
-     * @param memberOrderDTO 会员订单的数据传输对象
+     * @param takeOrderDTO 会员订单的数据传输对象
      * @return 订单是否保存成功
      */
     @PostMapping(path = "/pickSeatOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    boolean pickSeatOrder(@RequestBody MemberOrderDTO memberOrderDTO) {
-        return orderService.addPickSeatOrder(memberOrderDTO);
+    boolean pickSeatOrder(@RequestBody TakeOrderDTO takeOrderDTO) {
+        return orderService.addPickSeatOrder(takeOrderDTO);
     }
 
     /**
      * 用户立即购票
      *
-     * @param memberOrderDTO 会员订单的数据传输对象
+     * @param takeOrderDTO 会员订单的数据传输对象
      * @return 订单是否保存成功
      */
     @PostMapping(path = "/buyNowOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    boolean buyNowOrder(@RequestBody MemberOrderDTO memberOrderDTO) {
-        return orderService.addBuyNowOrder(memberOrderDTO);
+    boolean buyNowOrder(@RequestBody TakeOrderDTO takeOrderDTO) {
+        return orderService.addBuyNowOrder(takeOrderDTO);
     }
 
     /**
@@ -82,7 +83,7 @@ public class MemberController {
      */
     @GetMapping(path = "/scanShow")
     public String scanShow(Model model) {
-        model.addAttribute("comingShows", JSON.toJSONString(venueService.getComingVenueBriefPlan()));
+        model.addAttribute("comingShows", venueService.getComingVenueBriefPlan());
         return "/member/scan-shows";
     }
 
