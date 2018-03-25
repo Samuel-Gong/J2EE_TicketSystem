@@ -30,10 +30,30 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public List<Order> getOrders(String mail, OrderStatus orderStatus) {
         Session session = sessionFactory.getCurrentSession();
-        //todo 怎么级联查询，对比会员的账号
-        return session.createQuery("from Order order left join fetch order.member m with m.mail = :mail where order.orderStatus = :orderStatus", Order.class)
+        return session.createQuery("from Order where memberFK.mail = :mail and orderStatus = :orderStatus ", Order.class)
                 .setParameter("mail", mail)
                 .setParameter("orderStatus", orderStatus)
                 .list();
+    }
+
+    @Override
+    public List<Order> getOrderByMemberId(String memberId) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Order where memberFK.mail = :mail ", Order.class)
+                .setParameter("mail", memberId)
+                .list();
+    }
+
+    @Override
+    public List<Order> getOrdersByVenuePlanId(int vneuePlanId) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Order where venuePlan.id = :venuePlanId ", Order.class)
+                .setParameter("venuePlanId", vneuePlanId)
+                .list();
+    }
+
+    @Override
+    public Order getOrder(int orderId) {
+        return sessionFactory.getCurrentSession().get(Order.class, orderId);
     }
 }

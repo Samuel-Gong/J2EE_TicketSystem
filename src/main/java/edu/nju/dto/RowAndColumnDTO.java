@@ -1,6 +1,5 @@
 package edu.nju.dto;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 
 /**

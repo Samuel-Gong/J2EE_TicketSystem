@@ -1,9 +1,7 @@
 package edu.nju.dto;
 
 import edu.nju.model.VenuePlan;
-import edu.nju.util.LocalDateUtil;
-
-import java.time.LocalDateTime;
+import edu.nju.util.LocalDateTimeUtil;
 
 /**
  * @author Shenmiu
@@ -50,8 +48,8 @@ public class VenuePlanBriefDTO {
 
     public VenuePlanBriefDTO(VenuePlan venuePlan) {
         this.venuePlanId = venuePlan.getVenuePlanId();
-        this.begin = LocalDateUtil.formatTillMinute(venuePlan.getBegin());
-        this.end = LocalDateUtil.formatTillMinute(venuePlan.getEnd());
+        this.begin = LocalDateTimeUtil.formatTillMinute(venuePlan.getBegin());
+        this.end = LocalDateTimeUtil.formatTillMinute(venuePlan.getEnd());
         this.city = venuePlan.getVenue().getCity();
         this.venueName = venuePlan.getVenue().getName();
         this.showType = venuePlan.getShowType().getValue();

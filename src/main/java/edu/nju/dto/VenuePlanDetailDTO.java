@@ -1,19 +1,7 @@
 package edu.nju.dto;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import edu.nju.model.SeatType;
-import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
-import edu.nju.model.VenuePlanSeat;
-import edu.nju.util.ShowType;
-import edu.nju.util.deserializer.ShowTypeDeserializer;
-import edu.nju.util.serializer.ShowTypeSerializer;
-
-import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Shenmiu

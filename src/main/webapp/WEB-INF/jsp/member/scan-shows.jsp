@@ -43,7 +43,6 @@
                             <h3 class='panel-title'><c:out value="${show.description}"/></h3>
                         </div>
                         <div class="panel-body">
-                            <input id="venue-plan-id" type="text" value="<c:out value="${show.venuePlanId}"/>" hidden>
                             <form class="form-horizontal" role="form">
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">演出地点：</label>
@@ -75,6 +74,7 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-offset-4 col-md-4">
+                                        <input type="text" value="<c:out value="${show.venuePlanId}"/>" hidden>
                                         <button type="button" class="btn btn-primary center-block booking">去买票</button>
                                     </div>
                                 </div>
@@ -100,7 +100,8 @@
     $(document).ready(function () {
         //去买票按钮添加监听
         $("#plans-container").on("click", ".booking", function () {
-            let venuePlanId = $("#venue-plan-id").val();
+            let venuePlanId = $(this).prev().val();
+            // console.log(venuePlanId);
             $(location).attr("href", "/member/booking/" + venuePlanId);
         });
     });

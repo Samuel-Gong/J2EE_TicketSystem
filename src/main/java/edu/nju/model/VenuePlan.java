@@ -1,6 +1,10 @@
 package edu.nju.model;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.alibaba.fastjson.annotation.JSONType;
 import edu.nju.util.ShowType;
+import edu.nju.util.deserializer.ShowTypeDeserializer;
+import edu.nju.util.serializer.ShowTypeSerializer;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +19,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "venue_plan")
+@JSONType(ignores = {"venue", "orders"}, orders = {"venuePlanId", "begin", "end", "showType", "description", "seatTypes", "venueSeats", "orders"})
 public class VenuePlan {
 
     /**
@@ -29,19 +34,21 @@ public class VenuePlan {
     /**
      * 场馆计划开始时间，每个计划的开始时间不可以相同
      */
+    @JSONField(format = "yyyy-MM-dd HH:mm")
     @Column(nullable = false, unique = true)
     private LocalDateTime begin;
 
     /**
      * 场馆计划结束时间，每个计划的结束时间不可以相同
      */
+    @JSONField(format = "yyyy-MM-dd HH:mm")
     @Column(nullable = false, unique = true)
     private LocalDateTime end;
 
     /**
      * 演出类型
      */
-    @Column(name = "show_type")
+    @JSONField(deserializeUsing = ShowTypeDeserializer.class, serializeUsing = ShowTypeSerializer.class)
     private ShowType showType;
 
     /**

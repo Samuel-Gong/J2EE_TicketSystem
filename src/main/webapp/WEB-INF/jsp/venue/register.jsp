@@ -174,10 +174,9 @@
                 method: "post",
                 data: JSON.stringify(venue),
                 processData: false,
-                success: function (data) {
-                    //todo 提交之后的操作
-                    if (data === "true") {
-                        alert("注册成功，请等待经理审核");
+                success: function (venueId) {
+                    if (venueId) {
+                        alert("注册成功，场馆编号为:" + venueId + "\n请等待经理审核");
                         //返回主页
                         $(location).attr("href", "/index");
                     }

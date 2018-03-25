@@ -164,4 +164,16 @@ public class VenueDaoImpl implements VenueDao {
 
         return specificVenuePlanSeats;
     }
+
+    @Override
+    public VenuePlanSeat getVenuePlanSeat(int venuePlanId, int row, int column) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from VenuePlanSeat " +
+                        "where venuePlan.id = :venuePlanId and row = :row and column = :column ", VenuePlanSeat.class)
+                .setParameter("venuePlanId", venuePlanId)
+                .setParameter("row", row)
+                .setParameter("column", column)
+                .getSingleResult();
+    }
+
 }

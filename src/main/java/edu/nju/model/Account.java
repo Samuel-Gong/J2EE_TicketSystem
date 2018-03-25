@@ -2,6 +2,7 @@ package edu.nju.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -21,14 +22,15 @@ public class Account {
     private String id;
 
     /**
-     * 密码
-     */
-    private String password;
-
-    /**
      * 余额
      */
     private double balance;
+
+    /**
+     * 和会员一对一
+     */
+    @OneToOne(mappedBy = "account")
+    private Member member;
 
     public Account() {
     }
@@ -41,19 +43,19 @@ public class Account {
         this.id = id;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public double getBalance() {
         return balance;
     }
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public Member getMember() {
+        return member;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 }

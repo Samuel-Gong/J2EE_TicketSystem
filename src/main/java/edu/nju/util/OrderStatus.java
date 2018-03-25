@@ -13,32 +13,46 @@ public enum OrderStatus {
      */
     UNPAID("未支付"),
     /**
+     * 在15分钟内没有支付成功，已过期
+     */
+    EXPIRED("已过期"),
+    /**
+     * 未支付订单情况下取消支付
+     */
+    CANCELED("已取消"),
+    /**
      * 已预订
      */
     BOOKED("已预订"),
     /**
-     * 已退订
-     */
-    RETREAT("已退订"),
-    /**
      * 已消费
      */
-    COMSUMPED("已消费");
+    COMSUMPED("已消费"),
+    /**
+     * 已退订
+     */
+    RETREAT("已退订");
 
     private String value;
 
     public static OrderStatus val2Status(String value) {
-        if(UNPAID.value.equals(value)){
+        if (UNPAID.value.equals(value)) {
             return UNPAID;
+        }
+        if (EXPIRED.value.equals(value)) {
+            return EXPIRED;
+        }
+        if (CANCELED.value.equals(value)) {
+            return CANCELED;
         }
         if (BOOKED.value.equals(value)) {
             return BOOKED;
         }
-        if (RETREAT.value.equals(value)) {
-            return RETREAT;
-        }
         if (COMSUMPED.value.equals(value)) {
             return COMSUMPED;
+        }
+        if (RETREAT.value.equals(value)) {
+            return RETREAT;
         }
         return null;
     }

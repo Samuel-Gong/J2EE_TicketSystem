@@ -1,6 +1,6 @@
 package edu.nju;
 
-import edu.nju.util.LocalDateUtil;
+import edu.nju.util.LocalDateTimeUtil;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -29,9 +29,13 @@ class LocalDateTest {
     @Test
     void instant() {
         LocalDateTime localDateTime = LocalDateTime.of(2018, 10, 10, 10, 10);
-        Instant instant = localDateTime.toInstant(ZoneOffset.UTC);
+        Instant instant = localDateTime.toInstant(ZoneOffset.ofHours(8));
 
-        System.out.println(instant.toEpochMilli());
+        long millis = instant.toEpochMilli();
+        System.out.println(millis);
+
+        LocalDateTime localDateTime1 = LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneId.systemDefault());
+        System.out.println(LocalDateTimeUtil.formatTillSecond(localDateTime1));
     }
 
     //format
@@ -50,7 +54,7 @@ class LocalDateTest {
     }
 
     @Test
-    void now(){
-        System.out.println(LocalDateUtil.now());
+    void now() {
+        System.out.println(LocalDateTimeUtil.now());
     }
 }

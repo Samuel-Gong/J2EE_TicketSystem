@@ -2,7 +2,6 @@ package edu.nju.dao;
 
 import edu.nju.dto.RowAndColumnDTO;
 import edu.nju.dto.VenueBasicInfoDTO;
-import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
@@ -145,4 +144,14 @@ public interface VenueDao {
      * @return 指定的场馆计划座位
      */
     List<VenuePlanSeat> getSpecificSeats(Integer venuePlanId, List<RowAndColumnDTO> orderPlanSeats);
+
+    /**
+     * 通过场馆计划id及座位的行、列，获取指定座位
+     *
+     * @param venuePlanId 场馆计划id
+     * @param row         座位行数
+     * @param column      座位列数
+     * @return
+     */
+    VenuePlanSeat getVenuePlanSeat(int venuePlanId, int row, int column);
 }

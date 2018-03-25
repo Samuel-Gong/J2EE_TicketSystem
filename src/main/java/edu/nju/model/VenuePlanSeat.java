@@ -49,6 +49,11 @@ public class VenuePlanSeat implements Serializable {
     private boolean available = true;
 
     /**
+     * 表示该座位是否已检票登记
+     */
+    private boolean checkIn = false;
+
+    /**
      * 与订单的多对一，可能不存在对应的订单，指定外键为orderId
      */
     @JSONField(deserialize = false, serialize = false)
@@ -94,6 +99,14 @@ public class VenuePlanSeat implements Serializable {
 
     public void setAvailable(boolean available) {
         this.available = available;
+    }
+
+    public boolean isCheckIn() {
+        return checkIn;
+    }
+
+    public void setCheckIn(boolean checkIn) {
+        this.checkIn = checkIn;
     }
 
     public Order getOrder() {

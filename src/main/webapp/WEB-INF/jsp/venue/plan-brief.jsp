@@ -42,7 +42,6 @@
                             <h3 class='panel-title'><c:out value="${plan.description}"/></h3>
                         </div>
                         <div class="panel-body">
-                            <input type="text" value="<c:out value="${plan.venuePlanId}"/>" hidden>
                             <form class="form-horizontal" role="form">
                                 <div class="form-group">
                                     <label class="col-md-3 control-label">演出地点：</label>
@@ -72,6 +71,23 @@
                                         </p>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <div class="col-md-offset-2 col-md-2">
+                                        <input type="text" value="<c:out value="${plan.venuePlanId}"/>" hidden>
+                                        <button type="button" class="btn btn-primary center-block detail-btn">查看详情
+                                        </button>
+                                    </div>
+                                    <div class="col-md-offset-1 col-md-2">
+                                        <input type="text" value="<c:out value="${plan.venuePlanId}"/>" hidden>
+                                        <button type="button" class="btn btn-primary center-block buy-on-site-btn">现场购票
+                                        </button>
+                                    </div>
+                                    <div class="col-md-offset-1 col-md-2">
+                                        <input type="text" value="<c:out value="${plan.venuePlanId}"/>" hidden>
+                                        <button type="button" class="btn btn-primary center-block check-in-btn">检票登记
+                                        </button>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -86,5 +102,19 @@
 <script src="../../../js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="../../../js/bootstrap.min.js"></script>
+
+<script>
+    $("#plans-container").on("click", ".detail-btn", function () {
+        $(location).attr("href", "/venue/planView/" + $(this).prev().val());
+    });
+
+    $("#plans-container").on("click", ".buy-on-site-btn", function () {
+        $(location).attr("href", "/venue/buy/" + $(this).prev().val());
+    });
+
+    $("#plans-container").on("click", ".check-in-btn", function () {
+        $(location).attr("href", "/venue/checkIn/" + $(this).prev().val());
+    });
+</script>
 </body>
 </html>

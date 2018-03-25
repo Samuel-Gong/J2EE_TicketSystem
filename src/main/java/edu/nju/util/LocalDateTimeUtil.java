@@ -1,6 +1,7 @@
 package edu.nju.util;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -9,7 +10,7 @@ import java.time.format.DateTimeFormatter;
  * <p>
  * 时间有关的工具类
  */
-public class LocalDateUtil {
+public class LocalDateTimeUtil {
 
     private static DateTimeFormatter dtfTillMinute = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -26,6 +27,7 @@ public class LocalDateUtil {
 
     /**
      * 格式化时间到分钟级别
+     *
      * @param tillMinute 需要格式化的对象
      * @return 格式化好的时间
      */
@@ -35,11 +37,21 @@ public class LocalDateUtil {
 
     /**
      * 格式化时间到秒级别
+     *
      * @param tillSecond 需要格式化的对象
      * @return 格式化好的时间
      */
     public static String formatTillSecond(LocalDateTime tillSecond) {
         return tillSecond.format(dtfTillSecond);
+    }
+
+    /**
+     * 转化为毫秒数
+     * @param localDateTime 需要转化的时间
+     * @return 毫秒数
+     */
+    public static Long toMillis(LocalDateTime localDateTime) {
+        return localDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
     }
 
 }

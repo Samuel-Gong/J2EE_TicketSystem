@@ -1,10 +1,8 @@
 package edu.nju.service.impl;
 
+import edu.nju.dao.OrderDao;
 import edu.nju.dao.VenueDao;
-import edu.nju.dto.VenueBasicInfoDTO;
-import edu.nju.dto.VenuePlanBriefDTO;
-import edu.nju.dto.VenuePlanDetailDTO;
-import edu.nju.dto.VenueSeatInfoDTO;
+import edu.nju.dto.*;
 import edu.nju.model.*;
 import edu.nju.service.VenueService;
 import org.hibernate.Hibernate;
@@ -27,6 +25,9 @@ public class VenueServiceImpl implements VenueService {
 
     @Autowired
     VenueDao venueDao;
+
+    @Autowired
+    OrderDao orderDao;
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
@@ -54,12 +55,13 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public boolean register(Venue venue) {
+    public int register(Venue venue) {
 //        venue和venueSeat建立关系
         for (VenueSeat venueSeat : venue.getSeatMap()) {
             venueSeat.setVenue(venue);
         }
-        return venueDao.addVenue(venue);
+        venueDao.addVenue(venue);
+        return venue.getId();
     }
 
     @Override
@@ -168,10 +170,28 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<VenuePlanBriefDTO> getComingVenueBriefPlan() {
         return venueDao.getComingVenuePlans()
                 .stream()
                 .map(VenuePlanBriefDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public List<Order> getVenuePlanOrders(int venuePlanId) {
+        return orderDao.getOrdersByVenuePlanId(venuePlanId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean seatCheckIn(SeatCheckInDTO seatCheckInDTO) {
+        int venuePlanId = seatCheckInDTO.getVenuePlanId();
+        int row = seatCheckInDTO.getRowAndColumnDTO().getRow();
+        int column = seatCheckInDTO.getRowAndColumnDTO().getColumn();
+        VenuePlanSeat checkedInSeat = venueDao.getVenuePlanSeat(venuePlanId, row, column);
+        checkedInSeat.setCheckIn(true);
+        return true;
     }
 }

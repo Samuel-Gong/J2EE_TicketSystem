@@ -171,31 +171,21 @@ row 标记， 不显示边框
 }
 
 /**
-available seats
- */
-/*div.seatCharts-seat.available {*/
-/*background-color: #B9DEA0;*/
-/*}*/
-
-/**
-focused seats
- */
-/*div.seatCharts-seat.focused {*/
-/*background-color: #76B474;*/
-/*}*/
-
-/**
 selected seats
  */
 div.seatCharts-seat.selected {
-background-color: red;
+    background-color: red;
 }
 
 /**
 unavailable seats
  */
 div.seatCharts-seat.unavailable {
-background-color: #472B34;
+    background-color: #472B34;
+}
+
+div.seatCharts-seat.unavailable.checked {
+    background-color: red;
 }
 
 div.seatCharts-legend {

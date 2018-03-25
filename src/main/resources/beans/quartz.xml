@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- jobs and triggers -->
+    <!--<util:list id="quartzTriggers">-->
+        <!--<bean class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+                <!--<p-->
+        <!--&lt;!&ndash; Reference to the job bean that will be triggered: &ndash;&gt;-->
+        <!--<property name="jobDetail" ref="myJob"/>-->
+        <!--&lt;!&ndash; Cron expression, usually comes from a property &ndash;&gt;-->
+        <!--<property name="cronExpression" value="0 15 11-12 ? * MON-FRI"/>-->
+        <!--&lt;!&ndash; What to do if the job has missed its time-->
+             <!--because the previous job was running for too long.-->
+             <!--Usually, it's OK to do nothing, but Quartz has other strategies as well,-->
+             <!--notably 'MISFIRE_INSTRUCTION_FIRE_ONCE_NOW' &ndash;&gt;-->
+        <!--<property name="misfireInstruction"-->
+                  <!--value="#{T(org.quartz.CronTrigger).MISFIRE_INSTRUCTION_DO_NOTHING}"/>-->
+    <!--</util:list>-->
+
+    <!-- Our 'AutowiringSpringBeanJobFactory' implemented in the previous section: -->
+    <bean id="quartzJobFactory" class="edu.nju.util.AutowiringSpringBeanJobFactory">
+        <!-- I will not explain this setting, just use it as shown: -->
+        <property name="ignoredUnknownProperties" value="applicationContext"/>
+    </bean>
+
+    <!-- 创建调度器 -->
+    <bean id="scheduler" lazy-init="true" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <!-- Quartz requires a separate 'quartz.properties' file -->
+        <property name="configLocation" value="classpath:quartz.properties"/>
+        <!-- Naturally, Quartz with the DB requires references
+          to the data source and transaction manager beans -->
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <!--<property name="transactionManager" ref="transactionManager"/>-->
+        <!-- reference to our 'autowiring job factory bean', defined above: -->
+        <property name="jobFactory" ref="quartzJobFactory"/>
+
+        <!-- Boolean controlling whether you want to override
+          the job definitions in the DB on the app start up.
+          We'll talk about it more in the next section. -->
+        <!--<property name="overwriteExistingJobs" value="${scheduler.quartz.db.override-on-startup}"/>-->
+
+        <!-- I will not explain the next three properties, just use it as shown: -->
+        <property name="autoStartup" value="true"/>
+        <property name="schedulerName" value="quartzScheduler"/>
+        <property name="applicationContextSchedulerContextKey" value="applicationContext"/>
+
+        <!-- Controls whether to wait for jobs completion on app shutdown, we use 'true' -->
+        <property name="waitForJobsToCompleteOnShutdown"
+                  value="true"/>
+
+        <!-- You can override any property from the 'quartz.properties' here,
+             using the more flexible Spring mechanisms, for example: -->
+        <!--<property name="quartzProperties">-->
+        <!--<props>-->
+        <!--<prop key="org.quartz.jobStore.misfireThreshold">-->
+        <!--${scheduler.quartz.prop.jobStore.misfireThreshold}-->
+        <!--</prop>-->
+        <!--<prop key="org.quartz.threadPool.threadCount">-->
+        <!--${scheduler.quartz.prop.threadPool.threadCount}-->
+        <!--</prop>-->
+        <!--</props>-->
+        <!--</property>-->
+
+        <!-- Tell the Quartz scheduler about the triggers.
+          We have implemented the 'quartzTriggers' bean in the 'Jobs and triggers' section.
+          No need to pass job definitions, since triggers created via Spring know their jobs.
+          Later we'll see a case when we'll have to disable this and pass the jobs explicitly.-->
+        <!--<property name="triggers" ref="quartzTriggers"/>-->
+
+    </bean>
+</beans>

@@ -1,5 +1,6 @@
 package edu.nju.service;
 
+import edu.nju.dto.LevelAndDiscount;
 import edu.nju.model.Member;
 
 /**
@@ -61,4 +62,11 @@ public interface MemberService {
      * @return 是否取消成功
      */
     boolean disqualify(String mail);
+
+    /**
+     * 根据会员的邮箱
+     * @param mail 会员邮箱
+     * @return 会员的等级以及折扣信息
+     */
+    LevelAndDiscount getLevelAndDiscount(String mail);
 }

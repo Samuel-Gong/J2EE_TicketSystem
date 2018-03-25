@@ -131,6 +131,8 @@
 <script src="../../../js/jquery-seat-charts.js"></script>
 <!-- 对座位操作的js -->
 <script src="../../../js/seat-operation.js"></script>
+<!-- date -->
+<script src="../../../js/date-format.js"></script>
 
 <script>
 
@@ -250,7 +252,7 @@
 
         //给座位添加点击监听
         seatChartsSetting.addClick(seatClick);
-        rerenderSeats();
+        rerenderSeats(venuePlan.venuePlanSeats);
 
         console.log("选座购买");
         $("#selected-seat-form").removeClass("hidden");
@@ -264,7 +266,7 @@
 
         //座位不可选择，已选座位状态改为available
         seatChartsSetting.clickDoNothing();
-        rerenderSeats();
+        rerenderSeats(venuePlan.venuePlanSeats);
 
         //清空已选座位，已选座位列表
         selectedSeats = [];
@@ -308,10 +310,10 @@
             async: false,           //同步操作
             data: JSON.stringify(data),
             processData: false,
-            success: function (data) {
-                if (data === "true") {
+            success: function (orderId) {
+                if (orderId) {
                     console.log("成功了");
-                    $(location).attr("href", "/member/orderManagement");
+                    $(location).attr("href", "/member/order/pay/"+);
                 }
                 else {
                     console.log("失败了");
@@ -410,10 +412,7 @@
         });
 
         seatChartsSetting.addClick(seatClick);
-        renderSeats();
-
-        //将已被锁定（包括未支付）的座位设置为unavailable
-        setBookedSeatsUnavailable(venuePlan.venuePlanSeats);
+        renderSeats(venuePlan.venuePlanSeats);
     });
 </script>
 </body>

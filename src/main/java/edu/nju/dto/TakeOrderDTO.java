@@ -1,7 +1,6 @@
 package edu.nju.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.alibaba.fastjson.annotation.JSONType;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.List;
  * <p>
  * 会员下订单时的数据传输对象
  */
-@JSONType(orders = {"mail", "venueId", "venuePlanId", "createTime", "orderPlanSeats"})
 public class TakeOrderDTO {
 
     /**
@@ -55,6 +53,11 @@ public class TakeOrderDTO {
      * 订单总价格
      */
     private Integer price;
+
+    /**
+     * 是否是会员订票
+     */
+    private Boolean memberOrder;
 
     public String getMail() {
         return mail;
@@ -120,6 +123,14 @@ public class TakeOrderDTO {
         this.price = price;
     }
 
+    public boolean getMemberOrder() {
+        return memberOrder;
+    }
+
+    public void setMemberOrder(boolean member) {
+        memberOrder = member;
+    }
+
     @Override
     public String toString() {
         return "TakeOrderDTO{" +
@@ -131,6 +142,7 @@ public class TakeOrderDTO {
                 ", seatType=" + seatType +
                 ", seatNum=" + seatNum +
                 ", price=" + price +
+                ", memberOrder=" + memberOrder +
                 '}';
     }
 }

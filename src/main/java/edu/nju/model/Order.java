@@ -28,7 +28,7 @@ public class Order {
     /**
      * 订单创建时间
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm")
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
 
     /**
@@ -48,11 +48,26 @@ public class Order {
     private boolean seatSettled;
 
     /**
-     * 多个订单可能对应一个会员，外键为会员id
+     * 是否是现场购票
      */
-    @ManyToOne(optional = false)
+    private boolean boughtOnSite;
+
+    /**
+     * 预订的座位的字符串
+     */
+    private String bookedSeatStr;
+
+    /**
+     * 退还票价
+     */
+    private double returnedMoney;
+
+    /**
+     * 多个订单可能对应一个会员，外键为会员id，可以不对应会员：现场购票（非会员）
+     */
+    @ManyToOne
     @JoinColumn(name = "memberId", foreignKey = @ForeignKey(name = "FK_MEMBER"))
-    private Member member;
+    private Member memberFK;
 
     /**
      * 多个订单可能对应一个场馆，与场馆多对一，外键为场馆id
@@ -114,12 +129,36 @@ public class Order {
         this.seatSettled = pickSeat;
     }
 
-    public Member getMember() {
-        return member;
+    public boolean isBoughtOnSite() {
+        return boughtOnSite;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
+    public void setBoughtOnSite(boolean boughtOnSite) {
+        this.boughtOnSite = boughtOnSite;
+    }
+
+    public String getBookedSeatStr() {
+        return bookedSeatStr;
+    }
+
+    public void setBookedSeatStr(String seatBooked) {
+        this.bookedSeatStr = seatBooked;
+    }
+
+    public double getReturnedMoney() {
+        return returnedMoney;
+    }
+
+    public void setReturnedMoney(double returnedMoney) {
+        this.returnedMoney = returnedMoney;
+    }
+
+    public Member getMemberFK() {
+        return memberFK;
+    }
+
+    public void setMemberFK(Member member) {
+        this.memberFK = member;
     }
 
     public Venue getVenue() {

@@ -1,10 +1,7 @@
 package edu.nju.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 /**
@@ -44,9 +41,16 @@ public class Member {
     private int mailKey;
 
     /**
+     * 和账户一对一
+     */
+    @OneToOne
+    @JoinColumn(name = "accountId", foreignKey = @ForeignKey(name = "FK_ACCOUNT"))
+    private Account account;
+
+    /**
      * 会员的订单
      */
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    @OneToMany(mappedBy = "memberFK")
     private List<Order> orders;
 
     public Member() {
@@ -98,6 +102,14 @@ public class Member {
 
     public void setMailKey(int key) {
         this.mailKey = key;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
     public List<Order> getOrders() {

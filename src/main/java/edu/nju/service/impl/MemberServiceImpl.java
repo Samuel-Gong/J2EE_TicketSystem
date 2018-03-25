@@ -1,7 +1,10 @@
 package edu.nju.service.impl;
 
 import edu.nju.dao.MemberDao;
+import edu.nju.dto.LevelAndDiscount;
 import edu.nju.model.Member;
+import edu.nju.service.DiscountStrategy;
+import edu.nju.service.LevelStrategy;
 import edu.nju.service.MemberService;
 import edu.nju.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +70,24 @@ public class MemberServiceImpl implements MemberService {
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean disqualify(String mail) {
         return memberDao.disqulify(mail) > 0;
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public LevelAndDiscount getLevelAndDiscount(String mail) {
+        Member member = memberDao.getMember(mail);
+        LevelAndDiscount levelAndDiscount = new LevelAndDiscount();
+        //如果会员不存在，将等级设置为-1
+        if (member == null) {
+            levelAndDiscount.setLevel(-1);
+            levelAndDiscount.setDiscount(10);
+        } else {
+            int points = member.getPoints();
+            int level = LevelStrategy.calculateLevel(points);
+            levelAndDiscount.setLevel(level);
+            levelAndDiscount.setDiscount(DiscountStrategy.calculateDiscount(level));
+        }
+        return levelAndDiscount;
     }
 
     @Override

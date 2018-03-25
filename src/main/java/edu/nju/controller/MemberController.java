@@ -1,11 +1,13 @@
 package edu.nju.controller;
 
 import com.alibaba.fastjson.JSON;
+import edu.nju.dto.LevelAndDiscount;
 import edu.nju.dto.TakeOrderDTO;
 import edu.nju.model.Member;
 import edu.nju.service.MemberService;
 import edu.nju.service.OrderService;
 import edu.nju.service.VenueService;
+import edu.nju.util.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -33,22 +35,127 @@ public class MemberController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping(path = "orderManagement")
-    public String orderManagement(@SessionAttribute("mail") String mail, Model model) {
+    @RequestMapping(path = "/discount")
+    public @ResponseBody
+    LevelAndDiscount getMemberDiscount(@RequestParam("mail") String mail) {
+        return memberService.getLevelAndDiscount(mail);
+//        return new LevelAndDiscount();
+    }
+
+    /**
+     * 订单退订
+     *
+     * @param mail    会员邮箱
+     * @param orderId 订单编号
+     * @return 订单退订是否成功
+     */
+    @GetMapping(path = "/order/retreat/{orderId}")
+    public @ResponseBody
+    boolean retreatOrder(@SessionAttribute("mail") String mail, @PathVariable("orderId") int orderId) {
+        return orderService.retreatOrder(mail, orderId);
+    }
+
+    /**
+     * 取消订单支付
+     *
+     * @param orderId 订单编号
+     * @return 取消支付是否成功
+     */
+    @GetMapping(path = "/order/cancel/{orderId}")
+    public @ResponseBody
+    boolean cancelOrder(@PathVariable("orderId") int orderId) {
+        return orderService.cancelOrder(orderId);
+    }
+
+    /**
+     * 订单支付
+     *
+     * @param orderId 订单编号
+     * @return 支付是否成功
+     */
+    @GetMapping(path = "/order/pay/{orderId}")
+    public @ResponseBody
+    boolean payOrder(@SessionAttribute("mail") String mail, @PathVariable("orderId") int orderId) {
+        return orderService.payOrder(mail, orderId);
+    }
+
+    /**
+     * 请求支付订单
+     *
+     * @param orderId 订单编号
+     * @return 支付订单界面
+     */
+    @GetMapping(path = "/pay/{orderId}")
+    public String payView(@PathVariable("orderId") int orderId, Model model) {
+        model.addAttribute("unpaidOrder", orderService.getOrderShowDTO(orderId));
+        return "member/pay";
+    }
+
+
+    /**
+     * 未支付订单
+     *
+     * @param mail 会员邮箱
+     * @return 未支付订单
+     */
+    @GetMapping(path = "/order/unpaid")
+    public String unpaidOrder(@SessionAttribute("mail") String mail, Model model) {
         //首先进去展示未支付订单
-        model.addAttribute("unpaidOrders", orderService.getUnpaidOrdersWithShowInfo(mail));
-        return "member/order-management";
+        model.addAttribute("unpaidOrders", orderService.getOrderShowDTOs(mail, OrderStatus.UNPAID));
+        return "/member/order/unpaid";
+    }
+
+    /**
+     * 已预订订单
+     *
+     * @param mail 会员邮箱
+     * @return 已预订订单界面
+     */
+    @GetMapping(path = "/order/booked")
+    public String bookedOrder(@SessionAttribute("mail") String mail, Model model) {
+        model.addAttribute("bookedOrders", orderService.getOrderShowDTOs(mail, OrderStatus.BOOKED));
+        return "/member/order/booked";
+    }
+
+    /**
+     * 已消费订单
+     *
+     * @param mail 会员邮箱
+     * @return 已消费订单界面
+     */
+    @GetMapping(path = "/order/consumed")
+    public String consumedOrder(@SessionAttribute("mail") String mail, Model model) {
+        model.addAttribute("consumedOrders", orderService.getOrderShowDTOs(mail, OrderStatus.COMSUMPED));
+        return "/member/order/consumed";
+    }
+
+    /**
+     * 已退订订单
+     *
+     * @param mail 会员邮箱
+     * @return 已退订订单界面
+     */
+    @GetMapping(path = "/order/retreat")
+    public String retreatOrder(@SessionAttribute("mail") String mail, Model model) {
+        model.addAttribute("retreatOrders", orderService.getOrderShowDTOs(mail, OrderStatus.RETREAT));
+        return "/member/order/retreat";
+    }
+
+    @GetMapping(path = "/order/cancel")
+    public String cancelOrder(@SessionAttribute("mail") String mail, Model model) {
+        model.addAttribute("cancelOrders", orderService.getOrderShowDTOs(mail, OrderStatus.CANCELED));
+        return "/member/order/cancel";
     }
 
     /**
      * 用户选座购票
      *
      * @param takeOrderDTO 会员订单的数据传输对象
-     * @return 订单是否保存成功
+     * @return 被保存订单的编号
      */
     @PostMapping(path = "/pickSeatOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    boolean pickSeatOrder(@RequestBody TakeOrderDTO takeOrderDTO) {
+    int pickSeatOrder(@RequestBody TakeOrderDTO takeOrderDTO) {
         return orderService.addPickSeatOrder(takeOrderDTO);
     }
 
@@ -56,11 +163,11 @@ public class MemberController {
      * 用户立即购票
      *
      * @param takeOrderDTO 会员订单的数据传输对象
-     * @return 订单是否保存成功
+     * @return 被保存订单的编号
      */
     @PostMapping(path = "/buyNowOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    boolean buyNowOrder(@RequestBody TakeOrderDTO takeOrderDTO) {
+    int buyNowOrder(@RequestBody TakeOrderDTO takeOrderDTO) {
         return orderService.addBuyNowOrder(takeOrderDTO);
     }
 

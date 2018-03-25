@@ -3,6 +3,8 @@ package edu.nju.service.impl;
 import com.alibaba.fastjson.JSON;
 import edu.nju.dto.TakeOrderDTO;
 import edu.nju.service.OrderService;
+import edu.nju.util.OrderStatus;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -30,5 +32,10 @@ class OrderServiceImplTest {
 
 //        orderService.addPickSeatOrder();
 
+    }
+
+    @Test
+    void getOrderShowDTOs() {
+        Assertions.assertEquals(1, orderService.getOrderShowDTOs("335931662@qq.com", OrderStatus.UNPAID).size());
     }
 }

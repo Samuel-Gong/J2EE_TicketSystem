@@ -1,0 +1,12 @@
+#nav-side {
+    margin-top: 20px;
+}
+
+.panel {
+    margin-top: 20px;
+}
+
+.order-container {
+    height: 600px;
+    overflow: scroll;
+}

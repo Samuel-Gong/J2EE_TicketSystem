@@ -26,6 +26,9 @@
     <!-- 场馆计划发布及更新css -->
     <link href="../../../css/plan-release-detail.css" rel="stylesheet">
 
+    <!-- footer -->
+    <link href="../../../css/footer.css" rel="stylesheet">
+
 </head>
 <body>
 
@@ -111,6 +114,8 @@
     </div>
 </div>
 <!-- container end -->
+
+<footer></footer>
 
 <!-- 增加类型模态框 begin -->
 <div id="add-seat-type-modal" class="modal fade">
@@ -574,11 +579,11 @@
                 data: JSON.stringify(venuePlan),
                 processData: false,
                 success: function (data) {
-                    console.log("成功发布");
+                    alert("计划发布成功");
                     $(location).attr("href", "/venue/planView")
                 },
                 error: function () {
-                    console.log("错误了");
+                    alert("出错了");
                 }
             });
         });

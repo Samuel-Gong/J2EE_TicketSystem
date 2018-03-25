@@ -1,9 +1,7 @@
 package edu.nju.service;
 
-import edu.nju.dto.VenueBasicInfoDTO;
-import edu.nju.dto.VenuePlanBriefDTO;
-import edu.nju.dto.VenuePlanDetailDTO;
-import edu.nju.dto.VenueSeatInfoDTO;
+import edu.nju.dto.*;
+import edu.nju.model.Order;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
 
@@ -47,9 +45,9 @@ public interface VenueService {
      * 场馆注册
      *
      * @param venue 场馆信息
-     * @return 是否注册成功
+     * @return 场馆编号
      */
-    boolean register(Venue venue);
+    int register(Venue venue);
 
     /**
      * 场馆登录
@@ -136,4 +134,20 @@ public interface VenueService {
      * @return 场馆计划传输对象
      */
     List<VenuePlanBriefDTO> getComingVenueBriefPlan();
+
+    /**
+     * 根据场馆计划id访问该场馆计划对应的订单
+     *
+     * @param venuePlanId 场馆计划id
+     * @return 该场馆计划对应的订单列表
+     */
+    List<Order> getVenuePlanOrders(int venuePlanId);
+
+    /**
+     * 场馆检票登记
+     *
+     * @param seatCheckInDTO 检票登记数据传输对象
+     * @return 检票登记是否成功
+     */
+    boolean seatCheckIn(SeatCheckInDTO seatCheckInDTO);
 }

@@ -238,9 +238,7 @@ let seatChartsSetting = {
     },
     clickDoNothing() {
         this.click = function () {
-            if (this.status() === 'available') {
-                return 'available';
-            }
+            return this.status();
         }
     }
 };
@@ -273,25 +271,40 @@ function organizeRenderSeatInfo() {
 
 function setBookedSeatsUnavailable(venuePlanSeats) {
     $.each(venuePlanSeats, function (index, seat) {
-       if(seat.available !== true){
-           sc.status(seat.row+"_"+seat.column, 'unavailable');
-       }
+        if (seat.available !== true) {
+            sc.status(seat.row + "_" + seat.column, 'unavailable');
+        }
     });
 }
 
 let sc = null;
 
 /**
+ * 对检票登记的座位图进行渲染
+ */
+function checkInRender(venuePlanSeats) {
+    sc = $("#seat-map").seatCharts(organizeRenderSeatInfo());
+    $.each(venuePlanSeats, function (index, seat) {
+        //已经检票登记的座位，加上一个checked类，进行渲染
+        if (seat.checkIn === true) {
+            sc.get(seat.row + "_" + seat.column).node().addClass("checked");
+        }
+    });
+}
+
+/**
  * 渲染座位
  */
-function renderSeats() {
+function renderSeats(venuePlanSeats) {
     sc = $("#seat-map").seatCharts(organizeRenderSeatInfo());
+    //将已被锁定（包括未支付）的座位设置为unavailable
+    setBookedSeatsUnavailable(venuePlanSeats);
 }
 
 /**
  * 重新渲染座位
  */
-function rerenderSeats() {
+function rerenderSeats(venuePlanSeats) {
     //删除原来的seat-map div
     $("#seat-map").remove();
     //删除座位类型的list
@@ -301,5 +314,35 @@ function rerenderSeats() {
     //将新的seat-map元素添加到外层container中
     $("#seat-map-container").append(newSeatMap);
     //重新渲染座位图
-    renderSeats();
+    renderSeats(venuePlanSeats);
+}
+
+/**
+ * 对一个座位检票登记，设置它的类
+ * @param row 座位行数
+ * @param column 座位列数
+ */
+function seatCheckIn(row, column) {
+    sc.get(row + "_" + column).node().addClass("checked");
+}
+
+
+/**
+ * 判断一个座位是否被预订
+ * @param row 座位行数
+ * @param column 座位列数
+ * @returns {boolean} 是否被预订
+ */
+function isAvailable(row, column) {
+    return sc.get(row + "_" + column).status === "available";
+}
+
+/**
+ * 检查该行列是否在
+ * @param row 座位行数
+ * @param column 座位列数
+ * @returns {boolean}
+ */
+function isInSeatMap(row, column) {
+    return (1 <= row && row <= seatMap.length) && (1 <= column && column <= seatMap[0].length);
 }

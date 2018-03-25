@@ -269,20 +269,6 @@
     $("#manager-login-btn").on("click", function () {
         $("#manager-login-form").submit();
     });
-
-    $(document).ready(function () {
-        if (${sessionScope.containsKey("mail")}) {
-            console.log("contains mail");
-            console.log("${sessionScope.get("mail")}");
-            var user_mail = $("#user-mail");
-            user_mail.removeClass("hidden");
-            user_mail.addClass("show");
-            user_mail.text("${sessionScope.get("mail")}");
-
-            $("#login-li").addClass("hidden");
-            $("#register-li").addClass("hidden");
-        }
-    });
 </script>
 </body>
 </html>
