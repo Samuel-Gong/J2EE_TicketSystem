@@ -2,7 +2,9 @@ package edu.nju.service.impl;
 
 import edu.nju.dao.OrderDao;
 import edu.nju.dao.VenueDao;
-import edu.nju.dto.*;
+import edu.nju.dto.SeatCheckInDTO;
+import edu.nju.dto.VenuePlanBriefDTO;
+import edu.nju.dto.VenuePlanDetailDTO;
 import edu.nju.model.*;
 import edu.nju.service.VenueService;
 import org.hibernate.Hibernate;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,46 +70,59 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean updateVenue(Venue venue) {
+
+        Venue oldVenue = venueDao.getVenue(venue.getId());
+        assert oldVenue != null;
+
+        List<VenueSeat> oldSeatMap = oldVenue.getSeatMap();
+
+        //更改场馆的基本信息
+        oldVenue.setName(venue.getName());
+        oldVenue.setCity(venue.getCity());
+
+        List<VenueSeat> newSeatMap = venue.getSeatMap();
+        newSeatMap.forEach(venueSeat -> venueSeat.setVenue(venue));
+
+        //场馆座位的行列数没有变化
+        if (oldVenue.getRowNum() == venue.getRowNum() && oldVenue.getColumnNum() == venue.getColumnNum()) {
+            //只更新是否位置是否有座位
+            newSeatMap.forEach(newSeat -> {
+                int index = oldVenue.getSeatMap().indexOf(newSeat);
+                if (index != -1) {
+                    oldSeatMap.get(index).setHasSeat(newSeat.isHasSeat());
+                }
+            });
+        }
+        //行列数有变化
+        else {
+
+            //删除所有座位
+            venueDao.deleteSeatMap(oldVenue.getId());
+
+            //更新venue的行和列
+            oldVenue.setRowNum(venue.getRowNum());
+            oldVenue.setColumnNum(venue.getColumnNum());
+
+            //添加新的座位
+            newSeatMap.forEach(newSeat -> {
+                newSeat.setVenue(oldVenue);
+                oldSeatMap.add(newSeat);
+            });
+        }
+
+        //设置为接收审批
+        oldVenue.setAuditing(true);
+        return true;
+    }
+
+    @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean login(int venueId, String venuePassword) {
         Venue venue = venueDao.getVenue(venueId);
         //当场馆密码正确且没有在审批的时候才允许登录
         return venue.getPassword().equals(venuePassword) && !venue.isAuditing();
-    }
-
-    @Override
-    @Transactional(rollbackFor = RuntimeException.class)
-    public boolean updateBasicInfo(VenueBasicInfoDTO venueBasicInfo) {
-        //todo 审批不准修改
-        return venueDao.updateBasicInfo(venueBasicInfo);
-    }
-
-    @Override
-    @Transactional(rollbackFor = RuntimeException.class)
-    public boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfo) {
-        //todo 审批不准修改
-        Venue venue = getVenueWithSeatMap(venueSeatInfo.getVenueId());
-        assert venue != null;
-        //venueSeat和venue建立联系
-        for (VenueSeat venueSeat : venueSeatInfo.getSeatMap()) {
-            venueSeat.setVenue(venue);
-        }
-        //场馆座位的行列数没有变化
-        if (venue.getRowNum() == venueSeatInfo.getRowNum() && venue.getColumnNum() == venueSeatInfo.getColumnNum()) {
-            //只更新座位上是否有座位
-            venueDao.updateSeatMap(venueSeatInfo);
-        } else {
-            //先删除座位
-            venueDao.deleteSeatMap(venue.getId());
-            //更新venue的行和列
-            venue.setRowNum(venueSeatInfo.getRowNum());
-            venue.setColumnNum(venueSeatInfo.getColumnNum());
-            venueDao.updateVenue(venue);
-            //再添加座位
-            venueDao.addSeatMap(venueSeatInfo.getSeatMap());
-        }
-        //行列数有变化
-        return venueDao.updateSeatMap(venueSeatInfo);
     }
 
     @Override
@@ -214,5 +230,24 @@ public class VenueServiceImpl implements VenueService {
         Venue venue = venueDao.getVenue(venueId);
         venue.setAuditing(false);
         return true;
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public boolean modifyCheck(int venueId) {
+        List<VenuePlan> venuePlans = venueDao.getAllVenuePlan(venueId);
+        return venuePlans.size() == 0 || allPlansPassOver(venuePlans);
+    }
+
+    /**
+     * 检查场馆计划是否都已经完成
+     *
+     * @param venuePlans 场馆计划列表
+     * @return 是否都已完成
+     */
+    private boolean allPlansPassOver(List<VenuePlan> venuePlans) {
+        return venuePlans.stream()
+                //所有计划都满足计划结束时间早于当前时间
+                .allMatch(venuePlan -> venuePlan.getEnd().isBefore(LocalDateTime.now()));
     }
 }

@@ -1,6 +1,8 @@
 package edu.nju.service;
 
-import edu.nju.dto.*;
+import edu.nju.dto.SeatCheckInDTO;
+import edu.nju.dto.VenuePlanBriefDTO;
+import edu.nju.dto.VenuePlanDetailDTO;
 import edu.nju.model.Order;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
@@ -50,6 +52,14 @@ public interface VenueService {
     int register(Venue venue);
 
     /**
+     * 更新场馆信息
+     *
+     * @param venue 场馆信息
+     * @return 更新场馆信息是否成功
+     */
+    boolean updateVenue(Venue venue);
+
+    /**
      * 场馆登录
      *
      * @param venueId       场馆编号
@@ -57,24 +67,6 @@ public interface VenueService {
      * @return 是否登录成功
      */
     boolean login(int venueId, String venuePassword);
-
-    /**
-     * 更新场馆基本信息
-     *
-     * @param venueBasicInfo 场馆信息
-     * @return 是否修改成功
-     */
-    boolean updateBasicInfo(VenueBasicInfoDTO venueBasicInfo);
-
-    //场馆座位
-
-    /**
-     * 更新场馆座位信息
-     *
-     * @param venueSeatInfo 场馆座位信息
-     * @return 更新行数
-     */
-    boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfo);
 
     //场馆计划
 
@@ -160,8 +152,17 @@ public interface VenueService {
 
     /**
      * 场馆审批通过
+     *
      * @param venueId 场馆编号
      * @return 审批是否成功
      */
     boolean auditPass(int venueId);
+
+    /**
+     * 检查场馆是否可以修改信息
+     *
+     * @param venueId 场馆编号
+     * @return 场馆是否可以修改信息
+     */
+    boolean modifyCheck(int venueId);
 }

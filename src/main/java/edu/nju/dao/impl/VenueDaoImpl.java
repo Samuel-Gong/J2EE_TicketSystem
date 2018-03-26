@@ -114,11 +114,9 @@ public class VenueDaoImpl implements VenueDao {
 
     @Override
     public List<VenuePlan> getAllVenuePlan(int venueId) {
-        Session session = sessionFactory.getCurrentSession();
-        Venue venue = session.get(Venue.class, venueId);
-        Query<VenuePlan> query = session.createQuery("from VenuePlan where venue = :venue", VenuePlan.class)
-                .setParameter("venue", venue);
-        return query.list();
+        return sessionFactory.getCurrentSession().createQuery("from VenuePlan where venue.id = :venueId", VenuePlan.class)
+                .setParameter("venueId", venueId)
+                .list();
     }
 
     @Override

@@ -3,7 +3,7 @@
   User: Shenmiu
   Date: 15/03/2018
   Time: 17:31
-  
+
   Description:  场馆信息界面
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
@@ -46,13 +46,6 @@
         }
 
         /*
-        座位修改按钮组的样式
-        */
-        #modify-seat-btn-grp {
-            margin-left: 17%;
-        }
-
-        /*
         右边场馆基本信息表单样式
         */
         #basic-info-form-container {
@@ -61,10 +54,6 @@
 
         #venue-basic-info-form {
             margin-top: 30%;
-        }
-
-        #modify-basic-btn-grp {
-            margin-left: 17%;
         }
 
     </style>
@@ -77,6 +66,15 @@
 <div id="venue-info-container" class="container">
     <div class="row">
         <h2 class="text-center">场馆信息</h2>
+        <div class="col-md-offset-8 col-md-2">
+            <button id="modify-info-btn" type="button" class="btn btn-primary center-block">修改信息</button>
+        </div>
+        <div class="col-md-offset-8 col-md-1">
+            <button id="modify-info-confirm-btn" type="button" class="btn btn-primary center-block hidden">确认</button>
+        </div>
+        <div class="col-md-1">
+            <button id="modify-info-cancel-btn" type="button" class="btn btn-primary center-block hidden">取消</button>
+        </div>
     </div>
     <div id="all-venue-info" class="row">
         <div id="legend-info" class="col-md-2">
@@ -96,11 +94,6 @@
                         </div>
                     </div>
                 </fieldset>
-                <button id="modify-seat-btn" type="button" class="btn btn-primary center-block">修改座位信息</button>
-                <div id="modify-seat-btn-grp" class="btn-group hidden">
-                    <button id="modify-seat-confirm-btn" type="button" class="btn btn-primary">保存</button>
-                    <button id="modify-seat-cancel-btn" type="button" class="btn btn-primary">取消</button>
-                </div>
             </div>
         </div>
         <div class="col-md-8">
@@ -127,11 +120,6 @@
                     </div>
                 </form>
             </fieldset>
-            <button id="modify-basic-info-btn" type="button" class="btn btn-primary center-block">修改基本信息</button>
-            <div id="modify-basic-btn-grp" class="btn-group hidden">
-                <button id="modify-basic-confirm-btn" type="button" class="btn btn-primary">保存</button>
-                <button id="modify-basic-cancel-btn" type="button" class="btn btn-primary">取消</button>
-            </div>
         </div>
     </div>
 </div>
@@ -149,45 +137,130 @@
 
 <script>
 
-    /**
-     * 确认/取消修改座位信息时，js共同动作
-     */
-    function seat_info_save_cancel() {
-        $("#modify-seat-btn-grp").addClass("hidden");
-        $("#modify-seat-btn").removeClass("hidden");
+    //修改信息按钮监听
+    $("#modify-info-btn").on("click", function () {
+        $.ajax({
+            url: "${pageContext.request.contextPath}/venue/modify/check",
+            method: "get",
+            success: function (data) {
+                if (data) {
+                    alert("可以修改场馆信息");
+                    //修改信息按钮隐藏，显示保存取消按钮组
+                    $("#modify-info-btn").addClass("hidden");
+                    $("#modify-info-confirm-btn").removeClass("hidden");
+                    $("#modify-info-cancel-btn").removeClass("hidden");
+
+                    //基本信息可编辑
+                    $("#basic-info-fieldset").removeAttr("disabled");
+
+                    //座位信息可编辑
+                    $("#seat-info-fieldset").removeAttr("disabled");
+                    //空位添加由空位转换到座位的点击事件
+                    $("#seat-map-container").on("click", ".seatCharts-space:empty", space2seat);
+                    //座位添加由座位转换到空位的点击事件
+                    seatInfo.a.click = seat2space;
+                    //重新渲染
+                    rerenderSeats();
+                }
+                else {
+                    alert("场馆还有未完成的场馆计划，请等场馆计划完成再修改场馆信息");
+                }
+            },
+            error: function () {
+                alert("出错了");
+            }
+        });
+    });
+
+
+    function disableField() {
         //座位信息不可编辑
         $("#seat-info-fieldset").attr("disabled", "disabled");
         $("#seat-map-container").off("click", ".seatCharts-space:empty", space2seat);
-        //删除座位转换到空位的点击事件
-        delete seatInfo.a.click;
-    }
 
-    /**
-     * 确认/取消修改基本信息时，js共同动作
-     */
-    function basic_info_save_cancel() {
-        $("#modify-basic-btn-grp").addClass("hidden");
-        $("#modify-basic-info-btn").removeClass("hidden");
         //基本信息不可编辑
         $("#basic-info-fieldset").attr("disabled", "disabled");
     }
 
+    //修改信息取消按钮监听
+    $("#modify-info-cancel-btn").on("click", function () {
+        //确认取消按钮隐藏
+        $("#modify-info-confirm-btn").addClass("hidden");
+        $("#modify-info-cancel-btn").addClass("hidden");
+
+        //显示修改信息按钮
+        $("#modify-info-btn").removeClass("hidden");
+
+        //场馆信息取消修改
+        modify_info_cancel();
+    });
+
+    //修改信息确认按钮监听
+    $("#modify-info-confirm-btn").on("click", function () {
+
+        let seatMapArr = [];
+        $.each(seatMap, function (row, val) {
+            $.each(val, function (column, char) {
+                let newVenueSeat = {
+                    "row": row + 1,
+                    "column": column + 1,
+                    "hasSeat": char === 'a'
+                };
+                seatMapArr.push(newVenueSeat);
+            });
+        });
+
+        let venue = {
+            "id": ${sessionScope.venueId},
+            "name": $("#venue-name").val(),
+            "city": $("#venue-city").val(),
+            "rowNum": seatMap.length,
+            "columnNum": seatMap[0].length,
+            "seatMap": seatMapArr
+        };
+
+        console.log(JSON.stringify(seatMapArr));
+
+        $.ajax({
+            url: "${pageContext.request.contextPath}/venue/update",
+            contentType: "application/json;charset=utf-8",
+            method: "post",
+            data: JSON.stringify(venue),
+            processData: false,
+            success: function (data) {
+                if (data) {
+                    alert("更新基本信息成功，等待经理审批\n审批期间不可登陆");
+                    $(location).attr("href", "${pageContext.request.contextPath}/venue/logout");
+                }
+                else {
+                    alert("更新基本信息出现了问题");
+                    //场馆信息取消修改
+                    modify_info_cancel();
+                }
+            },
+            error: function () {
+                alert("错误了");
+                //场馆信息取消修改
+                modify_info_cancel();
+            }
+        });
+
+    });
+
+
     /**
-     * 取消修改座位信息
+     * 取消修改场馆信息
      */
-    function modify_seat_info_cancel() {
-        seat_info_save_cancel();
+    function modify_info_cancel() {
+        //输入框不可编辑
+        disableField();
+
+        //删除座位转换到空位的点击事件
+        delete seatInfo.a.click;
         //座位图复原
         fillSeatMapWithDefaultType(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
         //重新渲染
         rerenderSeats();
-    }
-
-    /**
-     * 取消修改基本信息
-     */
-    function modify_basic_info_cancel() {
-        basic_info_save_cancel();
 
         //基本信息复原
         $("#venue-name").val(venueInfo.name);
@@ -205,6 +278,7 @@
         $("#venue-name").val(venueInfo.name);
         $("#venue-city").val(venueInfo.city);
 
+        seatChartsSetting.clickDoNothing();
         //座位信息
         fillSeatMapWithDefaultType(venueInfo.rowNum, venueInfo.columnNum, venueInfo.seatMap);
         renderSeats();
@@ -214,128 +288,6 @@
         $("#add-column").on("click", add_column);
         $("#delete-row").on("click", delete_row);
         $("#delete-column").on("click", delete_column);
-
-        //修改座位信息的按钮
-        $("#modify-seat-btn").on("click", function modify_seat() {
-            //确认没有在修改基本信息
-            if ($("#modify-basic-btn-grp").hasClass("hidden")) {
-                //修改座位信息按钮隐藏，显示保存取消按钮组
-                $(this).addClass("hidden");
-                $("#modify-seat-btn-grp").removeClass("hidden");
-                //座位信息可编辑
-                $("#seat-info-fieldset").removeAttr("disabled");
-                //空位添加由空位转换到座位的点击事件
-                $("#seat-map-container").on("click", ".seatCharts-space:empty", space2seat);
-                //座位添加由座位转换到空位的点击事件
-                seatInfo.a.click = seat2space;
-                //重新渲染
-                rerenderSeats();
-            }
-            else {
-                alert("请先保存或取消基本信息");
-            }
-
-        });
-
-        //修改基本信息按钮
-        $("#modify-basic-info-btn").on("click", function modify_basic_info() {
-            //确认没有在修改座位信息
-            if ($("#modify-seat-btn-grp").hasClass("hidden")) {
-                //修改基本信息按钮隐藏，显示保存取消按钮组
-                $(this).addClass("hidden");
-                $("#modify-basic-btn-grp").removeClass("hidden");
-                //基本信息可编辑
-                $("#basic-info-fieldset").removeAttr("disabled");
-            }
-            else {
-                alert("请先保存或取消座位信息")
-            }
-        });
-
-        //修改座位信息取消按钮
-        $("#modify-seat-cancel-btn").on("click", modify_seat_info_cancel);
-
-        //修改基本信息取消按钮
-        $("#modify-basic-cancel-btn").on("click", modify_basic_info_cancel);
-
-        //修改座位信息确认按钮
-        //更新座位信息
-        $("#modify-seat-confirm-btn").on("click", function () {
-
-            let seatMapArr = [];
-            $.each(seatMap, function (row, val) {
-                $.each(val, function (column, char) {
-                    let newVenueSeat = {
-                        "venueSeatId": {
-                            "row": row + 1,
-                            "column": column + 1,
-                        },
-                        "hasSeat": char === 'a'
-                    };
-                    seatMapArr.push(newVenueSeat);
-                });
-            });
-
-            let seatMapInfo = {
-                "venueId": ${sessionScope.venueId},
-                "rowNum": seatMap.length,
-                "columnNum": seatMap[0].length,
-                "seatMap": seatMapArr
-            };
-
-            $.ajax({
-                url: "${pageContext.request.contextPath}/venue/updateSeatMap",
-                contentType: "application/json;charset=utf-8",
-                method: "post",
-                data: JSON.stringify(seatMapInfo),
-                processData: false,
-                success: function (data) {
-                    if (data === "true") {
-                        alert("更新座位信息成功");
-                        seat_info_save_cancel();
-                    }
-                    else {
-                        alert("更新座位信息出现了问题");
-                        modify_seat_info_cancel();
-                    }
-                },
-                error: function () {
-                    console.log("错误了");
-                }
-            });
-        });
-
-        //修改基本信息确认按钮
-        //更新场馆基本信息
-        $("#modify-basic-confirm-btn").on("click", function () {
-
-            let venueBasicInfoDTO = {
-                "venueId": ${sessionScope.venueId},
-                "name": $("#venue-name").val(),
-                "city": $("#venue-city").val(),
-            };
-
-            $.ajax({
-                url: "${pageContext.request.contextPath}/venue/updateBasicInfo",
-                contentType: "application/json;charset=utf-8",
-                method: "post",
-                data: JSON.stringify(venueBasicInfoDTO),
-                processData: false,
-                success: function (data) {
-                    if (data === "true") {
-                        alert("更新基本信息成功");
-                        basic_info_save_cancel();
-                    }
-                    else {
-                        alert("更新基本信息出现了问题");
-                        modify_basic_info_cancel();
-                    }
-                },
-                error: function () {
-                    console.log("错误了");
-                }
-            });
-        });
     });
 </script>
 </body>

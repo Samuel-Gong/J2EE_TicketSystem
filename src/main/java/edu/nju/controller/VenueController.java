@@ -3,8 +3,6 @@ package edu.nju.controller;
 import com.alibaba.fastjson.JSON;
 import edu.nju.dto.SeatCheckInDTO;
 import edu.nju.dto.TakeOrderDTO;
-import edu.nju.dto.VenueBasicInfoDTO;
-import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
 import edu.nju.service.OrderService;
@@ -30,6 +28,18 @@ public class VenueController {
 
     @Autowired
     private OrderService orderService;
+
+    /**
+     * 检查场馆信息是否可以修改
+     *
+     * @param venueId 场馆编号
+     * @return 场馆信息是否可以修改
+     */
+    @GetMapping(value = "/modify/check")
+    public @ResponseBody
+    boolean modifyCheck(@SessionAttribute("venueId") int venueId) {
+        return venueService.modifyCheck(venueId);
+    }
 
     @PostMapping(value = "/checkIn")
     public @ResponseBody
@@ -173,35 +183,22 @@ public class VenueController {
             //在Session中加入场馆编号
             model.addAttribute("venueId", venueId);
             return "redirect:/venue/infoView";
-        }
-        else {
+        } else {
             model.addAttribute("errorMsg", "密码错误或正在审批中，不可登陆");
             return "/venue/error";
         }
     }
 
     /**
-     * 更新场馆的基本信息
+     * 更新场馆信息
      *
-     * @param venueBasicInfoDTO 场馆基本信息
+     * @param venue 场馆信息
      * @return 是否更新成功
      */
-    @PostMapping(value = "/updateBasicInfo", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    boolean updateBasicInfo(@RequestBody VenueBasicInfoDTO venueBasicInfoDTO) {
-        return venueService.updateBasicInfo(venueBasicInfoDTO);
-    }
-
-    /**
-     * 更新场馆的座位信息
-     *
-     * @param venueSeatInfoDTO 场馆座位信息
-     * @return 是否更新成功
-     */
-    @PostMapping(value = "/updateSeatMap", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody
-    boolean updateSeatMap(@RequestBody VenueSeatInfoDTO venueSeatInfoDTO) {
-        return venueService.updateSeatMap(venueSeatInfoDTO);
+    boolean updateVenueInfo(@RequestBody Venue venue) {
+        return venueService.updateVenue(venue);
     }
 
 }
