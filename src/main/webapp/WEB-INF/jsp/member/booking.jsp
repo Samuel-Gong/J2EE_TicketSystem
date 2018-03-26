@@ -304,7 +304,7 @@
         console.log(JSON.stringify(data));
 
         $.ajax({
-            url: '/member/pickSeatOrder',
+            url: '${pageContext.request.contextPath}/member/pickSeatOrder',
             method: 'post',
             contentType: 'application/json;charset=UTF-8',
             async: false,           //同步操作
@@ -313,7 +313,8 @@
             success: function (orderId) {
                 if (orderId) {
                     console.log("成功了");
-                    $(location).attr("href", "${pageContext.request.contextPath}/member/order/pay/" + orderId);
+                    //跳转到支付界面
+                    $(location).attr("href", "${pageContext.request.contextPath}/member/pay/" + orderId);
                 }
                 else {
                     console.log("失败了");
@@ -344,7 +345,7 @@
         console.log(JSON.stringify(data));
 
         $.ajax({
-            url: '/order/buyNow',
+            url: '${pageContext.request.contextPath}/order/buyNow',
             method: 'post',
             contentType: 'application/json;charset=UTF-8',
             async: false,           //同步操作

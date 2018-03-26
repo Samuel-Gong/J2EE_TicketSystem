@@ -141,6 +141,12 @@ public class MemberController {
         return "/member/order/retreat";
     }
 
+    /**
+     * 已取消支付订单
+     *
+     * @param mail 会员邮箱
+     * @return 已取消订单
+     */
     @GetMapping(path = "/order/cancel")
     public String cancelOrder(@SessionAttribute("mail") String mail, Model model) {
         model.addAttribute("cancelOrders", orderService.getOrderShowDTOs(mail, OrderStatus.CANCELED));

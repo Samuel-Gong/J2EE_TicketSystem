@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,8 +74,7 @@ public class OrderServiceImpl implements OrderService {
         //添加一条订单
         orderDao.addOrder(order);
 
-        //任务调度
-//        jobService.addCheckUnpaidOrderJob(order.getCreateTime(), order.getOrderId());
+        //todo quartz任务调度
 
         //更新会员及场馆信息
         member.getOrders().add(order);
@@ -86,7 +86,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public int addBuyNowOrder(TakeOrderDTO takeOrderDTO) {
-        //todo 任务调度
         Member member = memberDao.getMember(takeOrderDTO.getMail());
         Venue venue = venueDao.getVenue(takeOrderDTO.getVenueId());
         VenuePlan venuePlan = venueDao.getVenuePlan(takeOrderDTO.getVenuePlanId());
@@ -151,6 +150,12 @@ public class OrderServiceImpl implements OrderService {
         Member member = memberDao.getMember(mail);
         Account account = member.getAccount();
         Order order = orderDao.getOrder(orderId);
+
+        //订单支付的时候再次检查，是否已经过了支付时间
+        if (passOverPayTime(order.getCreateTime())) {
+            return false;
+        }
+
         //减少账户余额
         if (account.getBalance() >= order.getPrice()) {
 
@@ -173,17 +178,8 @@ public class OrderServiceImpl implements OrderService {
         //改变订单状态
         order.setOrderStatus(OrderStatus.CANCELED);
 
-        //将订单预订的座位用字符串的形式保存下来
-        String bookedSeatStr = order.getVenuePlanSeats().stream()
-                .map(seat -> seat.getRow() + "排" + seat.getColumn() + "座")
-                .collect(Collectors.joining(","));
-        order.setBookedSeatStr(bookedSeatStr);
-
-        //改变座位状态为可预定，无绑定的订单
-        order.getVenuePlanSeats().forEach(seat -> {
-            seat.setAvailable(true);
-            seat.setOrder(null);
-        });
+        setBookedSeatStr(order);
+        detachSeat(order);
         return true;
     }
 
@@ -198,17 +194,8 @@ public class OrderServiceImpl implements OrderService {
         //改变订单状态
         order.setOrderStatus(OrderStatus.RETREAT);
 
-        //将订单预订的座位用字符串的形式保存下来
-        String bookedSeatStr = order.getVenuePlanSeats().stream()
-                .map(seat -> seat.getRow() + "排" + seat.getColumn() + "座")
-                .collect(Collectors.joining(","));
-        order.setBookedSeatStr(bookedSeatStr);
-
-        //改变座位状态为可预定，无绑定订单
-        order.getVenuePlanSeats().forEach(seat -> {
-            seat.setAvailable(true);
-            seat.setOrder(null);
-        });
+        setBookedSeatStr(order);
+        detachSeat(order);
 
         return true;
     }
@@ -252,9 +239,53 @@ public class OrderServiceImpl implements OrderService {
         //添加一条订单
         orderDao.addOrder(order);
 
-        //任务调度
-//        jobService.addCheckUnpaidOrderJob(order.getCreateTime(), order.getOrderId());
+        //todo quartz任务调度
 
         return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void checkUnpaidOrders() {
+        List<Order> unpaidOrders = orderDao.getUnpaidOrders();
+        unpaidOrders.stream()
+                .filter(unpaidOrder -> passOverPayTime(unpaidOrder.getCreateTime()))
+                .forEach(unpaidOrder -> {
+                    unpaidOrder.setOrderStatus(OrderStatus.CANCELED);
+                    setBookedSeatStr(unpaidOrder);
+                    detachSeat(unpaidOrder);
+                });
+    }
+
+    /**
+     * 过期、取消、退订订单需要与座位解绑，并将座位设置为可用
+     */
+    private void detachSeat(Order order) {
+        //改变座位状态为可预定，无绑定订单
+        order.getVenuePlanSeats().forEach(seat -> {
+            seat.setAvailable(true);
+            seat.setOrder(null);
+        });
+    }
+
+    /**
+     * 过期、取消、退订订单需要与座位解绑前，将将订单预订的座位用字符串的形式保存下来
+     */
+    private void setBookedSeatStr(Order order) {
+        String bookedSeatStr = order.getVenuePlanSeats().stream()
+                .map(seat -> seat.getRow() + "排" + seat.getColumn() + "座")
+                .collect(Collectors.joining(","));
+        order.setBookedSeatStr(bookedSeatStr);
+    }
+
+    /**
+     * 订单创建时间+15分钟在当前时间之前，则说明会员未在有效时间内支付订单
+     *
+     * @param createTime 订单创建时间
+     * @return 订单是否超过支付时间
+     */
+    private boolean passOverPayTime(LocalDateTime createTime) {
+        final int expireTime = 15;
+        return createTime.plusMinutes(expireTime).isBefore(LocalDateTime.now());
     }
 }

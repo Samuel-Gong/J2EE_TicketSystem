@@ -45,15 +45,23 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getOrdersByVenuePlanId(int vneuePlanId) {
+    public List<Order> getOrdersByVenuePlanId(int venueId) {
         return sessionFactory.getCurrentSession()
                 .createQuery("from Order where venuePlan.id = :venuePlanId ", Order.class)
-                .setParameter("venuePlanId", vneuePlanId)
+                .setParameter("venuePlanId", venueId)
                 .list();
     }
 
     @Override
     public Order getOrder(int orderId) {
         return sessionFactory.getCurrentSession().get(Order.class, orderId);
+    }
+
+    @Override
+    public List<Order> getUnpaidOrders() {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Order where orderStatus = :orderStatus ", Order.class)
+                .setParameter("orderStatus", OrderStatus.UNPAID)
+                .list();
     }
 }

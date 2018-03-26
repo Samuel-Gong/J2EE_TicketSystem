@@ -82,8 +82,14 @@ public interface OrderService {
 
     /**
      * 场馆现场购票
+     *
      * @param takeOrderDTO 用户订单的数据传输对象
      * @return 购票是否成功
      */
     boolean takeOrderOnSite(TakeOrderDTO takeOrderDTO);
+
+    /**
+     * 检查所有未支付订单，将超时的未支付订单设置为已过期
+     */
+    void checkUnpaidOrders();
 }

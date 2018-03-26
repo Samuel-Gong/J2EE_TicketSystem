@@ -52,4 +52,11 @@ public interface OrderDao {
      * @return 订单持久化对象
      */
     Order getOrder(int orderId);
+
+    /**
+     * 根据订单状态获取该状态的所有订单
+     *
+     * @return 所有未支付订单列表
+     */
+    List<Order> getUnpaidOrders();
 }

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+        http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+
 
     <!-- 任务调度 -->
+    <!-- quartz方式未实现 -->
     <!--<import resource="classpath:beans/quartz.xml"/>-->
+    <!-- 使用spring内置的@Scheduled注解的方式 -->
+    <task:annotation-driven/>
     <!-- 邮箱服务 -->
     <import resource="classpath:beans/mail.xml"/>
     <import resource="classpath:springmvc.xml"/>

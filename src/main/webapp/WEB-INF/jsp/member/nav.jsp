@@ -26,8 +26,8 @@
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="/member/myInfo">个人信息</a></li>
-                    <li><a href="/member/order/booked">我的订单</a></li>
+                    <li><a href="${pageContext.request.contextPath}/member/myInfo">个人信息</a></li>
+                    <li><a href="${pageContext.request.contextPath}/member/order/booked">我的订单</a></li>
                     <li><a href="#">我的优惠券</a></li>
                 </ul>
             </li>
@@ -35,14 +35,14 @@
 
         <ul class="nav navbar-nav">
             <li>
-                <a href="/member/scanShow">近期演出</a>
+                <a href="${pageContext.request.contextPath}/member/scanShow">近期演出</a>
             </li>
         </ul>
 
         <ul class="nav navbar-nav pull-right">
             <!-- todo logout-->
             <li id="member-logout">
-                <a href="/member/logout">登出</a>
+                <a href="${pageContext.request.contextPath}/member/logout">登出</a>
             </li>
         </ul>
     </div>
