@@ -32,10 +32,11 @@
             <%@include file="../side-nav.jsp" %>
         </div>
         <div id="booked-container" class="col-md-8">
-            <c:forEach items="${bookedOrders}" var="detailOrder">
-                <c:set var="order" value="${detailOrder.order}"/>
-                <c:set var="venuePlan" value="${detailOrder.venuePlan}"/>
-                <div class="col-md-offset-1 col-md-10 order-container">
+            <div id="order-container" class="col-md-offset-1 col-md-10">
+                <c:forEach items="${bookedOrders}" var="detailOrder">
+                    <c:set var="order" value="${detailOrder.order}"/>
+                    <c:set var="venuePlan" value="${detailOrder.venuePlan}"/>
+
                     <div class="panel panel-warning">
                         <div class="panel-heading">
                             <h4 class="panel-title">
@@ -110,8 +111,8 @@
                             </form>
                         </div>
                     </div>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
     </div>
 </div>

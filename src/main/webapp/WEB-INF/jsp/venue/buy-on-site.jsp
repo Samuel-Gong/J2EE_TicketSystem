@@ -349,13 +349,13 @@
      */
     $("#buy-comfirm").on("click", function () {
 
-        let orderPlanSeats = [];
+        let orderSeats = [];
         $.each(selectedSeats, function (index, rawId) {
             let rowAndColumn = rawId.split("_");
             let row = rowAndColumn[0];
             let column = rowAndColumn[1];
 
-            orderPlanSeats.push(
+            orderSeats.push(
                 {
                     row: row,
                     column: column
@@ -370,7 +370,7 @@
             venueId: planDetail.venueId,
             venuePlanId: venuePlan.venuePlanId,
             createTime: new Date().Format("yyyy-MM-dd hh:mm:ss"),
-            orderPlanSeats: orderPlanSeats,
+            orderSeats: orderSeats,
             price: parseInt($("#actual-price").text().trim())
         };
 

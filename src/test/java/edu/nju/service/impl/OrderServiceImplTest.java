@@ -24,17 +24,6 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void addPickSeatOrder() {
-
-        TakeOrderDTO takeOrderDTO = JSON.parseObject("{\"mail\":\"123@qq.com\",\"venueId\":1,\"venuePlanId\":3,\"orderPlanSeats\":[{\"row\":\"1\",\"column\":\"6\"},{\"row\":\"1\",\"column\":\"7\"},{\"row\":\"1\",\"column\":\"8\"}]}", TakeOrderDTO.class);
-        orderService.addPickSeatOrder(takeOrderDTO);
-//        takeOrderDTO.set
-
-//        orderService.addPickSeatOrder();
-
-    }
-
-    @Test
     void getOrderShowDTOs() {
         Assertions.assertEquals(1, orderService.getOrderShowDTOs("335931662@qq.com", OrderStatus.UNPAID).size());
     }

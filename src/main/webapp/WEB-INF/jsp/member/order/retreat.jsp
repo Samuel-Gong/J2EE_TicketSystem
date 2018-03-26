@@ -32,10 +32,10 @@
             <%@include file="../side-nav.jsp" %>
         </div>
         <div id="retreat-container" class="col-md-8">
-            <c:forEach items="${retreatOrders}" var="detailOrder">
-                <c:set var="order" value="${detailOrder.order}"/>
-                <c:set var="venuePlan" value="${detailOrder.venuePlan}"/>
-                <div class="col-md-offset-1 col-md-10 order-container">
+            <div class="col-md-offset-1 col-md-10 order-container">
+                <c:forEach items="${retreatOrders}" var="detailOrder">
+                    <c:set var="order" value="${detailOrder.order}"/>
+                    <c:set var="venuePlan" value="${detailOrder.venuePlan}"/>
                     <div class="panel panel-warning">
                         <div class="panel-heading">
                             <h4 class="panel-title">
@@ -78,7 +78,8 @@
                                         <p class="form-control-static">
                                             <c:choose>
                                                 <c:when test="${order.seatSettled}">
-                                                    <span class="form-control-static"><c:out value="${order.bookedSeatStr}"/></span>
+                                                    <span class="form-control-static"><c:out
+                                                            value="${order.bookedSeatStr}"/></span>
                                                 </c:when>
                                                 <c:otherwise>
                                                     <span class="form-control-static">还未配票</span>
@@ -104,8 +105,8 @@
                             </form>
                         </div>
                     </div>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
     </div>
 </div>

@@ -39,31 +39,33 @@ public class OrderServiceImpl implements OrderService {
     private VenueDao venueDao;
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
-    public int addPickSeatOrder(TakeOrderDTO takeOrderDTO) {
-        //todo 任务调度
-        Member member = memberDao.getMember(takeOrderDTO.getMail());
+    public int addOrder(TakeOrderDTO takeOrderDTO) {
         Venue venue = venueDao.getVenue(takeOrderDTO.getVenueId());
         VenuePlan venuePlan = venueDao.getVenuePlan(takeOrderDTO.getVenuePlanId());
 
-        Order order = new Order();
-        //设定为当前时间
-        order.setCreateTime(LocalDateTimeUtil.now());
-        //设置订单总价
-        order.setPrice(takeOrderDTO.getPrice());
-        //订单状态设置为未支付
-        order.setOrderStatus(OrderStatus.UNPAID);
-        //订单是自选座位
-        order.setSeatSettled(true);
-        //订单是否是现场购票
-        order.setBoughtOnSite(false);
+        Order order = new Order(takeOrderDTO);
 
-        order.setMemberFK(member);
+        //若是线上购买，设置状态为未支付
+        if (order.isBoughtOnline()) {
+            order.setOrderStatus(OrderStatus.UNPAID);
+        }
+        //现场购买，设置状态为已支付
+        else {
+            order.setOrderStatus(OrderStatus.BOOKED);
+        }
+
+        //如果是会员购票
+        if (order.isMemberOrder()) {
+            //设置与会员的关联
+            Member member = memberDao.getMember(takeOrderDTO.getMail());
+            order.setMemberFK(member);
+        }
+
         order.setVenue(venue);
         order.setVenuePlan(venuePlan);
 
         //得到persistent状态的场馆计划座位，更新available状态，设置联系order的外键
-        List<VenuePlanSeat> selectedVenuePlanSeats = venueDao.getSpecificSeats(takeOrderDTO.getVenuePlanId(), takeOrderDTO.getOrderPlanSeats());
+        List<VenuePlanSeat> selectedVenuePlanSeats = venueDao.getSpecificSeats(takeOrderDTO.getVenuePlanId(), takeOrderDTO.getOrderSeats());
         selectedVenuePlanSeats.forEach(seat -> {
             seat.setAvailable(false);
             seat.setOrder(order);
@@ -73,45 +75,6 @@ public class OrderServiceImpl implements OrderService {
 
         //添加一条订单
         orderDao.addOrder(order);
-
-        //todo quartz任务调度
-
-        //更新会员及场馆信息
-        member.getOrders().add(order);
-        venue.getOrders().add(order);
-
-        return order.getOrderId();
-    }
-
-    @Override
-    @Transactional(rollbackFor = RuntimeException.class)
-    public int addBuyNowOrder(TakeOrderDTO takeOrderDTO) {
-        Member member = memberDao.getMember(takeOrderDTO.getMail());
-        Venue venue = venueDao.getVenue(takeOrderDTO.getVenueId());
-        VenuePlan venuePlan = venueDao.getVenuePlan(takeOrderDTO.getVenuePlanId());
-
-        Order order = new Order();
-        //设定为当前时间
-        order.setCreateTime(takeOrderDTO.getCreateTime());
-        //设置订单总价
-        order.setPrice(takeOrderDTO.getPrice());
-        //订单状态设置为未支付
-        order.setOrderStatus(OrderStatus.UNPAID);
-        //订单不是自选座位，等待配票，座位未固定
-        order.setSeatSettled(false);
-        //订单是否是现场购票
-        order.setBoughtOnSite(false);
-
-        order.setMemberFK(member);
-        order.setVenue(venue);
-        order.setVenuePlan(venuePlan);
-
-        //添加一条订单
-        orderDao.addOrder(order);
-
-        //更新会员及场馆信息
-        member.getOrders().add(order);
-        venue.getOrders().add(order);
 
         return order.getOrderId();
     }
@@ -217,7 +180,7 @@ public class OrderServiceImpl implements OrderService {
         //订单是自选座位
         order.setSeatSettled(true);
         //订单是否是现场购票
-        order.setBoughtOnSite(true);
+        order.setBoughtOnline(true);
 
         //判断是否是会员订单
         if (takeOrderDTO.getMemberOrder()) {
@@ -228,7 +191,7 @@ public class OrderServiceImpl implements OrderService {
         order.setVenuePlan(venuePlan);
 
         //得到persistent状态的场馆计划座位，更新available状态，设置联系order的外键
-        List<VenuePlanSeat> selectedVenuePlanSeats = venueDao.getSpecificSeats(takeOrderDTO.getVenuePlanId(), takeOrderDTO.getOrderPlanSeats());
+        List<VenuePlanSeat> selectedVenuePlanSeats = venueDao.getSpecificSeats(takeOrderDTO.getVenuePlanId(), takeOrderDTO.getOrderSeats());
         selectedVenuePlanSeats.forEach(seat -> {
             seat.setAvailable(false);
             seat.setOrder(order);

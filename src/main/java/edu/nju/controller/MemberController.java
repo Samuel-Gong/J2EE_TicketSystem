@@ -154,27 +154,15 @@ public class MemberController {
     }
 
     /**
-     * 用户选座购票
+     * 用户购票
      *
-     * @param takeOrderDTO 会员订单的数据传输对象
+     * @param takeOrderDTO 订单的数据传输对象
      * @return 被保存订单的编号
      */
-    @PostMapping(path = "/pickSeatOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(path = "takeOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
-    int pickSeatOrder(@RequestBody TakeOrderDTO takeOrderDTO) {
-        return orderService.addPickSeatOrder(takeOrderDTO);
-    }
-
-    /**
-     * 用户立即购票
-     *
-     * @param takeOrderDTO 会员订单的数据传输对象
-     * @return 被保存订单的编号
-     */
-    @PostMapping(path = "/buyNowOrder", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public @ResponseBody
-    int buyNowOrder(@RequestBody TakeOrderDTO takeOrderDTO) {
-        return orderService.addBuyNowOrder(takeOrderDTO);
+    int takeOrder(@RequestBody TakeOrderDTO takeOrderDTO) {
+        return orderService.addOrder(takeOrderDTO);
     }
 
     /**

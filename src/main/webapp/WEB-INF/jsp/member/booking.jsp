@@ -89,20 +89,18 @@
             <form id="book-type-form">
                 <div class="radio">
                     <label>
-                        <input type="radio" name="book-type-options" value="pick" checked>选座购买
+                        <input id="pick-seat-radio" type="radio" name="book-type-options" value="pick" checked>选座购买
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="book-type-options" value="buyNow">立即购买
+                        <input id="buy-now-radio" type="radio" name="book-type-options" value="buyNow">立即购买
                     </label>
                 </div>
             </form>
             <div id="selected-seat-form">
                 <h4 class="text-center">已选座位</h4>
                 <ul id="selected-seats-list"></ul>
-                <h5>总票价:<span id="pick-seat-price-show">0</span></h5>
-                <button id="pick-seat-btn" type="button" class="btn btn-primary center-block hidden">下单</button>
             </div>
             <form id="buy-now-form" class="hidden">
                 <div class="form-group">
@@ -114,10 +112,10 @@
                     <label class="control-label">座位数量</label>
                     <input id="buy-now-seat-num" type="text" class="form-control">
                     <p class="help-block">最多不超过20个座位</p>
-                    <h5>总票价:<span id="buy-now-price-show">0</span></h5>
                 </div>
-                <button id="buy-now-btn" type="button" class="btn btn-primary center-block">下单</button>
             </form>
+            <h5>总票价:<span id="total-price">0</span></h5>
+            <button id="buy-btn" type="button" class="btn btn-primary center-block">下单</button>
         </div>
     </div>
 </div>
@@ -200,10 +198,10 @@
                 );
 
                 //更新总票价
-                let priceShow = $("#pick-seat-price-show");
+                let totalPriceNode = $("#total-price");
                 let typeChar = this.char();
-                let totalPrice = parseInt(priceShow.text()) + parseInt(seatTypes[findIndexInSeatTypes(typeChar)].price);
-                priceShow.text(totalPrice);
+                let totalPrice = parseInt(totalPriceNode.text()) + parseInt(seatTypes[findIndexInSeatTypes(typeChar)].price);
+                totalPriceNode.text(totalPrice);
                 return 'selected';
             }
         }
@@ -229,10 +227,10 @@
             });
 
             //更新总票价
-            let priceShow = $("#pick-seat-price-show");
+            let totalPriceNode = $("#total-price");
             let typeChar = this.char();
-            let totalPrice = parseInt(priceShow.text()) - parseInt(seatTypes[findIndexInSeatTypes(typeChar)].price);
-            priceShow.text(totalPrice);
+            let totalPrice = parseInt(totalPriceNode.text()) - parseInt(seatTypes[findIndexInSeatTypes(typeChar)].price);
+            totalPriceNode.text(totalPrice);
 
             return 'available';
         }
@@ -248,7 +246,7 @@
     function buyNow2PickSeat() {
 
         //总价格初始化为0
-        $("#pick-seat-price-show").text(0);
+        $("#total-price").text(0);
 
         //给座位添加点击监听
         seatChartsSetting.addClick(seatClick);
@@ -264,6 +262,9 @@
      */
     function pickSeat2BuyNow() {
 
+        //总价格初始化为0
+        $("#total-price").text(0);
+
         //座位不可选择，已选座位状态改为available
         seatChartsSetting.clickDoNothing();
         rerenderSeats(venuePlan.venuePlanSeats);
@@ -276,38 +277,57 @@
         $("#buy-now-form").removeClass("hidden");
     }
 
-    //选座购买下单按钮监听
-    $("#pick-seat-btn").on("click", function () {
-        let orderPlanSeats = [];
-        $.each(selectedSeats, function (index, rawId) {
-            let rowAndColumn = rawId.split("_");
-            let row = rowAndColumn[0];
-            let column = rowAndColumn[1];
-
-            orderPlanSeats.push(
-                {
-                    row: row,
-                    column: column
-                }
-            );
-        });
+    /**
+     * 下单按钮监听
+     */
+    $("#buy-btn").on("click", function () {
 
         let data = {
             mail: "${sessionScope.mail}",
             venueId: planDetail.venueId,
             venuePlanId: venuePlan.venuePlanId,
             createTime: new Date().Format("yyyy-MM-dd hh:mm:ss"),
-            orderPlanSeats: orderPlanSeats,
-            price: parseInt($("#pick-seat-price-show").text())
+            price: parseInt($("#total-price").text()),
+            //线上购买
+            boughtOnline: true,
+            //会员购票
+            memberOrder: true,
         };
 
-        console.log(JSON.stringify(data));
+        //判断是否是选座购买
+        let seatSettled = $("#pick-seat-radio").is(":checked");
+        //如果是选座购买
+        if (seatSettled) {
+            let orderSeats = [];
+            $.each(selectedSeats, function (index, rawId) {
+                let rowAndColumn = rawId.split("_");
+                let row = rowAndColumn[0];
+                let column = rowAndColumn[1];
+
+                orderSeats.push(
+                    {
+                        row: row,
+                        column: column
+                    }
+                );
+            });
+            data["seatSettled"] = true;
+            //装载订单选取的座位
+            data["orderSeats"] = orderSeats;
+            console.log("选座购买:\n" + JSON.stringify(data));
+        }
+        //立即购买
+        else {
+            data["seatSettled"] = false;
+            data["seatType"] = $("#seat-type-list").val();
+            data["seatNum"] = $("#buy-now-seat-num").val();
+            console.log("立即购买:\n" + JSON.stringify(data));
+        }
 
         $.ajax({
-            url: '${pageContext.request.contextPath}/member/pickSeatOrder',
+            url: '${pageContext.request.contextPath}/member/takeOrder',
             method: 'post',
             contentType: 'application/json;charset=UTF-8',
-            async: false,           //同步操作
             data: JSON.stringify(data),
             processData: false,
             success: function (orderId) {
@@ -315,46 +335,6 @@
                     console.log("成功了");
                     //跳转到支付界面
                     $(location).attr("href", "${pageContext.request.contextPath}/member/pay/" + orderId);
-                }
-                else {
-                    console.log("失败了");
-                }
-            },
-            error: function () {
-                console.log("出错了");
-            }
-        });
-    });
-
-    //立即购买下单按钮监听
-    $("#buy-now-btn").on("click", function () {
-
-        let seatType = $("#seat-type-list").val();
-        let seatNum = $("#buy-now-seat-num").val();
-
-        let data = {
-            mail: "${sessionScope.mail}",
-            venueId: planDetail.venueId,
-            venuePlanId: venuePlan.venuePlanId,
-            createTime: new Date().Format("yyyy-MM-dd hh:mm:ss"),
-            seatType: seatType,
-            seatNum: seatNum,
-            price: parseInt($("#pick-seat-price-show").text())
-        };
-
-        console.log(JSON.stringify(data));
-
-        $.ajax({
-            url: '${pageContext.request.contextPath}/order/buyNow',
-            method: 'post',
-            contentType: 'application/json;charset=UTF-8',
-            async: false,           //同步操作
-            data: JSON.stringify(data),
-            processData: false,
-            success: function (data) {
-                if (data === "true") {
-                    console.log("成功了");
-                    // $(location).attr("href", "${pageContext.request.contextPath}/member/orderManagement");
                 }
                 else {
                     console.log("失败了");

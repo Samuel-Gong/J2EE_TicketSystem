@@ -37,7 +37,7 @@ public class TakeOrderDTO {
     /**
      * 被订单选中的所有场馆计划的座位
      */
-    private List<RowAndColumnDTO> orderPlanSeats;
+    private List<RowAndColumnDTO> orderSeats;
 
     /**
      * 立即购买选择的座位类型
@@ -53,6 +53,16 @@ public class TakeOrderDTO {
      * 订单总价格
      */
     private Integer price;
+
+    /**
+     * 座位是否选择
+     */
+    private Boolean seatSettled;
+
+    /**
+     * 是否是在线上购票
+     */
+    private Boolean boughtOnline;
 
     /**
      * 是否是会员订票
@@ -91,12 +101,12 @@ public class TakeOrderDTO {
         this.createTime = createTime;
     }
 
-    public List<RowAndColumnDTO> getOrderPlanSeats() {
-        return orderPlanSeats;
+    public List<RowAndColumnDTO> getOrderSeats() {
+        return orderSeats;
     }
 
-    public void setOrderPlanSeats(List<RowAndColumnDTO> orderPlanSeats) {
-        this.orderPlanSeats = orderPlanSeats;
+    public void setOrderSeats(List<RowAndColumnDTO> orderSeats) {
+        this.orderSeats = orderSeats;
     }
 
     public Character getSeatType() {
@@ -123,6 +133,26 @@ public class TakeOrderDTO {
         this.price = price;
     }
 
+    public Boolean getSeatSettled() {
+        return seatSettled;
+    }
+
+    public void setSeatSettled(Boolean seatSettled) {
+        this.seatSettled = seatSettled;
+    }
+
+    public void setMemberOrder(Boolean memberOrder) {
+        this.memberOrder = memberOrder;
+    }
+
+    public Boolean getBoughtOnline() {
+        return boughtOnline;
+    }
+
+    public void setBoughtOnline(Boolean boughtOnline) {
+        this.boughtOnline = boughtOnline;
+    }
+
     public boolean getMemberOrder() {
         return memberOrder;
     }
@@ -138,10 +168,12 @@ public class TakeOrderDTO {
                 ", venueId=" + venueId +
                 ", venuePlanId=" + venuePlanId +
                 ", createTime=" + createTime +
-                ", orderPlanSeats=" + orderPlanSeats +
+                ", orderSeats=" + orderSeats +
                 ", seatType=" + seatType +
                 ", seatNum=" + seatNum +
                 ", price=" + price +
+                ", seatSettled=" + seatSettled +
+                ", boughtOnline=" + boughtOnline +
                 ", memberOrder=" + memberOrder +
                 '}';
     }

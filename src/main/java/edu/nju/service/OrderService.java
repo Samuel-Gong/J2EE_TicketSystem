@@ -15,22 +15,6 @@ import java.util.List;
 public interface OrderService {
 
     /**
-     * 添加一个用户选座购买的订单记录
-     *
-     * @param takeOrderDTO 用户订单的数据传输对象
-     * @return 添加的订单编号
-     */
-    int addPickSeatOrder(TakeOrderDTO takeOrderDTO);
-
-    /**
-     * 添加一个用户立即购买的订单记录
-     *
-     * @param takeOrderDTO 用户订单的数据传输对象
-     * @return 添加的订单编号
-     */
-    int addBuyNowOrder(TakeOrderDTO takeOrderDTO);
-
-    /**
      * 根据用户邮箱、订单状态，获取未支付订单
      *
      * @param mail        用户邮箱
@@ -92,4 +76,12 @@ public interface OrderService {
      * 检查所有未支付订单，将超时的未支付订单设置为已过期
      */
     void checkUnpaidOrders();
+
+    /**
+     * 添加一个订单
+     *
+     * @param takeOrderDTO 订单数据传输对象
+     * @return 添加的订单编号
+     */
+    int addOrder(TakeOrderDTO takeOrderDTO);
 }

@@ -2,6 +2,8 @@ package edu.nju.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
+import edu.nju.dto.TakeOrderDTO;
+import edu.nju.util.LocalDateTimeUtil;
 import edu.nju.util.OrderStatus;
 
 import javax.persistence.*;
@@ -48,9 +50,14 @@ public class Order {
     private boolean seatSettled;
 
     /**
-     * 是否是现场购票
+     * 是否是线上购票
      */
-    private boolean boughtOnSite;
+    private boolean boughtOnline;
+
+    /**
+     * 是否是会员购票
+     */
+    private boolean memberOrder;
 
     /**
      * 预订的座位的字符串
@@ -88,6 +95,22 @@ public class Order {
      */
     @OneToMany(mappedBy = "order")
     private List<VenuePlanSeat> venuePlanSeats = new ArrayList<>();
+
+    public Order() {
+    }
+
+    public Order(TakeOrderDTO takeOrderDTO) {
+        //设定为当前时间
+        this.setCreateTime(LocalDateTimeUtil.now());
+        //设置订单总价
+        this.setPrice(takeOrderDTO.getPrice());
+        //订单是自选座位
+        this.setSeatSettled(takeOrderDTO.getSeatSettled());
+        //订单是否是现场购票
+        this.setBoughtOnline(takeOrderDTO.getBoughtOnline());
+        //订单是否是会员购票
+        this.setMemberOrder(takeOrderDTO.getMemberOrder());
+    }
 
     public Integer getOrderId() {
         return orderId;
@@ -129,12 +152,20 @@ public class Order {
         this.seatSettled = pickSeat;
     }
 
-    public boolean isBoughtOnSite() {
-        return boughtOnSite;
+    public boolean isBoughtOnline() {
+        return boughtOnline;
     }
 
-    public void setBoughtOnSite(boolean boughtOnSite) {
-        this.boughtOnSite = boughtOnSite;
+    public void setBoughtOnline(boolean boughtOnSite) {
+        this.boughtOnline = boughtOnSite;
+    }
+
+    public boolean isMemberOrder() {
+        return memberOrder;
+    }
+
+    public void setMemberOrder(boolean memberOrder) {
+        this.memberOrder = memberOrder;
     }
 
     public String getBookedSeatStr() {
