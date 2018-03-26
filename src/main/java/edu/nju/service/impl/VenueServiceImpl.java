@@ -207,4 +207,12 @@ public class VenueServiceImpl implements VenueService {
         venueList.forEach(venue -> Hibernate.initialize(venue.getSeatMap()));
         return venueList;
     }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean auditPass(int venueId) {
+        Venue venue = venueDao.getVenue(venueId);
+        venue.setAuditing(false);
+        return true;
+    }
 }

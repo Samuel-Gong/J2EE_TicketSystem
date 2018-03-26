@@ -157,4 +157,11 @@ public interface VenueService {
      * @return 正在审批的场馆
      */
     List<Venue> getAuditingVenues();
+
+    /**
+     * 场馆审批通过
+     * @param venueId 场馆编号
+     * @return 审批是否成功
+     */
+    boolean auditPass(int venueId);
 }

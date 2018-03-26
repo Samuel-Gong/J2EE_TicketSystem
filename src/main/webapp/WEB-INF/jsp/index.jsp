@@ -117,7 +117,7 @@
                 <h4 class="modal-title text-center">会员登录</h4>
             </div>
             <div class="modal-body">
-                <form id="login_form" action="/member/login" method="post">
+                <form id="login_form" action="${pageContext.request.contextPath}/member/login" method="post">
                     <div class="input-group">
                         <span class="input-group-addon">邮箱</span>
                         <input type="text" class="form-control" name="mail" placeholder="请输入邮箱">
@@ -146,7 +146,7 @@
                 <h4 class="modal-title text-center">会员注册</h4>
             </div>
             <div class="modal-body">
-                <form id="reg_form" action="/member/register" method="post">
+                <form id="reg_form" action="${pageContext.request.contextPath}/member/register" method="post">
                     <div class="input-group">
                         <span class="input-group-addon">邮箱</span>
                         <input type="email" class="form-control" name="mail" placeholder="请输入验证邮箱">
@@ -179,7 +179,8 @@
                 <h4 class="modal-title text-center">场馆登录</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="venue-login-form" action="/venue/login" method="post">
+                <form class="form-horizontal" id="venue-login-form"
+                      action="${pageContext.request.contextPath}/venue/login" method="post">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-md-3 control-label">编号</label>
                         <div class="col-md-7">

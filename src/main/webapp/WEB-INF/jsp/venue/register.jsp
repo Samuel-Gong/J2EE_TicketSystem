@@ -130,6 +130,11 @@
 
     $(document).ready(function () {
 
+        //座位添加由座位转换到空位的点击事件
+        seatInfo.a.click = seat2space;
+        //空位添加由空位转换到座位的点击事件
+        $("#seat-map-container").on("click", ".seatCharts-space:empty", space2seat);
+
         //点击座位不发生任何事情
         seatChartsSetting.clickDoNothing();
 
@@ -139,9 +144,6 @@
         $("#add-column").on("click", add_column);
         $("#delete-row").on("click", delete_row);
         $("#delete-column").on("click", delete_column);
-
-        //空位添加由空位转换到座位的点击事件
-        $("#seat-map-container").on("click", ".seatCharts-space:empty", space2seat);
 
         //注册按钮点击后，将数据封装成JSON对象传给后端
         $("#venue-register-btn").on("click", function () {

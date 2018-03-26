@@ -24,7 +24,7 @@
         </ul>
 
         <ul class="nav navbar-nav pull-right">
-            <li><a href="#">登出</a>
+            <li><a href="${pageContext.request.contextPath}/manager/logout">登出</a>
             </li>
         </ul>
     </div>
