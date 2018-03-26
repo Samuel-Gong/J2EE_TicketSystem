@@ -13,15 +13,15 @@
     <title>小麦网</title>
 
     <!-- Normalize -->
-    <link href="../../../css/normalize.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <!-- 模态框的css -->
-    <link href="../../../css/index.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/index.css" rel="stylesheet">
     <!-- footer的css -->
-    <link href="../../../css/footer.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/footer.css" rel="stylesheet">
     <!-- plan panel -->
-    <link href="../../../css/plan-panel.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/plan-panel.css" rel="stylesheet">
 
 </head>
 <body>
@@ -31,7 +31,7 @@
 <!-- nav end -->
 
 <!-- plan container -->
-<%--<%@include file="../../../html/plan-container.html" %>--%>
+<%--<%@include file="${pageContext.request.contextPath}/html/plan-container.html" %>--%>
 <div id="plans-container" class="container" style="height: 100%; overflow: scroll">
     <div class="row">
         <h2 class="text-center">近期演出</h2>
@@ -90,10 +90,10 @@
 <footer></footer>
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="../../../js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="../../../js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 
 <script>
 
@@ -102,7 +102,7 @@
         $("#plans-container").on("click", ".booking", function () {
             let venuePlanId = $(this).prev().val();
             // console.log(venuePlanId);
-            $(location).attr("href", "/member/booking/" + venuePlanId);
+            $(location).attr("href", "${pageContext.request.contextPath}/member/booking/" + venuePlanId);
         });
     });
 </script>

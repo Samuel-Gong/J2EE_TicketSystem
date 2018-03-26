@@ -58,6 +58,11 @@ public class Venue {
     private int columnNum;
 
     /**
+     * 表示是否正在审批
+     */
+    private boolean auditing;
+
+    /**
      * 座位分布
      */
     @OneToMany(mappedBy = "venue", cascade = {CascadeType.ALL}, orphanRemoval = true)
@@ -131,6 +136,14 @@ public class Venue {
 
     public void setColumnNum(int columnNum) {
         this.columnNum = columnNum;
+    }
+
+    public boolean isAuditing() {
+        return auditing;
+    }
+
+    public void setAuditing(boolean auditing) {
+        this.auditing = auditing;
     }
 
     public List<VenuePlan> getVenuePlans() {

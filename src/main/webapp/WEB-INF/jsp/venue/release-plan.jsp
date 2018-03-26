@@ -14,26 +14,26 @@
     <title>发布计划</title>
 
     <!-- Normalize -->
-    <link href="../../../css/normalize.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <!-- seat css -->
-    <link href="../../../css/seat.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/seat.css" rel="stylesheet">
 
     <!-- datetimepicker css -->
-    <link href="../../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     <!-- 场馆计划发布及更新css -->
-    <link href="../../../css/plan-release-detail.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/plan-release-detail.css" rel="stylesheet">
 
     <!-- footer -->
-    <link href="../../../css/footer.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/footer.css" rel="stylesheet">
 
 </head>
 <body>
 
 <!-- nav begin -->
-<%@include file="../../../html/venue/nav.html" %>
+<%@include file="${pageContext.request.contextPath}/html/venue/nav.html" %>
 <!-- nav end -->
 
 <!-- container begin -->
@@ -47,10 +47,10 @@
     <div id="all-venue-info" class="row">
         <div class="col-md-2">
             <h4 class="text-center">选中类型</h4>
-            <%@include file="../../../html/venue/seat-type-form.html" %>
+            <%@include file="${pageContext.request.contextPath}/html/venue/seat-type-form.html" %>
         </div>
         <div class="col-md-8">
-            <%@include file="../../../html/venue/seat-map-container.html" %>
+            <%@include file="${pageContext.request.contextPath}/html/venue/seat-map-container.html" %>
         </div>
         <div class="col-md-2">
             <div id="legend-info">
@@ -206,17 +206,17 @@
 <!-- 删除类型模态框 end -->
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="../../../js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="../../../js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <!-- seat js -->
-<script src="../../../js/jquery-seat-charts.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-seat-charts.js"></script>
 <!-- datetimepicker -->
-<script src="../../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.min.js"></script>
 <!-- datetimepicker locale -->
-<script src="../../../js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="${pageContext.request.contextPath}/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <!-- 对座位操作的js -->
-<script src="../../../js/seat-operation.js"></script>
+<script src="${pageContext.request.contextPath}/js/seat-operation.js"></script>
 
 <script>
 
@@ -580,7 +580,7 @@
                 processData: false,
                 success: function (data) {
                     alert("计划发布成功");
-                    $(location).attr("href", "/venue/planView")
+                    $(location).attr("href", "${pageContext.request.contextPath}/venue/planView")
                 },
                 error: function () {
                     alert("出错了");

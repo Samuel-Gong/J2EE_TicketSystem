@@ -12,11 +12,11 @@
 <head>
     <title>未支付订单</title>
     <!-- Normalize -->
-    <link href="../../../css/normalize.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <!-- footer -->
-    <link href="../../../css/footer.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/footer.css" rel="stylesheet">
     <style>
         .panel {
             margin-top: 20px;
@@ -147,11 +147,11 @@
 <footer></footer>
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="../../../js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="../../../js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <!-- date format -->
-<script src="../../../js/date-format.js"></script>
+<script src="${pageContext.request.contextPath}/js/date-format.js"></script>
 
 <script>
 
@@ -160,7 +160,7 @@
             function (data) {
                 if (data === "true") {
                     alert("订单支付成功");
-                    $(location).attr("href", "/member/order/booked");
+                    $(location).attr("href", "${pageContext.request.contextPath}/member/order/booked");
                 }
             }
         );

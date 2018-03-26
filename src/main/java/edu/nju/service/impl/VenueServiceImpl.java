@@ -61,25 +61,30 @@ public class VenueServiceImpl implements VenueService {
             venueSeat.setVenue(venue);
         }
         venueDao.addVenue(venue);
+        //表示正在审批
+        venue.setAuditing(true);
         return venue.getId();
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean login(int venueId, String venuePassword) {
-        return venueDao.getPassword(venueId).equals(venuePassword);
+        Venue venue = venueDao.getVenue(venueId);
+        //当场馆密码正确且没有在审批的时候才允许登录
+        return venue.getPassword().equals(venuePassword) && !venue.isAuditing();
     }
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean updateBasicInfo(VenueBasicInfoDTO venueBasicInfo) {
+        //todo 审批不准修改
         return venueDao.updateBasicInfo(venueBasicInfo);
     }
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfo) {
-        //todo 测试
+        //todo 审批不准修改
         Venue venue = getVenueWithSeatMap(venueSeatInfo.getVenueId());
         assert venue != null;
         //venueSeat和venue建立联系
@@ -193,5 +198,11 @@ public class VenueServiceImpl implements VenueService {
         VenuePlanSeat checkedInSeat = venueDao.getVenuePlanSeat(venuePlanId, row, column);
         checkedInSeat.setCheckIn(true);
         return true;
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public List<Venue> getAuditingVenues() {
+        return venueDao.getAuditingVenue();
     }
 }

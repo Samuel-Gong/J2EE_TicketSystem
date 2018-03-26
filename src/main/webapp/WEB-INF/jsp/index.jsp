@@ -14,13 +14,13 @@
     <title>小麦网</title>
 
     <!-- Normalize -->
-    <link href="../../css/normalize.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <!-- 模态框的css -->
-    <link href="../../css/index.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/index.css" rel="stylesheet">
     <!-- footer的css -->
-    <link href="../../css/footer.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/footer.css" rel="stylesheet">
 
     <style>
         .panel {
@@ -215,17 +215,20 @@
                 <h4 class="modal-title text-center">经理</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="manager-login-form" action="/manager/login" method="post">
+                <form class="form-horizontal" id="manager-login-form"
+                      action="${pageContext.request.contextPath}/manager/login" method="post">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-md-3 control-label">账号</label>
                         <div class="col-md-7">
-                            <input type="text" class="form-control" name="manager-id" placeholder="请输入账号">
+                            <input id="manager-id" type="text" class="form-control" name="manager-id"
+                                   placeholder="请输入账号">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-offset-1 col-md-3 control-label">密码</label>
-                        <div class="col-md-7">
-                            <input type="password" class="form-control" name="manager-password" placeholder="请输入密码">
+                        <div class="col-md-7"><input id="manager-password" type="password" class="form-control"
+                                                     name="manager-password"
+                                                     placeholder="请输入密码">
                         </div>
                     </div>
                 </form>
@@ -239,10 +242,10 @@
 <!-- manager login 模态框 end -->
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="../../js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
 
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="../../js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <script>
 
     //会员登录
@@ -262,7 +265,7 @@
 
     //场馆注册
     $("#venue-register-btn").on("click", function () {
-        $(location).attr("href", "/venue/registerView");
+        $(location).attr("href", "${pageContext.request.contextPath}/venue/registerView");
     });
 
     //经理登录

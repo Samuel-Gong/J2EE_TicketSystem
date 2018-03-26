@@ -14,17 +14,17 @@
     <title>计划详情</title>
 
     <!-- Normalize -->
-    <link href="../../../css/normalize.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <!-- seat css -->
-    <link href="../../../css/seat.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/seat.css" rel="stylesheet">
 
     <!-- datetimepicker css -->
-    <link href="../../../css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     <!-- 场馆计划发布及更新css -->
-    <link href="../../../css/plan-release-detail.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/plan-release-detail.css" rel="stylesheet">
 
 </head>
 <body>
@@ -89,17 +89,17 @@
 <!-- container end -->
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="../../../js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="../../../js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <!-- seat js -->
-<script src="../../../js/jquery-seat-charts.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-seat-charts.js"></script>
 <!-- datetimepicker -->
-<script src="../../../js/bootstrap-datetimepicker.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap-datetimepicker.min.js"></script>
 <!-- datetimepicker locale -->
-<script src="../../../js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="${pageContext.request.contextPath}/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 <!-- 对座位操作的js -->
-<script src="../../../js/seat-operation.js"></script>
+<script src="${pageContext.request.contextPath}/js/seat-operation.js"></script>
 
 <script>
 

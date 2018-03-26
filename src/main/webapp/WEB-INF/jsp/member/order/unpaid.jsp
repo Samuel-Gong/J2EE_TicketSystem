@@ -13,13 +13,13 @@
 <head>
     <title>未支付订单</title>
     <!-- Normalize -->
-    <link href="../../../../css/normalize.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="../../../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <!-- footer -->
-    <link href="../../../../css/footer.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/footer.css" rel="stylesheet">
     <!-- order -->
-    <link href="../../../../css/member/order.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/member/order.css" rel="stylesheet">
 </head>
 <body>
 
@@ -127,11 +127,11 @@
 <footer></footer>
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="../../../../js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="../../../../js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 <!-- date format -->
-<script src="../../../../js/date-format.js"></script>
+<script src="${pageContext.request.contextPath}/js/date-format.js"></script>
 
 <script>
 
@@ -141,14 +141,14 @@
     $("#order-container").on("click", ".pay-btn", function () {
         let orderId = $(this).prev().val();
         console.log(orderId);
-        $(location).attr("href", "/member/pay/" + orderId);
+        $(location).attr("href", "${pageContext.request.contextPath}/member/pay/" + orderId);
     });
 
     //取消支付按钮监听
     $("#order-container").on("click", ".cancel-btn", function () {
         let orderId = $(this).prev().val();
         console.log(orderId);
-        $(location).attr("href", "/member/pay/" + orderId);
+        $(location).attr("href", "${pageContext.request.contextPath}/member/pay/" + orderId);
     });
 
 </script>

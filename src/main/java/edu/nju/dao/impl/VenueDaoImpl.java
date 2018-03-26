@@ -176,4 +176,12 @@ public class VenueDaoImpl implements VenueDao {
                 .getSingleResult();
     }
 
+    @Override
+    public List<Venue> getAuditingVenue() {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Venue " +
+                        "where auditing = true ", Venue.class)
+                .list();
+    }
+
 }

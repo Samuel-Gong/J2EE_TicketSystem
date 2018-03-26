@@ -154,4 +154,10 @@ public interface VenueDao {
      * @return
      */
     VenuePlanSeat getVenuePlanSeat(int venuePlanId, int row, int column);
+
+    /**
+     * 获取正在审批的场馆
+     * @return 审批场馆列表
+     */
+    List<Venue> getAuditingVenue();
 }

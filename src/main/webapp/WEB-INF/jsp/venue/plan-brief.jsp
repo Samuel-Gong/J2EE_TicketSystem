@@ -14,11 +14,11 @@
     <title>查看计划</title>
 
     <!-- Normalize -->
-    <link href="../../../css/normalize.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/normalize.css" rel="stylesheet">
     <!-- Bootstrap -->
-    <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
     <!-- footer -->
-    <link href="../../../css/footer.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/css/footer.css" rel="stylesheet">
 
     <style>
         .panel {
@@ -99,21 +99,21 @@
 <%@include file="../../../html/footer.html" %>
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="../../../js/jquery-3.3.1.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="../../../js/bootstrap.min.js"></script>
+<script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 
 <script>
     $("#plans-container").on("click", ".detail-btn", function () {
-        $(location).attr("href", "/venue/planView/" + $(this).prev().val());
+        $(location).attr("href", "${pageContext.request.contextPath}${pageContext.request.contextPath}/venue/planView/" + $(this).prev().val());
     });
 
     $("#plans-container").on("click", ".buy-on-site-btn", function () {
-        $(location).attr("href", "/venue/buy/" + $(this).prev().val());
+        $(location).attr("href", "${pageContext.request.contextPath}${pageContext.request.contextPath}/venue/buy/" + $(this).prev().val());
     });
 
     $("#plans-container").on("click", ".check-in-btn", function () {
-        $(location).attr("href", "/venue/checkIn/" + $(this).prev().val());
+        $(location).attr("href", "${pageContext.request.contextPath}${pageContext.request.contextPath}/venue/checkIn/" + $(this).prev().val());
     });
 </script>
 </body>

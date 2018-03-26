@@ -150,4 +150,11 @@ public interface VenueService {
      * @return 检票登记是否成功
      */
     boolean seatCheckIn(SeatCheckInDTO seatCheckInDTO);
+
+    /**
+     * 获取所有正在审批的场馆
+     *
+     * @return 正在审批的场馆
+     */
+    List<Venue> getAuditingVenues();
 }

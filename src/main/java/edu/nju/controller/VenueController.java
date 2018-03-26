@@ -174,8 +174,10 @@ public class VenueController {
             model.addAttribute("venueId", venueId);
             return "redirect:/venue/infoView";
         }
-        //todo 错误界面
-        return "";
+        else {
+            model.addAttribute("errorMsg", "密码错误或正在审批中，不可登陆");
+            return "/venue/error";
+        }
     }
 
     /**
