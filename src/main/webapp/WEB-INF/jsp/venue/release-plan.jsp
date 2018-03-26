@@ -33,7 +33,7 @@
 <body>
 
 <!-- nav begin -->
-<%@include file="${pageContext.request.contextPath}/html/venue/nav.html" %>
+<%@include file="nav.jsp" %>
 <!-- nav end -->
 
 <!-- container begin -->
@@ -47,10 +47,10 @@
     <div id="all-venue-info" class="row">
         <div class="col-md-2">
             <h4 class="text-center">选中类型</h4>
-            <%@include file="${pageContext.request.contextPath}/html/venue/seat-type-form.html" %>
+            <%@include file="../../../html/venue/seat-type-form.html" %>
         </div>
         <div class="col-md-8">
-            <%@include file="${pageContext.request.contextPath}/html/venue/seat-map-container.html" %>
+            <%@include file="../../../html/venue/seat-map-container.html" %>
         </div>
         <div class="col-md-2">
             <div id="legend-info">
@@ -573,7 +573,7 @@
             console.log(JSON.stringify(venuePlan));
 
             $.ajax({
-                url: "/venue/addPlan",
+                url: "${pageContext.request.contextPath}/venue/addPlan",
                 method: "post",
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify(venuePlan),

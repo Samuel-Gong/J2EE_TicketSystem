@@ -71,7 +71,7 @@
 </head>
 <body>
 
-<%@include file="${pageContext.request.contextPath}/html/venue/nav.html" %>
+<%@include file="nav.jsp" %>
 
 <!-- container begin -->
 <div id="venue-info-container" class="container">
@@ -284,7 +284,7 @@
             };
 
             $.ajax({
-                url: "/venue/updateSeatMap",
+                url: "${pageContext.request.contextPath}/venue/updateSeatMap",
                 contentType: "application/json;charset=utf-8",
                 method: "post",
                 data: JSON.stringify(seatMapInfo),
@@ -316,7 +316,7 @@
             };
 
             $.ajax({
-                url: "/venue/updateBasicInfo",
+                url: "${pageContext.request.contextPath}/venue/updateBasicInfo",
                 contentType: "application/json;charset=utf-8",
                 method: "post",
                 data: JSON.stringify(venueBasicInfoDTO),

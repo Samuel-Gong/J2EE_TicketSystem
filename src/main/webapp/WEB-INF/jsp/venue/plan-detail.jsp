@@ -30,7 +30,7 @@
 <body>
 
 <!-- nav begin -->
-<%@include file="../../../html/venue/nav.html" %>
+<%@include file="nav.jsp" %>
 <!-- nav end -->
 
 <!-- container begin -->

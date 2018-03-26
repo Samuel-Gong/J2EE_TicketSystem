@@ -28,6 +28,10 @@
     <context:component-scan base-package="edu.nju"/>
     <context:annotation-config/>
 
+    <!-- 可以使用@FastJsonView注解, 对Controller中的有@ResponseBody或返回ResponseEntity方法起作用 -->
+    <bean id="fastJsonViewResponseBodyAdvice"
+          class="com.alibaba.fastjson.support.spring.FastJsonViewResponseBodyAdvice"/>
+
     <!-- 启用默认配置 -->
     <mvc:annotation-driven>
         <mvc:message-converters>

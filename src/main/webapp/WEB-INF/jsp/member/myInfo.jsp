@@ -146,7 +146,7 @@
         $("#modify_password_confirm_btn").on("click", function () {
             alert("oldPassword: " + $("#oldPassword").val() + "newPassword: " + $("#newPassword").val());
             $.ajax({
-                url: "/member/modifyPassword",
+                url: "${pageContext.request.contextPath}/member/modifyPassword",
                 method: "post",
                 data: {
                     "oldPassword": $("#oldPassword").val(),
@@ -167,7 +167,7 @@
 
         $("#disqualify_confirm_btn").on("click", function () {
             $.ajax({
-                url: "/member/disqualify",
+                url: "${pageContext.request.contextPath}/member/disqualify",
                 method: "get",
                 dataType: "text",
                 success: function (data, value) {

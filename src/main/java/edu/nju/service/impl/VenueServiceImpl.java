@@ -203,6 +203,8 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<Venue> getAuditingVenues() {
-        return venueDao.getAuditingVenue();
+        List<Venue> venueList = venueDao.getAuditingVenue();
+        venueList.forEach(venue -> Hibernate.initialize(venue.getSeatMap()));
+        return venueList;
     }
 }

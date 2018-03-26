@@ -1,3 +1,12 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: Shenmiu
+  Date: 26/03/2018
+  Time: 16:13
+  
+  Description:
+--%>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <!-- nav begin -->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -9,7 +18,7 @@
 
         <!-- 导航内容 -->
         <ul class="nav navbar-nav">
-            <li><a href="#">审批</a></li>
+            <li><a href="${pageContext.request.contextPath}/manager/audit">审批</a></li>
             <li><a href="#">结算</a></li>
             <li><a href="#">统计信息</a></li>
         </ul>

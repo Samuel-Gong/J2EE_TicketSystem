@@ -169,7 +169,7 @@
             console.log(JSON.stringify(venue));
 
             $.ajax({
-                url: "/venue/register",
+                url: "${pageContext.request.contextPath}/venue/register",
                 contentType: "application/json;charset=utf-8",
                 method: "post",
                 data: JSON.stringify(venue),

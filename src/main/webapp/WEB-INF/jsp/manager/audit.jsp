@@ -31,28 +31,28 @@
 <body>
 
 <!-- nav begin -->
-<%@include file="../../../html/manager/nav.html" %>
+<%@include file="nav.jsp" %>
 <!-- nav end -->
 
-<table class="table text-center">
-    <caption>待审批场馆列表</caption>
-    <thead>
-    <tr>
-        <th>场馆编号</th>
-        <th>场馆名称</th>
-        <th>场馆所在城市</th>
-        <th>详情查看</th>
-    </tr>
-    </thead>
-    <tbody id="venue-table">
-        <td>南京</td>
-    </tr>
-    <tr>
-        <td>Sachin</td>
-        <td>Mumbai</td>
-    </tr>
-    </tbody>
-</table>
+<div class="container">
+    <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <table class="table text-center">
+                <caption class="text-center">待审批场馆列表</caption>
+                <thead>
+                <tr>
+                    <th class="text-center">场馆编号</th>
+                    <th class="text-center">场馆名称</th>
+                    <th class="text-center">场馆所在城市</th>
+                    <th class="text-center">详情查看</th>
+                </tr>
+                </thead>
+                <tbody id="venue-table">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
@@ -73,7 +73,7 @@
                 "        <td>" + venue.id + "</td>\n" +
                 "        <td>" + venue.name + "</td>\n" +
                 "        <td>" + venue.city + "</td>\n" +
-                "        <td><button type='button' class='btn btn-link' href='/manager/audit/venue/" + venue.id + "' >查看详情</button></td>\n" +
+                "        <td><a href='${pageContext.request.contextPath}/manager/audit/venue/" + venue.id + "' >查看详情</a></td>\n" +
                 "    </tr>");
         });
     }
@@ -81,11 +81,12 @@
     $(document).ready(function () {
 
         $.ajax({
-            url: "/manager/venues",
+            url: "${pageContext.request.contextPath}/manager/audit/venues",
             method: "get",
             dataType: "json",
             success: function (venues) {
-                addVenues(JSON.stringify(venues));
+                console.log(venues);
+                addVenues(venues);
             },
             error: function () {
                 alert("获取场馆数据错误");

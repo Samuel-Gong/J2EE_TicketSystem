@@ -28,7 +28,7 @@
 </head>
 <body>
 <%-- nav begin --%>
-<%@include file="../../../html/venue/nav.html" %>
+<%@include file="nav.jsp" %>
 <%-- nav end --%>
 
 <div id="plans-container" class="container">

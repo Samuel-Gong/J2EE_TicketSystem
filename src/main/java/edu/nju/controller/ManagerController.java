@@ -29,10 +29,11 @@ public class ManagerController {
     @Autowired
     private VenueService venueService;
 
+    @FastJsonView(include = @FastJsonFilter(clazz = Venue.class, props = {"id", "name", "city"}))
     @GetMapping(path = "/test")
     public @ResponseBody
-    boolean test() {
-        return true;
+    Venue test() {
+        return venueService.getVenue(1000000);
     }
 
     /**

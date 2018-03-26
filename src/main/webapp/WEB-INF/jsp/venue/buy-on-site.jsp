@@ -37,7 +37,7 @@
 <body>
 
 <!-- nav begin -->
-<%@include file="${pageContext.request.contextPath}/html/venue/nav.html" %>
+<%@include file="nav.jsp" %>
 <!-- nav end -->
 
 <!-- container begin -->
@@ -82,7 +82,7 @@
             </div>
         </div>
         <div class="col-md-8">
-            <%@include file="${pageContext.request.contextPath}/html/venue/seat-map-container.html" %>
+            <%@include file="../../../html/venue/seat-map-container.html" %>
         </div>
         <div class="col-md-2">
             <h4 class="text-center">已选座位</h4>
@@ -312,7 +312,7 @@
         let memberId = $("#member-id").val();
         console.log(memberId);
         $.ajax({
-            url: "/member/discount",
+            url: "${pageContext.request.contextPath}/member/discount",
             method: "post",
             data: {
                 mail: memberId

@@ -37,7 +37,7 @@
 <body>
 
 <!-- nav begin -->
-<%@include file="${pageContext.request.contextPath}/html/venue/nav.html" %>
+<%@include file="nav.jsp" %>
 <!-- nav end -->
 
 <!-- container begin -->
@@ -93,7 +93,7 @@
             </div>
         </div>
         <div class="col-md-8">
-            <%@include file="${pageContext.request.contextPath}/html/venue/seat-map-container.html" %>
+            <%@include file="../../../html/venue/seat-map-container.html" %>
         </div>
         <div class="col-md-2">
             <h4 class="text-center">检票登记</h4>
@@ -145,7 +145,7 @@
                 alert("该座位还未预订，不能检票登记");
             } else {
                 $.ajax({
-                    url: "/venue/checkIn",
+                    url: "${pageContext.request.contextPath}/venue/checkIn",
                     method: "post",
                     data:
                         {

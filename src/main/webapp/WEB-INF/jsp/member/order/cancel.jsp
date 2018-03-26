@@ -29,7 +29,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-2 col-md-offset-1">
-            <%@include file="../../../../html/member/side-nav.html" %>
+            <%@include file="../side-nav.jsp" %>
         </div>
         <div id="cancel-container" class="col-md-8">
             <c:forEach items="${cancelOrders}" var="detailOrder">
