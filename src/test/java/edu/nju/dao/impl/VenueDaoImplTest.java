@@ -1,7 +1,6 @@
 package edu.nju.dao.impl;
 
 import edu.nju.dao.VenueDao;
-import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenueSeat;
 import org.junit.jupiter.api.Assertions;
@@ -10,9 +9,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
-
-import java.util.ArrayList;
-import java.util.List;
 
 class VenueDaoImplTest {
 
@@ -52,30 +48,6 @@ class VenueDaoImplTest {
         venue.getSeatMap().add(venueSeat);
 
         Assertions.assertEquals(true, venueDao.addVenue(venue));
-
-    }
-
-    @Disabled
-    @Test
-    void updateSeatMap() {
-
-        VenueSeatInfoDTO venueSeatInfoDTO = new VenueSeatInfoDTO();
-
-        venueSeatInfoDTO.setRowNum(10);
-        venueSeatInfoDTO.setColumnNum(10);
-        venueSeatInfoDTO.setVenueId(2);
-
-        List<VenueSeat> venueSeats = new ArrayList<>();
-
-        VenueSeat venueSeat = new VenueSeat();
-        venueSeat.setColumn(9);
-        venueSeat.setRow(9);
-
-        venueSeat.setHasSeat(false);
-
-        venueSeats.add(venueSeat);
-
-        Assertions.assertEquals(true, venueDao.updateSeatMap(venueSeatInfoDTO));
 
     }
 

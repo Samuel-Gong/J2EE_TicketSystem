@@ -8,7 +8,6 @@ import edu.nju.dto.TakeOrderDTO;
 import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.model.*;
 import edu.nju.service.OrderService;
-import edu.nju.util.LocalDateTimeUtil;
 import edu.nju.util.OrderStatus;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,14 +63,22 @@ public class OrderServiceImpl implements OrderService {
         order.setVenue(venue);
         order.setVenuePlan(venuePlan);
 
-        //得到persistent状态的场馆计划座位，更新available状态，设置联系order的外键
-        List<VenuePlanSeat> selectedVenuePlanSeats = venueDao.getSpecificSeats(takeOrderDTO.getVenuePlanId(), takeOrderDTO.getOrderSeats());
-        selectedVenuePlanSeats.forEach(seat -> {
-            seat.setAvailable(false);
-            seat.setOrder(order);
-        });
+        //如果是选定座位购票
+        if (takeOrderDTO.getSeatSettled()) {
+            //得到persistent状态的场馆计划座位，更新available状态，设置联系order的外键
+            List<VenuePlanSeat> selectedVenuePlanSeats = venueDao.getSpecificSeats(takeOrderDTO.getVenuePlanId(), takeOrderDTO.getOrderSeats());
+            selectedVenuePlanSeats.forEach(seat -> {
+                seat.setAvailable(false);
+                seat.setOrder(order);
+            });
 
-        order.setVenuePlanSeats(selectedVenuePlanSeats);
+            order.setVenuePlanSeats(selectedVenuePlanSeats);
+        }
+        //立即购票
+        else {
+            order.setSeatType(takeOrderDTO.getSeatType());
+            order.setSeatNum(takeOrderDTO.getSeatNum());
+        }
 
         //添加一条订单
         orderDao.addOrder(order);
@@ -159,50 +166,6 @@ public class OrderServiceImpl implements OrderService {
 
         setBookedSeatStr(order);
         detachSeat(order);
-
-        return true;
-    }
-
-    @Override
-    @Transactional(rollbackFor = RuntimeException.class)
-    public boolean takeOrderOnSite(TakeOrderDTO takeOrderDTO) {
-
-        Venue venue = venueDao.getVenue(takeOrderDTO.getVenueId());
-        VenuePlan venuePlan = venueDao.getVenuePlan(takeOrderDTO.getVenuePlanId());
-
-        Order order = new Order();
-        //设定为当前时间
-        order.setCreateTime(LocalDateTimeUtil.now());
-        //设置订单总价
-        order.setPrice(takeOrderDTO.getPrice());
-        //订单状态设置为已预订
-        order.setOrderStatus(OrderStatus.BOOKED);
-        //订单是自选座位
-        order.setSeatSettled(true);
-        //订单是否是现场购票
-        order.setBoughtOnline(true);
-
-        //判断是否是会员订单
-        if (takeOrderDTO.getMemberOrder()) {
-            Member member = memberDao.getMember(takeOrderDTO.getMail());
-            order.setMemberFK(member);
-        }
-        order.setVenue(venue);
-        order.setVenuePlan(venuePlan);
-
-        //得到persistent状态的场馆计划座位，更新available状态，设置联系order的外键
-        List<VenuePlanSeat> selectedVenuePlanSeats = venueDao.getSpecificSeats(takeOrderDTO.getVenuePlanId(), takeOrderDTO.getOrderSeats());
-        selectedVenuePlanSeats.forEach(seat -> {
-            seat.setAvailable(false);
-            seat.setOrder(order);
-        });
-
-        order.setVenuePlanSeats(selectedVenuePlanSeats);
-
-        //添加一条订单
-        orderDao.addOrder(order);
-
-        //todo quartz任务调度
 
         return true;
     }

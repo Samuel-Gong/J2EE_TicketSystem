@@ -2,12 +2,10 @@ package edu.nju.dao.impl;
 
 import edu.nju.dao.VenueDao;
 import edu.nju.dto.RowAndColumnDTO;
-import edu.nju.dto.VenueBasicInfoDTO;
-import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
 import edu.nju.model.VenuePlanSeat;
-import edu.nju.model.VenueSeat;
+import edu.nju.util.LocalDateTimeUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -44,52 +42,7 @@ public class VenueDaoImpl implements VenueDao {
         return sessionFactory.getCurrentSession().get(Venue.class, venueId);
     }
 
-    @Override
-    public void updateVenue(Venue venue) {
-        sessionFactory.getCurrentSession().update(venue);
-    }
-
-    @Override
-    public String getPassword(int venueId) {
-        Session session = sessionFactory.getCurrentSession();
-        Query<String> query = session.createQuery("select password from Venue where id = :id", String.class)
-                .setParameter("id", venueId);
-
-        return query.getSingleResult();
-    }
-
-    @Override
-    public boolean updateBasicInfo(VenueBasicInfoDTO venueBasicInfo) {
-        Session session = sessionFactory.getCurrentSession();
-        int count = session.createQuery("update Venue set name = :name, city = :city " +
-                "where id = :id")
-                .setParameter("name", venueBasicInfo.getName())
-                .setParameter("city", venueBasicInfo.getCity())
-                .setParameter("id", venueBasicInfo.getVenueId())
-                .executeUpdate();
-
-        return count > 0;
-    }
-
     // SeatMap
-
-    @Override
-    public void addSeatMap(List<VenueSeat> seatMap) {
-        Session session = sessionFactory.getCurrentSession();
-        for (VenueSeat venueSeat : seatMap) {
-            session.save(venueSeat);
-        }
-    }
-
-    @Override
-    public boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfoDTO) {
-        //todo 测试
-        Session session = sessionFactory.getCurrentSession();
-        for (VenueSeat venueSeat : venueSeatInfoDTO.getSeatMap()) {
-            session.update(venueSeat);
-        }
-        return true;
-    }
 
     @Override
     public void deleteSeatMap(int venueId) {
@@ -180,6 +133,24 @@ public class VenueDaoImpl implements VenueDao {
                 .createQuery("from Venue " +
                         "where auditing = true ", Venue.class)
                 .list();
+    }
+
+    @Override
+    public List<VenuePlan> getCompleteVenuePlans() {
+        Session session = sessionFactory.getCurrentSession();
+        //场馆计划结束时间早于当前时间，说明场馆计划已经结束
+        Query<VenuePlan> query = session.createQuery("from VenuePlan where endTime <= :now and complete = false", VenuePlan.class);
+        query.setParameter("now", LocalDateTimeUtil.nowTillMinute());
+        return query.list();
+    }
+
+    @Override
+    public List<VenuePlan> getNeedSendTickets(int sendTicketsWeek) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<VenuePlan> query = session.createQuery("from VenuePlan where begin <= :needSendTime and sendTickets = false ", VenuePlan.class);
+        //场馆计划开始时间早于当前时间+2周，
+        query.setParameter("needSendTime", LocalDateTimeUtil.nowTillMinute().plusWeeks(2));
+        return query.list();
     }
 
 }

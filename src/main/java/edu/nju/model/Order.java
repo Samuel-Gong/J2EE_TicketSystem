@@ -34,6 +34,16 @@ public class Order {
     private LocalDateTime createTime;
 
     /**
+     * 立即购买选择的座位类型
+     */
+    private Character seatType;
+
+    /**
+     * 立即购买选用的座位数量
+     */
+    private Integer seatNum;
+
+    /**
      * 订单总价
      */
     private int price;
@@ -48,6 +58,11 @@ public class Order {
      * 座位是否固定
      */
     private boolean seatSettled;
+
+    /**
+     * 是否位置足够，默认未true
+     */
+    private boolean seatEnough = true;
 
     /**
      * 是否是线上购票
@@ -101,7 +116,7 @@ public class Order {
 
     public Order(TakeOrderDTO takeOrderDTO) {
         //设定为当前时间
-        this.setCreateTime(LocalDateTimeUtil.now());
+        this.setCreateTime(LocalDateTimeUtil.nowTillMinute());
         //设置订单总价
         this.setPrice(takeOrderDTO.getPrice());
         //订单是自选座位
@@ -118,6 +133,22 @@ public class Order {
 
     public void setOrderId(Integer orderID) {
         this.orderId = orderID;
+    }
+
+    public Character getSeatType() {
+        return seatType;
+    }
+
+    public void setSeatType(Character seatType) {
+        this.seatType = seatType;
+    }
+
+    public Integer getSeatNum() {
+        return seatNum;
+    }
+
+    public void setSeatNum(Integer seatNum) {
+        this.seatNum = seatNum;
     }
 
     public int getPrice() {
@@ -150,6 +181,14 @@ public class Order {
 
     public void setSeatSettled(boolean pickSeat) {
         this.seatSettled = pickSeat;
+    }
+
+    public boolean isSeatEnough() {
+        return seatEnough;
+    }
+
+    public void setSeatEnough(boolean seatEnough) {
+        this.seatEnough = seatEnough;
     }
 
     public boolean isBoughtOnline() {

@@ -4,8 +4,8 @@
   User: Shenmiu
   Date: 25/03/2018
   Time: 12:04
-  
-  Description:
+
+  Description:  订单支付界面
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
 <html>
@@ -104,10 +104,9 @@
                 </div>
             </div>
         </div>
-        <%-- todo 倒计时 --%>
-        <%--<div class="col-md-4 col-md-offset-4">--%>
-        <%--<h3>剩余支付时间:<span id="countdown-minute"></span>分<span id="countdown-second"></span>秒</h3>--%>
-        <%--</div>--%>
+        <div class="col-md-4 col-md-offset-4">
+            <h3>剩余支付时间:<span id="countdown-minute"></span>分<span id="countdown-second"></span>秒</h3>
+        </div>
     </div>
     <div class="row">
         <div id="pay-container" class="col-md-8 col-md-offset-2">
@@ -156,11 +155,14 @@
 <script>
 
     $("#pay-btn").on("click", function () {
-        $.get("/member/order/pay/" + ${order.orderId},
+        $.get("${pageContext.request.contextPath}/member/order/pay/" + ${order.orderId},
             function (data) {
-                if (data === "true") {
+                if (data === true) {
                     alert("订单支付成功");
                     $(location).attr("href", "${pageContext.request.contextPath}/member/order/booked");
+                }
+                else {
+                    alert("订单支付失败");
                 }
             }
         );
@@ -192,13 +194,13 @@
         setTimeout(countdown, 1000);
     }
 
-    let createTime = new Date(${unpaidOrder.createTime});
-    console.log(createTime.Format("yyyy-MM-dd hh:mm:ss"));
-    let now = new Date();
+    let createTime = moment(${unpaidOrder.createTime}, "YYYY-MM-DD HH:mm:ss");
+    let now = moment();
 
-    //设定倒数秒数
-    let minute = 14 - parseInt((now - createTime) / 1000 / 60);
-    let second = 60 - parseInt((now - createTime - minute * 1000 * 60) / 1000);
+    //获取相差分数
+    let minute = now.diff(createTime, "minutes");
+    //减去分钟后还相差的秒数
+    let second = now.diff(createTime, "seconds") - 60 * minute;
 
     countdown();
 

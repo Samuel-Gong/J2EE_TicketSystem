@@ -97,6 +97,7 @@
                         <input id="buy-now-radio" type="radio" name="book-type-options" value="buyNow">立即购买
                     </label>
                 </div>
+                <p id="time-not-enough" class="help-block hidden">距演出开始不足两周，不能立即购票</p>
             </form>
             <div id="selected-seat-form">
                 <h4 class="text-center">已选座位</h4>
@@ -131,6 +132,8 @@
 <script src="${pageContext.request.contextPath}/js/seat-operation.js"></script>
 <!-- date -->
 <script src="${pageContext.request.contextPath}/js/date-format.js"></script>
+<!-- 专门处理日期的js -->
+<script src="${pageContext.request.contextPath}/js/moment.min.js"></script>
 
 <script>
 
@@ -240,6 +243,24 @@
         }
     }
 
+    $("#buy-now-seat-num").on("input", function () {
+        let typeChar = $("#seat-type-list").val();
+        //单价
+        let singleSeatPrice;
+        $.each(seatTypes, function (index, seatType) {
+            if (typeChar === seatType.typeChar) {
+                singleSeatPrice = seatType.price;
+            }
+        });
+        //座位数量
+        let seatNum = $(this).val();
+
+        console.log(singleSeatPrice);
+        console.log(seatNum);
+        //显示总价
+        $("#total-price").text(singleSeatPrice * seatNum);
+    });
+
     /**
      * 立即购买切换到选座购买
      */
@@ -286,7 +307,7 @@
             mail: "${sessionScope.mail}",
             venueId: planDetail.venueId,
             venuePlanId: venuePlan.venuePlanId,
-            createTime: new Date().Format("yyyy-MM-dd hh:mm:ss"),
+            createTime: moment().format("YYYY-MM-DD HH:mm:ss"),
             price: parseInt($("#total-price").text()),
             //线上购买
             boughtOnline: true,
@@ -318,6 +339,7 @@
         }
         //立即购买
         else {
+            let seatNum = $("#buy-now-seat-num").val();
             data["seatSettled"] = false;
             data["seatType"] = $("#seat-type-list").val();
             data["seatNum"] = $("#buy-now-seat-num").val();
@@ -379,6 +401,15 @@
                 "<option value='" + typeChar + "'>" + typeChar + "</option>"
             );
         });
+
+        //检查当前时间与场馆计划开始时间是否相差两周，如果相差两周就准许立即买票
+        let begin = moment(venuePlan.begin, "YYYY-MM-DD HH:mm:ss");
+        let now = moment();
+        //如果当前时间往后推两周在场馆计划开始之后，将立即购票的radio disabled
+        if (now.add(2, "weeks").isAfter(begin)) {
+            $("#buy-now-radio").attr("disabled", "disabled");
+            $("#time-not-enough").removeClass("hidden");
+        }
 
         //初始化seatMap
         fillSeatMapWithType(planDetail.rowNum, planDetail.columnNum, venuePlan.venuePlanSeats);

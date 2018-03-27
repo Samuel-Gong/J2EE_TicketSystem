@@ -165,4 +165,14 @@ public interface VenueService {
      * @return 场馆是否可以修改信息
      */
     boolean modifyCheck(int venueId);
+
+    /**
+     * 检查有没有距离演出开始不足两周的演出计划，并给未配票订单配票
+     */
+    void sendTickets();
+
+    /**
+     * 检查已经结束的场馆计划，并将已预订订单置为已消费订单
+     */
+    void checkCompleteVenuePlans();
 }

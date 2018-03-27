@@ -11,12 +11,12 @@ public class LevelAndDiscount {
     /**
      * 会员等级
      */
-    Integer level;
+    private Integer level;
 
     /**
      * 会员折扣
      */
-    Integer discount;
+    private Integer discount;
 
     public Integer getLevel() {
         return level;

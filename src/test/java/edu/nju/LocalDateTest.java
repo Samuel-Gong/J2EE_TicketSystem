@@ -55,6 +55,6 @@ class LocalDateTest {
 
     @Test
     void now() {
-        System.out.println(LocalDateTimeUtil.now());
+        System.out.println(LocalDateTimeUtil.nowTillMinute());
     }
 }

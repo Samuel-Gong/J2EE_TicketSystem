@@ -21,8 +21,17 @@ public class LocalDateTimeUtil {
      *
      * @return 当前时间，精确到分
      */
-    public static LocalDateTime now() {
+    public static LocalDateTime nowTillMinute() {
         return LocalDateTime.parse(dtfTillMinute.format(LocalDateTime.now()), dtfTillMinute);
+    }
+
+    /**
+     * 返回当前时间，时间格式为yyyy-MM-dd HH:mm:ss
+     *
+     * @return 当前时间，精确到秒
+     */
+    public static LocalDateTime nowTillSecond() {
+        return LocalDateTime.parse(dtfTillMinute.format(LocalDateTime.now()), dtfTillSecond);
     }
 
     /**
@@ -47,11 +56,11 @@ public class LocalDateTimeUtil {
 
     /**
      * 转化为毫秒数
+     *
      * @param localDateTime 需要转化的时间
      * @return 毫秒数
      */
     public static Long toMillis(LocalDateTime localDateTime) {
         return localDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
     }
-
 }

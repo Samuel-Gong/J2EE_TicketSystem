@@ -34,16 +34,16 @@ public class VenuePlan {
     /**
      * 场馆计划开始时间，每个计划的开始时间不可以相同
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm")
+    @JSONField(name = "begin", format = "yyyy-MM-dd HH:mm")
     @Column(nullable = false, unique = true)
     private LocalDateTime begin;
 
     /**
      * 场馆计划结束时间，每个计划的结束时间不可以相同
      */
-    @JSONField(format = "yyyy-MM-dd HH:mm")
+    @JSONField(name = "end", format = "yyyy-MM-dd HH:mm")
     @Column(nullable = false, unique = true)
-    private LocalDateTime end;
+    private LocalDateTime endTime;
 
     /**
      * 演出类型
@@ -55,6 +55,16 @@ public class VenuePlan {
      * 简单描述
      */
     private String description;
+
+    /**
+     * 是否已经结束
+     */
+    private boolean complete;
+
+    /**
+     * 是否已经配票
+     */
+    private boolean sendTickets;
 
     /**
      * 与场馆多对一，外键为场馆编号
@@ -98,12 +108,12 @@ public class VenuePlan {
         this.begin = begin;
     }
 
-    public LocalDateTime getEnd() {
-        return end;
+    public LocalDateTime getEndTime() {
+        return endTime;
     }
 
-    public void setEnd(LocalDateTime end) {
-        this.end = end;
+    public void setEndTime(LocalDateTime end) {
+        this.endTime = end;
     }
 
     public ShowType getShowType() {
@@ -120,6 +130,22 @@ public class VenuePlan {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isComplete() {
+        return complete;
+    }
+
+    public void setComplete(boolean complete) {
+        this.complete = complete;
+    }
+
+    public boolean isSendTickets() {
+        return sendTickets;
+    }
+
+    public void setSendTickets(boolean sendTickets) {
+        this.sendTickets = sendTickets;
     }
 
     public Venue getVenue() {
@@ -168,7 +194,7 @@ public class VenuePlan {
         if (!begin.equals(venuePlan.begin)) {
             return false;
         }
-        if (!end.equals(venuePlan.end)) {
+        if (!endTime.equals(venuePlan.endTime)) {
             return false;
         }
         return venue.equals(venuePlan.venue);
@@ -177,7 +203,7 @@ public class VenuePlan {
     @Override
     public int hashCode() {
         int result = begin.hashCode();
-        result = 31 * result + end.hashCode();
+        result = 31 * result + endTime.hashCode();
         result = 31 * result + venue.hashCode();
         return result;
     }

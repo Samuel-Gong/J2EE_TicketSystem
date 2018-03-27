@@ -7,12 +7,13 @@ import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenuePlanDetailDTO;
 import edu.nju.model.*;
 import edu.nju.service.VenueService;
+import edu.nju.util.LocalDateTimeUtil;
+import edu.nju.util.OrderStatus;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -239,6 +240,80 @@ public class VenueServiceImpl implements VenueService {
         return venuePlans.size() == 0 || allPlansPassOver(venuePlans);
     }
 
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void sendTickets() {
+        final int sendTicketsWeek = 2;
+
+        List<VenuePlan> needSendTickets = venueDao.getNeedSendTickets(sendTicketsWeek);
+
+        for (int i = 0; i < needSendTickets.size(); i++) {
+            VenuePlan venuePlan = needSendTickets.get(i);
+            //设置为已配票
+            venuePlan.setSendTickets(true);
+
+            //找出所有该场馆计划下没有配票的已预订订单
+            List<Order> seatUnsettledOrders = venuePlan.getOrders().stream()
+                    .filter(order -> order.getOrderStatus() == OrderStatus.BOOKED && !order.isSeatSettled())
+                    .collect(Collectors.toList());
+
+            //找出所有该场馆计划下还可用的座位
+            List<VenuePlanSeat> availableSeats = venuePlan.getVenuePlanSeats().stream()
+                    .filter(VenuePlanSeat::isAvailable)
+                    .collect(Collectors.toList());
+
+            for (int j = 0; j < seatUnsettledOrders.size(); j++) {
+                Order order = seatUnsettledOrders.get(i);
+                //获取指定座位类型的座位
+                List<VenuePlanSeat> specificTypeSeats = availableSeats.stream()
+                        .filter(venuePlanSeat -> venuePlanSeat.getTypeChar() == order.getSeatType())
+                        .collect(Collectors.toList());
+                //剩余座位足够
+                if (specificTypeSeats.size() >= order.getSeatNum()) {
+                    for (int k = 0; k < order.getSeatNum(); k++) {
+                        VenuePlanSeat availableSeat = specificTypeSeats.get(k);
+                        availableSeat.setOrder(order);
+                        availableSeat.setAvailable(false);
+
+                        //从可用座位中移除掉
+                        availableSeats.remove(availableSeat);
+                    }
+                    //订单的配票状态设置为已配票
+                    order.setSeatSettled(true);
+                } else {
+                    //剩余座位不足，订单的状态设为已取消，退还会员票价
+                    order.setSeatEnough(false);
+                    order.setOrderStatus(OrderStatus.CANCELED);
+                    Member member = order.getMemberFK();
+                    Account account = member.getAccount();
+                    //全额退款
+                    account.setBalance(account.getBalance() + order.getPrice());
+                }
+            }
+        }
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public void checkCompleteVenuePlans() {
+
+        List<VenuePlan> completePlan = venueDao.getCompleteVenuePlans();
+
+        completePlan.forEach(venuePlan -> {
+            //将每个场馆的状态设置为已完成
+            venuePlan.setComplete(true);
+            venuePlan.getOrders().stream()
+                    .filter(order -> order.getOrderStatus() == OrderStatus.BOOKED)
+                    .forEach(order -> {
+                        //将场馆计划下的已注册订单的状态改为已消费订单，并给会员增加积分
+                        order.setOrderStatus(OrderStatus.COMSUMPED);
+                        Member member = order.getMemberFK();
+                        member.setPoints(member.getPoints() + order.getPrice());
+                    });
+        });
+    }
+
     /**
      * 检查场馆计划是否都已经完成
      *
@@ -248,6 +323,6 @@ public class VenueServiceImpl implements VenueService {
     private boolean allPlansPassOver(List<VenuePlan> venuePlans) {
         return venuePlans.stream()
                 //所有计划都满足计划结束时间早于当前时间
-                .allMatch(venuePlan -> venuePlan.getEnd().isBefore(LocalDateTime.now()));
+                .allMatch(venuePlan -> venuePlan.getEndTime().isBefore(LocalDateTimeUtil.nowTillSecond()));
     }
 }

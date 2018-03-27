@@ -366,7 +366,10 @@
         let isMember = $("#is-member-radio").is(":checked");
         let data = {
             mail: $("#member-id").val(),
+            //会员购买
             memberOrder: isMember,
+            //非线上购买
+            boughtOnline: false,
             venueId: planDetail.venueId,
             venuePlanId: venuePlan.venuePlanId,
             createTime: new Date().Format("yyyy-MM-dd hh:mm:ss"),

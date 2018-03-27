@@ -49,7 +49,7 @@ public class VenuePlanBriefDTO {
     public VenuePlanBriefDTO(VenuePlan venuePlan) {
         this.venuePlanId = venuePlan.getVenuePlanId();
         this.begin = LocalDateTimeUtil.formatTillMinute(venuePlan.getBegin());
-        this.end = LocalDateTimeUtil.formatTillMinute(venuePlan.getEnd());
+        this.end = LocalDateTimeUtil.formatTillMinute(venuePlan.getEndTime());
         this.city = venuePlan.getVenue().getCity();
         this.venueName = venuePlan.getVenue().getName();
         this.showType = venuePlan.getShowType().getValue();

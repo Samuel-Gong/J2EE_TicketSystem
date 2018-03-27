@@ -100,16 +100,6 @@
                                         </p>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div class="col-md-offset-2 col-md-3">
-                                        <button type="button" class="btn btn-primary center-block">去支付
-                                        </button>
-                                    </div>
-                                    <div class="col-md-offset-1 col-md-3">
-                                        <button type="button" class="btn btn-primary center-block">取消支付
-                                        </button>
-                                    </div>
-                                </div>
                             </form>
                         </div>
                     </div>

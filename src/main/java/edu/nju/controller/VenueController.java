@@ -68,7 +68,7 @@ public class VenueController {
     @PostMapping(value = "/buyOnSite", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
     boolean buyOnSite(@RequestBody TakeOrderDTO takeOrderDTO) {
-        return orderService.takeOrderOnSite(takeOrderDTO);
+        return orderService.addOrder(takeOrderDTO) > 0;
     }
 
     /**

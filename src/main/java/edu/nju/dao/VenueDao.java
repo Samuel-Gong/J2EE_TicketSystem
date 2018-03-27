@@ -1,12 +1,9 @@
 package edu.nju.dao;
 
 import edu.nju.dto.RowAndColumnDTO;
-import edu.nju.dto.VenueBasicInfoDTO;
-import edu.nju.dto.VenueSeatInfoDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
 import edu.nju.model.VenuePlanSeat;
-import edu.nju.model.VenueSeat;
 
 import java.util.List;
 
@@ -35,46 +32,6 @@ public interface VenueDao {
      * @return 场馆信息
      */
     Venue getVenue(int venueId);
-
-    /**
-     * 更新一个场馆
-     *
-     * @param venue 场馆信息
-     */
-    void updateVenue(Venue venue);
-
-    /**
-     * 根据场馆编号获取场馆的密码
-     *
-     * @param venueId 场馆编号
-     * @return 场馆密码
-     */
-    String getPassword(int venueId);
-
-    /**
-     * 更新场馆基础信息
-     *
-     * @param venue 场馆信息
-     * @return 是否更新成功
-     */
-    boolean updateBasicInfo(VenueBasicInfoDTO venue);
-
-    /**
-     * 在行列数没有变化的情况下，单纯更新每个位置是否有座位
-     *
-     * @param venueSeatInfoDTO 更新的场馆座位信息
-     * @return 是否更新成功
-     */
-    boolean updateSeatMap(VenueSeatInfoDTO venueSeatInfoDTO);
-
-    //场馆座位
-
-    /**
-     * 添加场馆座位信息
-     *
-     * @param seatMap 场馆座位列表
-     */
-    void addSeatMap(List<VenueSeat> seatMap);
 
     /**
      * 删除对应场馆编号的所有座位
@@ -157,7 +114,22 @@ public interface VenueDao {
 
     /**
      * 获取正在审批的场馆
+     *
      * @return 审批场馆列表
      */
     List<Venue> getAuditingVenue();
+
+    /**
+     * 获取已经结束但是状态还没设为结束的场馆计划
+     *
+     * @return 场馆计划列表
+     */
+    List<VenuePlan> getCompleteVenuePlans();
+
+    /**
+     * 获取应该配票的场馆
+     * @param sendTicketsWeek 演出前多少周开始配票
+     * @return 现在应该配票的场馆
+     */
+    List<VenuePlan> getNeedSendTickets(int sendTicketsWeek);
 }
