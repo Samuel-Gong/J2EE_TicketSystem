@@ -1,7 +1,10 @@
 package edu.nju.service.impl;
 
+import edu.nju.dao.CouponDao;
 import edu.nju.dao.MemberDao;
 import edu.nju.dto.LevelAndDiscount;
+import edu.nju.dto.PointsAndCoupons;
+import edu.nju.model.Coupon;
 import edu.nju.model.Member;
 import edu.nju.service.DiscountStrategy;
 import edu.nju.service.LevelStrategy;
@@ -11,7 +14,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.TreeMap;
 
 /**
  * @author Shenmiu
@@ -25,6 +31,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Autowired
     private MemberDao memberDao;
+
+    @Autowired
+    private CouponDao couponDao;
 
     private static final String DOMAIN = "http://localhost:8888/member/confirmMail?";
 
@@ -88,6 +97,35 @@ public class MemberServiceImpl implements MemberService {
             levelAndDiscount.setDiscount(DiscountStrategy.calculateDiscount(level));
         }
         return levelAndDiscount;
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public Member getInfo(String memberId) {
+        return memberDao.getMember(memberId);
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public PointsAndCoupons getPointsAndCoupons(String memberId) {
+        PointsAndCoupons pointsAndCoupons = new PointsAndCoupons();
+        Member member = memberDao.getMember(memberId);
+        pointsAndCoupons.setPoints(member.getPoints());
+
+        //todo 使用lambda简化
+        List<Coupon> couponList = couponDao.getUnusedCoupons(memberId);
+        Map<Integer, Integer> valueAndPoints = new TreeMap<>();
+        for (Coupon coupon : couponList) {
+            int value = coupon.getCouponType().getValue();
+            //如果存在就+1
+            valueAndPoints.computeIfPresent(value, (key, oldValue) -> oldValue + 1);
+            //如果不存在就赋值为1
+            valueAndPoints.putIfAbsent(value, 1);
+        }
+
+        pointsAndCoupons.setCoupons(valueAndPoints);
+
+        return pointsAndCoupons;
     }
 
     @Override

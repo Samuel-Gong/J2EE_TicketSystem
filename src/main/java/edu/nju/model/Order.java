@@ -111,6 +111,12 @@ public class Order {
     @OneToMany(mappedBy = "order")
     private List<VenuePlanSeat> venuePlanSeats = new ArrayList<>();
 
+    /**
+     * 一个订单对应一个优惠券
+     */
+    @OneToOne(mappedBy = "orderFK")
+    private Coupon coupon;
+
     public Order() {
     }
 

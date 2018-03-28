@@ -1,9 +1,14 @@
 package edu.nju.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.support.spring.annotation.FastJsonFilter;
+import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
 import edu.nju.dto.LevelAndDiscount;
+import edu.nju.dto.PointsAndCoupons;
 import edu.nju.dto.TakeOrderDTO;
+import edu.nju.model.CouponType;
 import edu.nju.model.Member;
+import edu.nju.service.CouponService;
 import edu.nju.service.MemberService;
 import edu.nju.service.OrderService;
 import edu.nju.service.VenueService;
@@ -16,6 +21,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 /**
  * @author Shenmiu
@@ -35,11 +42,69 @@ public class MemberController {
     @Autowired
     private OrderService orderService;
 
-    @RequestMapping(path = "/discount")
+    @Autowired
+    private CouponService couponService;
+
+    @GetMapping(path = "exchangeCoupon")
     public @ResponseBody
-    LevelAndDiscount getMemberDiscount(@RequestParam("mail") String mail) {
-        return memberService.getLevelAndDiscount(mail);
-//        return new LevelAndDiscount();
+    boolean exchangeCoupon(@RequestParam("memberId") String memberId, @RequestParam("couponValue") int couponValue) {
+        return couponService.exchangeCoupon(memberId, couponValue);
+    }
+
+    /**
+     * 获取所有优惠券的类型
+     *
+     * @return 优惠券类型列表
+     */
+    @GetMapping(path = "couponType")
+    public @ResponseBody
+    List<CouponType> getCouponTypes() {
+        return couponService.getCouponTypes();
+    }
+
+    /**
+     * 获取会员的积分和优惠券
+     *
+     * @param memberId 会员id
+     * @return 会员的积分和优惠券的信息
+     */
+    @GetMapping(path = "coupons")
+    public @ResponseBody
+    PointsAndCoupons getMemberWithCoupons(@RequestParam("memberId") String memberId) {
+        return memberService.getPointsAndCoupons(memberId);
+    }
+
+    /**
+     * 返回我的优惠券视图
+     */
+    @GetMapping(path = "/myCoupon")
+    public String couponView() {
+        return "/member/myCoupon";
+    }
+
+    /**
+     * 获取会员的基本信息
+     *
+     * @param memberId 会员id
+     * @return 会员基本信息
+     */
+    @FastJsonView(include = @FastJsonFilter(clazz = Member.class, props = {"mail", "points"}))
+    @GetMapping(path = "/info")
+    public @ResponseBody
+    Member getInfo(@RequestParam("memberId") String memberId) {
+        return memberService.getInfo(memberId);
+    }
+
+    /**
+     * 获取会员的等级和折扣信息
+     *
+     * @param memberId 会员id
+     * @return 会员的等级和折扣信息
+     */
+    @GetMapping(path = "/discount")
+    public @ResponseBody
+    LevelAndDiscount getDiscount(@RequestParam("memberId") String memberId) {
+        return memberService.getLevelAndDiscount(memberId);
     }
 
     /**

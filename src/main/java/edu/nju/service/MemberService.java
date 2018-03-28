@@ -1,6 +1,7 @@
 package edu.nju.service;
 
 import edu.nju.dto.LevelAndDiscount;
+import edu.nju.dto.PointsAndCoupons;
 import edu.nju.model.Member;
 
 /**
@@ -69,4 +70,18 @@ public interface MemberService {
      * @return 会员的等级以及折扣信息
      */
     LevelAndDiscount getLevelAndDiscount(String mail);
+
+    /**
+     * 根据会员id获取会员信息
+     * @param memberId 会员id
+     * @return 会员信息
+     */
+    Member getInfo(String memberId);
+
+    /**
+     * 根据会员id获取会员积分及优惠券（面值与张数对应）
+     * @param memberId 会员id
+     * @return
+     */
+    PointsAndCoupons getPointsAndCoupons(String memberId);
 }

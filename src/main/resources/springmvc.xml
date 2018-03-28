@@ -50,6 +50,9 @@
                     <bean class="com.alibaba.fastjson.support.config.FastJsonConfig">
                         <property name="serializerFeatures">
                             <list>
+                                <!-- 将非String类型的键值对都转换成String再输出json -->
+                                <value>WriteNonStringKeyAsString</value>
+                                <value>WriteNonStringValueAsString</value>
                                 <!-- 给键值加上双引号 -->
                                 <value>QuoteFieldNames</value>
                                 <!-- 显示为Null的值 -->

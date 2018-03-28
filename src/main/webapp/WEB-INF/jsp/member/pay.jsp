@@ -149,9 +149,8 @@
 <script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-<!-- date format -->
-<script src="${pageContext.request.contextPath}/js/date-format.js"></script>
-
+<!-- moment -->
+<script src="${pageContext.request.contextPath}/js/moment.min.js"></script>
 <script>
 
     $("#pay-btn").on("click", function () {
@@ -171,36 +170,60 @@
     /**
      * 倒计时
      */
+
+        //计算倒计时分钟数和秒数
+    let createTime = moment("${order.createTime}", "YYYY-MM-DDTHH:mm:ss");
+    let now = moment();
+
+    console.log(createTime);
+    console.log(now);
+
+    //获取相差分数
+    let millis = now.diff(createTime);
+    let passMinute = Math.floor(millis / 1000 / 60);
+    let passSecond = Math.floor(now.diff(createTime) / 1000) - 60 * passMinute;
+
+    let remainMinute = 14 - passMinute;
+    let remainSecond = 60 - passSecond;
+    console.log(remainMinute);
+    console.log(remainSecond);
+
     //显示倒数秒数
     function countdown() {
-        $("#countdown-minute").text(minute);
-        if (second < 10) {
-            $("#countdown-second").text("0" + second);
+        $("#countdown-minute").text(remainMinute);
+        if (remainSecond < 10) {
+            $("#countdown-second").text("0" + remainSecond);
         } else {
-            $("#countdown-second").text(second);
+            $("#countdown-second").text(remainSecond);
         }
-        if (minute === 0 && second === 0) {
-            //todo 倒计时完成的时候ajax
-            alert("倒计时完成");
+        if (remainMinute === 0 && remainSecond === 0) {
+            alert("支付超时，订单自动取消");
+            //支付超时，取消订单
+            $.ajax({
+                url: "${pageContext.request.contextPath}/member/order/cancel/${order.orderId}",
+                method: "get",
+                async: false,
+                success: function (data) {
+                    if (data === true) {
+                        console.log("订单取消成功");
+                        $(location).attr("href", "${pageContext.request.contextPath}/member/order/cancel");
+                    }
+                },
+                error: function () {
+                    alert("订单取消有故障");
+                }
+            });
         }
-        else if (second === 0) {
-            minute -= 1;
-            second = 59;
+        else if (remainSecond === 0) {
+            remainMinute -= 1;
+            remainSecond = 59;
         }
         else {
-            second -= 1;
+            remainSecond -= 1;
         }
         //每秒执行一次,countdown()
         setTimeout(countdown, 1000);
     }
-
-    let createTime = moment(${unpaidOrder.createTime}, "YYYY-MM-DD HH:mm:ss");
-    let now = moment();
-
-    //获取相差分数
-    let minute = now.diff(createTime, "minutes");
-    //减去分钟后还相差的秒数
-    let second = now.diff(createTime, "seconds") - 60 * minute;
 
     countdown();
 

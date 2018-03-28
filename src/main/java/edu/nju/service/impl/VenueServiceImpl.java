@@ -291,7 +291,6 @@ public class VenueServiceImpl implements VenueService {
                 }
             }
         }
-
     }
 
     @Override

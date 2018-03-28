@@ -45,7 +45,23 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label">Email</label>
                             <div class="col-md-7">
-                                <p class="form-control-static">${sessionScope.mail}</p>
+                                <p id="member-mail" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">会员积分</label>
+                            <div class="col-md-7">
+                                <p id="member-points" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">会员等级</label>
+                            <div class="col-md-4">
+                                <p class="form-control-static"><span>Lv.</span><span id="member-level"></span></p>
+                            </div>
+                            <label class="col-md-2 control-label">享受优惠</label>
+                            <div class="col-md-4">
+                                <p class="form-control-static"><span id="member-discount"></span>折</p>
                             </div>
                         </div>
                         <div class="form-group">
@@ -142,44 +158,92 @@
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 
 <script>
+
     $(document).ready(function () {
-        $("#modify_password_confirm_btn").on("click", function () {
-            alert("oldPassword: " + $("#oldPassword").val() + "newPassword: " + $("#newPassword").val());
-            $.ajax({
-                url: "${pageContext.request.contextPath}/member/modifyPassword",
-                method: "post",
-                data: {
-                    "oldPassword": $("#oldPassword").val(),
-                    "newPassword": $("#newPassword").val()
-                },
-                dataType: "text",
-                success: function (data, value) {
-                    if (data === "true")
-                        alert("密码修改成功");
-                    else
-                        alert("密码修改失败");
-                },
-                error: function () {
-                    alert("修改密码失败");
-                }
-            });
+
+        /**
+         * 请求会员信息显示（不包含等级和折扣）
+         */
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/info",
+            method: "get",
+            data: {
+                memberId: "${sessionScope.mail}"
+            },
+            success: function (info) {
+                console.log(info);
+                //显示会员的邮箱和信息
+                $("#member-mail").text(info.mail);
+                $("#member-points").text(info.points);
+            },
+            error: function () {
+                alert("请求会员信息失败");
+            }
         });
 
-        $("#disqualify_confirm_btn").on("click", function () {
-            $.ajax({
-                url: "${pageContext.request.contextPath}/member/disqualify",
-                method: "get",
-                dataType: "text",
-                success: function (data, value) {
-                    if (data === "true")
-                        alert("取消资格成功");
-                    else
-                        alert("取消资格失败");
-                },
-                error: function () {
+        /**
+         * 请求显示会员等级和折扣
+         */
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/discount",
+            method: "get",
+            data: {
+                memberId: "${sessionScope.mail}"
+            },
+            success: function (levelAndDiscount) {
+                //显示会员的邮箱和信息
+                $("#member-level").text(levelAndDiscount.level);
+                $("#member-discount").text(levelAndDiscount.discount);
+            },
+            error: function () {
+                alert("请求会员等级和折扣失败");
+            }
+        });
+
+    });
+
+    /**
+     * 修改密码监听
+     */
+    $("#modify_password_confirm_btn").on("click", function () {
+        alert("oldPassword: " + $("#oldPassword").val() + "newPassword: " + $("#newPassword").val());
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/modifyPassword",
+            method: "post",
+            data: {
+                "oldPassword": $("#oldPassword").val(),
+                "newPassword": $("#newPassword").val()
+            },
+            dataType: "text",
+            success: function (data, value) {
+                if (data === "true")
+                    alert("密码修改成功");
+                else
+                    alert("密码修改失败");
+            },
+            error: function () {
+                alert("修改密码失败");
+            }
+        });
+    });
+
+    /**
+     * 取消资格监听
+     */
+    $("#disqualify_confirm_btn").on("click", function () {
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/disqualify",
+            method: "get",
+            dataType: "text",
+            success: function (data, value) {
+                if (data === "true")
+                    alert("取消资格成功");
+                else
                     alert("取消资格失败");
-                }
-            });
+            },
+            error: function () {
+                alert("取消资格失败");
+            }
         });
     });
 </script>

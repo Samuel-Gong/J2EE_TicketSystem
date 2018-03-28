@@ -53,6 +53,12 @@ public class Member {
     @OneToMany(mappedBy = "memberFK")
     private List<Order> orders;
 
+    /**
+     * 会员的优惠券
+     */
+    @OneToMany(mappedBy = "memberFK")
+    private List<Coupon> coupons;
+
     public Member() {
     }
 
@@ -118,5 +124,13 @@ public class Member {
 
     public void setOrders(List<Order> orderList) {
         this.orders = orderList;
+    }
+
+    public List<Coupon> getCoupons() {
+        return coupons;
+    }
+
+    public void setCoupons(List<Coupon> coupons) {
+        this.coupons = coupons;
     }
 }

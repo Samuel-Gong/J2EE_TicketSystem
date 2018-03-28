@@ -312,7 +312,7 @@
         let memberId = $("#member-id").val();
         console.log(memberId);
         $.ajax({
-            url: "${pageContext.request.contextPath}/member/discount",
+            url: "${pageContext.request.contextPath}/venue/discount",
             method: "post",
             data: {
                 mail: memberId

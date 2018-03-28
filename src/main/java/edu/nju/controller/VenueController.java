@@ -1,10 +1,12 @@
 package edu.nju.controller;
 
 import com.alibaba.fastjson.JSON;
+import edu.nju.dto.LevelAndDiscount;
 import edu.nju.dto.SeatCheckInDTO;
 import edu.nju.dto.TakeOrderDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
+import edu.nju.service.MemberService;
 import edu.nju.service.OrderService;
 import edu.nju.service.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,16 @@ public class VenueController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private MemberService memberService;
+
+    @RequestMapping(path = "/discount")
+    public @ResponseBody
+    LevelAndDiscount getMemberDiscount(@RequestParam("mail") String mail) {
+        return memberService.getLevelAndDiscount(mail);
+//        return new LevelAndDiscount();
+    }
 
     /**
      * 检查场馆信息是否可以修改
