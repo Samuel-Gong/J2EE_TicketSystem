@@ -1,7 +1,9 @@
 package edu.nju.service.impl;
 
 import edu.nju.dao.ManagerDao;
+import edu.nju.dao.VenueDao;
 import edu.nju.model.Manager;
+import edu.nju.model.VenuePlan;
 import edu.nju.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,10 +22,48 @@ public class ManagerServiceImpl implements ManagerService {
     @Autowired
     private ManagerDao managerDao;
 
+    @Autowired
+    private VenueDao venueDao;
+
+    /**
+     * 经理id
+     */
+    private final static int MEMBER_ID = 1;
+
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean login(int id, String password) {
         Manager manager = managerDao.getManager(id);
         return manager != null && manager.getPassword().equals(password);
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public Manager getManager(int managerId) {
+        Manager manager = managerDao.getManager(managerId);
+        assert manager != null;
+        return manager;
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean settlePlan(int venuePlanId, int rate) {
+        VenuePlan venuePlan = venueDao.getVenuePlan(venuePlanId);
+        int totalIncome = venuePlan.getTotalIncome();
+        int actualIncome = totalIncome * rate / 10;
+
+        //计划被结算
+        venuePlan.setSettle(true);
+
+        //场馆计划实际票价收入
+        venuePlan.setActualIncome(actualIncome);
+
+        //从未结算总收入中扣除票价总收入
+        Manager manager = managerDao.getManager(MEMBER_ID);
+        manager.setUnsettleIncome(manager.getUnsettleIncome() - totalIncome);
+        //系统赚取差价
+        manager.setSettleIncome(manager.getSettleIncome() + totalIncome - actualIncome);
+
+        return true;
     }
 }

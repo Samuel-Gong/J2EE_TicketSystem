@@ -1,6 +1,7 @@
 package edu.nju.service;
 
 import edu.nju.dto.SeatCheckInDTO;
+import edu.nju.dto.VenueAndPlanDTO;
 import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenuePlanDetailDTO;
 import edu.nju.model.Order;
@@ -175,4 +176,11 @@ public interface VenueService {
      * 检查已经结束的场馆计划，并将已预订订单置为已消费订单
      */
     void checkCompleteVenuePlans();
+
+    /**
+     * 获取所有已结束但是未结算的场馆计划
+     *
+     * @return 已结束、为结算的场馆计划列表
+     */
+    List<VenueAndPlanDTO> getUnsettleVenuePlans();
 }

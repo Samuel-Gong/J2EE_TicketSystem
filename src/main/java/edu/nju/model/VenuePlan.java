@@ -67,6 +67,21 @@ public class VenuePlan {
     private boolean sendTickets;
 
     /**
+     * 是否已经结算
+     */
+    private boolean settle;
+
+    /**
+     * 总共的票价收入
+     */
+    private int totalIncome;
+
+    /**
+     * 实际经理结算的收入
+     */
+    private int actualIncome;
+
+    /**
      * 与场馆多对一，外键为场馆编号
      */
     @ManyToOne(optional = false)
@@ -146,6 +161,30 @@ public class VenuePlan {
 
     public void setSendTickets(boolean sendTickets) {
         this.sendTickets = sendTickets;
+    }
+
+    public boolean isSettle() {
+        return settle;
+    }
+
+    public void setSettle(boolean settle) {
+        this.settle = settle;
+    }
+
+    public int getTotalIncome() {
+        return totalIncome;
+    }
+
+    public void setTotalIncome(int totalIncome) {
+        this.totalIncome = totalIncome;
+    }
+
+    public int getActualIncome() {
+        return actualIncome;
+    }
+
+    public void setActualIncome(int actualIncome) {
+        this.actualIncome = actualIncome;
     }
 
     public Venue getVenue() {

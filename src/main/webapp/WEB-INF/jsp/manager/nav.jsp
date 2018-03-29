@@ -19,7 +19,7 @@
         <!-- 导航内容 -->
         <ul class="nav navbar-nav">
             <li><a href="${pageContext.request.contextPath}/manager/audit">审批</a></li>
-            <li><a href="#">结算</a></li>
+            <li><a href="${pageContext.request.contextPath}/manager/settlement">结算中心</a></li>
             <li><a href="#">统计信息</a></li>
         </ul>
 

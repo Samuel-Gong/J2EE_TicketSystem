@@ -18,9 +18,14 @@ public class Manager {
     private String password;
 
     /**
-     * 总收入
+     * 未结算收入
      */
-    private int balance;
+    private int unsettleIncome;
+
+    /**
+     * 已结算收入
+     */
+    private int settleIncome;
 
     public Manager() {
     }
@@ -41,11 +46,19 @@ public class Manager {
         this.password = password;
     }
 
-    public int getBalance() {
-        return balance;
+    public int getUnsettleIncome() {
+        return unsettleIncome;
     }
 
-    public void setBalance(int balance) {
-        this.balance = balance;
+    public void setUnsettleIncome(int balance) {
+        this.unsettleIncome = balance;
+    }
+
+    public int getSettleIncome() {
+        return settleIncome;
+    }
+
+    public void setSettleIncome(int settleIncome) {
+        this.settleIncome = settleIncome;
     }
 }

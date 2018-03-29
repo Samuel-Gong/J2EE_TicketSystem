@@ -1,8 +1,10 @@
 package edu.nju.service.impl;
 
+import edu.nju.dao.ManagerDao;
 import edu.nju.dao.OrderDao;
 import edu.nju.dao.VenueDao;
 import edu.nju.dto.SeatCheckInDTO;
+import edu.nju.dto.VenueAndPlanDTO;
 import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.dto.VenuePlanDetailDTO;
 import edu.nju.model.*;
@@ -28,10 +30,19 @@ import java.util.stream.Collectors;
 public class VenueServiceImpl implements VenueService {
 
     @Autowired
-    VenueDao venueDao;
+    private VenueDao venueDao;
 
     @Autowired
-    OrderDao orderDao;
+    private OrderDao orderDao;
+
+    @Autowired
+    private ManagerDao managerDao;
+
+    /**
+     * 经理id
+     */
+    private static final int MANAGER_ID = 1;
+
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
@@ -299,6 +310,9 @@ public class VenueServiceImpl implements VenueService {
 
         List<VenuePlan> completePlan = venueDao.getCompleteVenuePlans();
 
+        Manager manager = managerDao.getManager(MANAGER_ID);
+        assert manager != null;
+
         completePlan.forEach(venuePlan -> {
             //将每个场馆的状态设置为已完成
             venuePlan.setComplete(true);
@@ -308,9 +322,22 @@ public class VenueServiceImpl implements VenueService {
                         //将场馆计划下的已注册订单的状态改为已消费订单，并给会员增加积分
                         order.setOrderStatus(OrderStatus.COMSUMPED);
                         Member member = order.getMemberFK();
-                        member.setPoints(member.getPoints() + order.getPrice());
+                        member.setPoints(member.getPoints() + order.getActualPrice());
+
+                        //累加该计划的票价总收入
+                        venuePlan.setTotalIncome(venuePlan.getTotalIncome() + order.getActualPrice());
+
+                        //增加经理的账户余额
+                        manager.setUnsettleIncome(manager.getUnsettleIncome() + order.getActualPrice());
                     });
         });
+    }
+
+    @Override
+    public List<VenueAndPlanDTO> getUnsettleVenuePlans() {
+        return venueDao.getUnsettleVenuePlans().stream()
+                .map(venuePlan -> new VenueAndPlanDTO(venuePlan, venuePlan.getVenue()))
+                .collect(Collectors.toList());
     }
 
     /**

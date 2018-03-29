@@ -132,4 +132,10 @@ public interface VenueDao {
      * @return 现在应该配票的场馆
      */
     List<VenuePlan> getNeedSendTickets(int sendTicketsWeek);
+
+    /**
+     * 获取所有已结束、未结算的场馆计划
+     * @return 已结束、为结算场馆计划列表
+     */
+    List<VenuePlan> getUnsettleVenuePlans();
 }

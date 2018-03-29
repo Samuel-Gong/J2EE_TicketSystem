@@ -153,4 +153,11 @@ public class VenueDaoImpl implements VenueDao {
         return query.list();
     }
 
+    @Override
+    public List<VenuePlan> getUnsettleVenuePlans() {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from VenuePlan where complete = true and settle = false ", VenuePlan.class)
+                .list();
+    }
+
 }

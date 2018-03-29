@@ -132,11 +132,6 @@ public class OrderServiceImpl implements OrderService {
             assert OrderStatus.UNPAID == order.getOrderStatus();
             order.setOrderStatus(OrderStatus.BOOKED);
 
-            //增加经理的账户余额
-            Manager manager = managerDao.getManager(MANAGER_ID);
-            assert manager != null;
-            manager.setBalance(manager.getBalance() + order.getPrice());
-
             return true;
         }
         return false;
@@ -167,8 +162,8 @@ public class OrderServiceImpl implements OrderService {
 
         //扣除经理账户余额
         Manager manager = managerDao.getManager(MANAGER_ID);
-        assert manager != null && manager.getBalance() >= order.getPrice();
-        manager.setBalance(manager.getBalance() - order.getPrice());
+        assert manager != null && manager.getUnsettleIncome() >= order.getPrice();
+        manager.setUnsettleIncome(manager.getUnsettleIncome() - order.getPrice());
 
         //改变订单状态
         order.setOrderStatus(OrderStatus.RETREAT);

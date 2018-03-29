@@ -2,7 +2,10 @@ package edu.nju.controller;
 
 import com.alibaba.fastjson.support.spring.annotation.FastJsonFilter;
 import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
+import edu.nju.dto.VenueAndPlanDTO;
+import edu.nju.model.Manager;
 import edu.nju.model.Venue;
+import edu.nju.model.VenuePlan;
 import edu.nju.service.ManagerService;
 import edu.nju.service.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,59 @@ public class ManagerController {
 
     @Autowired
     private VenueService venueService;
+
+    /**
+     * 结算场馆计划
+     *
+     * @param venuePlanId 场馆计划id
+     * @param rate        场馆分成
+     * @return 结算是否成功
+     */
+    @RequestMapping(path = "settle")
+    public @ResponseBody
+    boolean settlePlan(@RequestParam("venuePlanId") int venuePlanId, @RequestParam("rate") int rate) {
+        return managerService.settlePlan(venuePlanId, rate);
+    }
+
+    /**
+     * 获取所有的已结束但是未结算的计划
+     *
+     * @return 已结束但是为结算的计划列表
+     */
+    @FastJsonView(include = {
+            @FastJsonFilter(clazz = VenueAndPlanDTO.class, props = {"venue", "venuePlan"}),
+            @FastJsonFilter(clazz = VenuePlan.class, props = {"venuePlanId", "description", "end", "totalIncome"}),
+            @FastJsonFilter(clazz = Venue.class, props = {"id"})
+    })
+    @GetMapping(path = "unsettlePlans")
+    public @ResponseBody
+    List<VenueAndPlanDTO> getUnsettlePlans() {
+        return venueService.getUnsettleVenuePlans();
+    }
+
+    /**
+     * 获取经理的收入，已结算收入和未结算收入
+     *
+     * @param managerId 经理id
+     * @return 已结算收入和未结算收入
+     */
+    @FastJsonView(include = @FastJsonFilter(clazz = Manager.class, props = {"unsettleIncome", "settleIncome"}))
+    @GetMapping(path = "income")
+    public @ResponseBody
+    Manager getIncome(@SessionAttribute("managerId") int managerId) {
+        return managerService.getManager(managerId);
+    }
+
+    /**
+     * 结算中心视图
+     *
+     * @return 结算中心视图
+     */
+    @GetMapping(path = "settlement")
+    public String settlementView() {
+        return "/manager/settlement";
+    }
+
 
     /**
      * 经理登出
@@ -89,7 +145,7 @@ public class ManagerController {
     @PostMapping(path = "/login")
     public String login(@RequestParam("manager-id") int id, @RequestParam("manager-password") String password, Model model) {
         if (managerService.login(id, password)) {
-            model.addAttribute("manager-id", id);
+            model.addAttribute("managerId", id);
             return "redirect:/manager/audit";
         } else {
             model.addAttribute("errorMsg", "账户或密码错误");

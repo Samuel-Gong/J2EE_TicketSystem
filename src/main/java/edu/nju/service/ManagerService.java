@@ -1,5 +1,7 @@
 package edu.nju.service;
 
+import edu.nju.model.Manager;
+
 /**
  * @author Shenmiu
  * @date 2018/03/26
@@ -15,4 +17,21 @@ public interface ManagerService {
      * @return 登录是否成功
      */
     boolean login(int id, String password);
+
+    /**
+     * 根据经理id获取经理信息
+     *
+     * @param managerId 经理id
+     * @return 经理信息
+     */
+    Manager getManager(int managerId);
+
+    /**
+     * 结算场馆计划
+     *
+     * @param venuePlanId 场馆计划id
+     * @param rate        场馆利率
+     * @return 是否结算成功
+     */
+    boolean settlePlan(int venuePlanId, int rate);
 }
