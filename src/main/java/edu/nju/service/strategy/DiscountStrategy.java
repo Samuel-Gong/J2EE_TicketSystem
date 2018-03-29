@@ -1,4 +1,4 @@
-package edu.nju.service;
+package edu.nju.service.strategy;
 
 /**
  * @author Shenmiu
@@ -8,8 +8,8 @@ package edu.nju.service;
  */
 public class DiscountStrategy {
 
-    private final static int[] levels = {0, 1, 2, 3, 4, 5};
-    private final static int[] discount = {10, 9, 8, 7, 6, 5};
+    private final static int[] LEVELS = {0, 1, 2, 3, 4, 5};
+    private final static int[] DISCOUNT = {10, 9, 8, 7, 6, 5};
 
     /**
      * 根据会员的等级计算折扣
@@ -18,12 +18,12 @@ public class DiscountStrategy {
      * @return 该会员等级所对应的折扣
      */
     public static Integer calculateDiscount(int level) {
-        return discount[findIndex(level)];
+        return DISCOUNT[findIndex(level)];
     }
 
     private static int findIndex(int level) {
         int index = 0;
-        while (levels[index] != level) {
+        while (LEVELS[index] != level) {
             index++;
         }
         return index;

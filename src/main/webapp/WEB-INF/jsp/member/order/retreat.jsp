@@ -89,10 +89,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-3 control-label">总票价:</label>
+                                    <label class="col-md-3 control-label">优惠票价:</label>
                                     <div class="col-md-2">
                                         <p class="form-control-static">
-                                            <c:out value="${order.price}"/>元
+                                            <c:out value="${order.actualPrice}"/>元
                                         </p>
                                     </div>
                                     <label class="col-md-3 control-label">退还票价:</label>
@@ -117,8 +117,6 @@
 <script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
-<!-- date format -->
-<script src="${pageContext.request.contextPath}/js/date-format.js"></script>
 
 <script>
     //左侧导航栏active

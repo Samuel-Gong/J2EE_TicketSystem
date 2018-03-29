@@ -9,17 +9,22 @@ import javax.persistence.Table;
  * @author Shenmiu
  * @date 2018/03/04
  * <p>
- * 存钱账户
+ * 支付宝账户
  */
 @Entity
 @Table(name = "account")
 public class Account {
 
     /**
-     * 账户的账号
+     * 支付宝账号
      */
     @Id
-    private String id;
+    private int id;
+
+    /**
+     * 支付宝密码
+     */
+    private String password;
 
     /**
      * 余额
@@ -35,12 +40,20 @@ public class Account {
     public Account() {
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public double getBalance() {

@@ -50,9 +50,14 @@ public class TakeOrderDTO {
     private Integer seatNum;
 
     /**
-     * 订单总价格
+     * 订单原价格
      */
     private Integer price;
+
+    /**
+     * 订单优惠价格
+     */
+    private Integer actualPrice;
 
     /**
      * 座位是否选择
@@ -68,6 +73,16 @@ public class TakeOrderDTO {
      * 是否是会员订票
      */
     private Boolean memberOrder;
+
+    /**
+     * 是否使用会员折扣
+     */
+    private boolean memberDiscount;
+
+    /**
+     * 是否使用优惠券
+     */
+    private boolean useCoupon;
 
     public String getMail() {
         return mail;
@@ -133,6 +148,14 @@ public class TakeOrderDTO {
         this.price = price;
     }
 
+    public Integer getActualPrice() {
+        return actualPrice;
+    }
+
+    public void setActualPrice(Integer actualPrice) {
+        this.actualPrice = actualPrice;
+    }
+
     public Boolean getSeatSettled() {
         return seatSettled;
     }
@@ -161,6 +184,22 @@ public class TakeOrderDTO {
         memberOrder = member;
     }
 
+    public boolean isMemberDiscount() {
+        return memberDiscount;
+    }
+
+    public void setMemberDiscount(boolean memberDiscount) {
+        this.memberDiscount = memberDiscount;
+    }
+
+    public boolean isUseCoupon() {
+        return useCoupon;
+    }
+
+    public void setUseCoupon(boolean useCoupon) {
+        this.useCoupon = useCoupon;
+    }
+
     @Override
     public String toString() {
         return "TakeOrderDTO{" +
@@ -175,6 +214,8 @@ public class TakeOrderDTO {
                 ", seatSettled=" + seatSettled +
                 ", boughtOnline=" + boughtOnline +
                 ", memberOrder=" + memberOrder +
+                ", memberDiscount=" + memberDiscount +
+                ", useCoupon=" + useCoupon +
                 '}';
     }
 }

@@ -17,6 +17,11 @@ public class Manager {
 
     private String password;
 
+    /**
+     * 总收入
+     */
+    private int balance;
+
     public Manager() {
     }
 
@@ -34,5 +39,13 @@ public class Manager {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getBalance() {
+        return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 }

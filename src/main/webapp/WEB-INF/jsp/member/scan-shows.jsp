@@ -98,11 +98,28 @@
 <script>
 
     $(document).ready(function () {
-        //去买票按钮添加监听
-        $("#plans-container").on("click", ".booking", function () {
-            let venuePlanId = $(this).prev().val();
-            // console.log(venuePlanId);
-            $(location).attr("href", "${pageContext.request.contextPath}/member/booking/" + venuePlanId);
+        //检查会员是否绑定支付宝账号
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/checkAccount",
+            method: "get",
+            success: function (data) {
+                if (data === true) {
+                    //去买票按钮添加监听
+                    $("#plans-container").on("click", ".booking", function () {
+                        let venuePlanId = $(this).prev().val();
+                        // console.log(venuePlanId);
+                        $(location).attr("href", "${pageContext.request.contextPath}/member/booking/" + venuePlanId);
+                    });
+                }
+                else {
+                    //提示用户未绑定支付宝账户
+                    $("#plans-container").on("click", ".booking", function () {
+                        alert("请先绑定支付宝账户");
+                        //前往个人信息界面
+                        $(location).attr("href", "${pageContext.request.contextPath}/member/myInfo");
+                    });
+                }
+            }
         });
     });
 </script>

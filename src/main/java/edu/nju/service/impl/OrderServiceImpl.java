@@ -1,5 +1,6 @@
 package edu.nju.service.impl;
 
+import edu.nju.dao.ManagerDao;
 import edu.nju.dao.MemberDao;
 import edu.nju.dao.OrderDao;
 import edu.nju.dao.VenueDao;
@@ -8,6 +9,7 @@ import edu.nju.dto.TakeOrderDTO;
 import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.model.*;
 import edu.nju.service.OrderService;
+import edu.nju.service.strategy.RetreatStrategy;
 import edu.nju.util.OrderStatus;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,13 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private VenueDao venueDao;
 
+    @Autowired
+    private ManagerDao managerDao;
+
+    private static int MANAGER_ID = 1;
+
     @Override
+    @Transactional(rollbackFor = RuntimeException.class)
     public int addOrder(TakeOrderDTO takeOrderDTO) {
         Venue venue = venueDao.getVenue(takeOrderDTO.getVenueId());
         VenuePlan venuePlan = venueDao.getVenuePlan(takeOrderDTO.getVenuePlanId());
@@ -99,15 +107,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public void checkUnpaidOrder(int orderId) {
-        Order order = orderDao.getOrder(orderId);
-        if (OrderStatus.UNPAID == order.getOrderStatus()) {
-            order.setOrderStatus(OrderStatus.EXPIRED);
-        }
-    }
-
-    @Override
-    @Transactional(rollbackFor = RuntimeException.class)
     public OrderShowDTO getOrderShowDTO(int orderId) {
         Order unpaidOrder = orderDao.getOrder(orderId);
         Hibernate.initialize(unpaidOrder.getVenuePlanSeats());
@@ -126,15 +125,17 @@ public class OrderServiceImpl implements OrderService {
             return false;
         }
 
-        //减少账户余额
         if (account.getBalance() >= order.getPrice()) {
-
+            //减少账户余额
             account.setBalance(account.getBalance() - order.getPrice());
             //改变订单状态为已预订
             assert OrderStatus.UNPAID == order.getOrderStatus();
             order.setOrderStatus(OrderStatus.BOOKED);
 
-            member.setPoints(member.getPoints() + order.getPrice());
+            //增加经理的账户余额
+            Manager manager = managerDao.getManager(MANAGER_ID);
+            assert manager != null;
+            manager.setBalance(manager.getBalance() + order.getPrice());
 
             return true;
         }
@@ -159,7 +160,15 @@ public class OrderServiceImpl implements OrderService {
         Member member = memberDao.getMember(mail);
         Account account = member.getAccount();
         Order order = orderDao.getOrder(orderId);
-        //todo 返还账户余额策略
+
+        //计算退还票价，给账户余额加上退还的票价
+        int returnMoney = RetreatStrategy.calculateReturnMoney(order.getVenuePlan().getBegin(), order.getActualPrice());
+        account.setBalance(account.getBalance() + returnMoney);
+
+        //扣除经理账户余额
+        Manager manager = managerDao.getManager(MANAGER_ID);
+        assert manager != null && manager.getBalance() >= order.getPrice();
+        manager.setBalance(manager.getBalance() - order.getPrice());
 
         //改变订单状态
         order.setOrderStatus(OrderStatus.RETREAT);
@@ -175,7 +184,9 @@ public class OrderServiceImpl implements OrderService {
     public void checkUnpaidOrders() {
         List<Order> unpaidOrders = orderDao.getUnpaidOrders();
         unpaidOrders.stream()
+                //筛选出那些超过支付时间的订单
                 .filter(unpaidOrder -> passOverPayTime(unpaidOrder.getCreateTime()))
+                //取消超过支付时间的订单
                 .forEach(unpaidOrder -> {
                     unpaidOrder.setOrderStatus(OrderStatus.CANCELED);
                     setBookedSeatStr(unpaidOrder);

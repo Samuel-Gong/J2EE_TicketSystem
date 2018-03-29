@@ -66,6 +66,7 @@ public interface MemberService {
 
     /**
      * 根据会员的邮箱
+     *
      * @param mail 会员邮箱
      * @return 会员的等级以及折扣信息
      */
@@ -73,6 +74,7 @@ public interface MemberService {
 
     /**
      * 根据会员id获取会员信息
+     *
      * @param memberId 会员id
      * @return 会员信息
      */
@@ -80,8 +82,27 @@ public interface MemberService {
 
     /**
      * 根据会员id获取会员积分及优惠券（面值与张数对应）
+     *
      * @param memberId 会员id
      * @return
      */
     PointsAndCoupons getPointsAndCoupons(String memberId);
+
+    /**
+     * 检查会员是否有绑定的支付宝
+     *
+     * @param mail 会员邮箱
+     * @return 是否有绑定
+     */
+    boolean checkAccount(String mail);
+
+    /**
+     * 会员绑定支付宝
+     *
+     * @param mail            会员邮箱
+     * @param accountId       支付宝id
+     * @param accountPassword 支付宝密码
+     * @return 绑定是否成功
+     */
+    boolean bindAccount(String mail, int accountId, String accountPassword);
 }

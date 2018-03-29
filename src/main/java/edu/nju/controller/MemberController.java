@@ -45,7 +45,35 @@ public class MemberController {
     @Autowired
     private CouponService couponService;
 
+    @GetMapping(path = "/checkAccount")
+    public @ResponseBody
+    boolean checkAccount(@SessionAttribute("mail") String mail) {
+        return memberService.checkAccount(mail);
+    }
+
+    /**
+     * 会员绑定账户
+     *
+     * @param mail            会员邮箱
+     * @param accountId       支付宝id
+     * @param accountPassword 支付宝密码
+     * @return 绑定是否成功
+     */
+    @PostMapping(path = "/bindAccount")
+    public @ResponseBody
+    boolean bindAccount(@SessionAttribute("mail") String mail, @RequestParam("id") int accountId, @RequestParam("password") String accountPassword) {
+        return memberService.bindAccount(mail, accountId, accountPassword);
+    }
+
+    /**
+     * 兑换优惠券
+     *
+     * @param memberId    会员id
+     * @param couponValue 优惠券面额
+     * @return
+     */
     @GetMapping(path = "exchangeCoupon")
+
     public @ResponseBody
     boolean exchangeCoupon(@RequestParam("memberId") String memberId, @RequestParam("couponValue") int couponValue) {
         return couponService.exchangeCoupon(memberId, couponValue);
@@ -88,7 +116,7 @@ public class MemberController {
      * @param memberId 会员id
      * @return 会员基本信息
      */
-    @FastJsonView(include = @FastJsonFilter(clazz = Member.class, props = {"mail", "points"}))
+    @FastJsonView(include = @FastJsonFilter(clazz = Member.class, props = {"mail", "points", "bindAccount"}))
     @GetMapping(path = "/info")
     public @ResponseBody
     Member getInfo(@RequestParam("memberId") String memberId) {
@@ -339,7 +367,6 @@ public class MemberController {
     @PostMapping(path = "/modifyPassword")
     public @ResponseBody
     boolean modifyPassword(@SessionAttribute("mail") String mail, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
-//        return true;
         return memberService.modifyPassword(mail, oldPassword, newPassword);
     }
 
@@ -352,7 +379,6 @@ public class MemberController {
     @GetMapping(path = "/disqualify")
     public @ResponseBody
     boolean disqualify(@SessionAttribute("mail") String mail) {
-//        return true;
         return memberService.disqualify(mail);
     }
 

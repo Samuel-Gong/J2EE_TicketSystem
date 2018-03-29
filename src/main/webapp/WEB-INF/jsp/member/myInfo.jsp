@@ -3,7 +3,7 @@
   User: Shenmiu
   Date: 13/03/2018
   Time: 15:55
-  
+
   Description:  个人信息
 --%>
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" %>
@@ -43,29 +43,39 @@
                 <div class="panel-body">
                     <form class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Email</label>
+                            <label class="col-md-3 control-label">Email</label>
                             <div class="col-md-7">
                                 <p id="member-mail" class="form-control-static"></p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">会员积分</label>
+                            <label class="col-md-3 control-label">支付宝账户</label>
+                            <div class="col-md-7">
+                                <p id="is-bind-account" class="form-control-static">已绑定</p>
+                                <button id="bind-account-btn" type="button" class="btn btn-link" data-toggle="modal"
+                                        data-target="#bind-account">
+                                    去绑定
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-3 control-label">会员积分</label>
                             <div class="col-md-7">
                                 <p id="member-points" class="form-control-static"></p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">会员等级</label>
-                            <div class="col-md-4">
+                            <label class="col-md-3 control-label">会员等级</label>
+                            <div class="col-md-3">
                                 <p class="form-control-static"><span>Lv.</span><span id="member-level"></span></p>
                             </div>
-                            <label class="col-md-2 control-label">享受优惠</label>
-                            <div class="col-md-4">
+                            <label class="col-md-3 control-label">享受优惠</label>
+                            <div class="col-md-3">
                                 <p class="form-control-static"><span id="member-discount"></span>折</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">密码</label>
+                            <label class="col-md-3 control-label">密码</label>
                             <div class="col-md-7">
                                 <button type="button" class="btn btn-link" data-toggle="modal"
                                         data-target="#modify-password">
@@ -74,7 +84,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-2 control-label">会员资格</label>
+                            <label class="col-md-3 control-label">会员资格</label>
                             <div class="col-md-7">
                                 <button type="button" class="btn btn-link" data-toggle="modal"
                                         data-target="#disqualify">
@@ -91,6 +101,40 @@
 </div>
 
 <!-- 模态框 -->
+<!-- bind-account modal begin -->
+<div class="modal fade" id="bind-account" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title text-center">绑定支付宝</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="bind-account-form" method="post">
+                    <div class="form-group">
+                        <label class="control-label col-md-3">账户</label>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" id="account-id" placeholder="请输入支付宝账户">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-3">支付密码</label>
+                        <div class="col-md-6">
+                            <input type="password" class="form-control" id="account-password" placeholder="请输入支付密码">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group">
+                    <button type="button" id="bind-account-confirm-btn" class="btn btn-primary">确认</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- bind-account modal end -->
+
 <!-- modify_password_modal begin -->
 <div class="modal fade" id="modify-password" data-backdrop="false">
     <div class="modal-dialog">
@@ -172,9 +216,17 @@
             },
             success: function (info) {
                 console.log(info);
-                //显示会员的邮箱和信息
+                //显示会员的邮箱、余额、积分
                 $("#member-mail").text(info.mail);
                 $("#member-points").text(info.points);
+
+                //已经绑定支付宝账户，去绑定支付宝账户按钮隐藏
+                if (info.bindAccount === "true") {
+                    $("#bind-account-btn").addClass("hidden");
+                }
+                else {
+                    $("#is-bind-account").addClass("hidden");
+                }
             },
             error: function () {
                 alert("请求会员信息失败");
@@ -203,10 +255,35 @@
     });
 
     /**
+     * 绑定支付宝账户监听
+     */
+    $("#bind-account-confirm-btn").on("click", function () {
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/bindAccount",
+            method: "post",
+            data: {
+                "id": $("#account-id").val(),
+                "password": $("#account-password").val()
+            },
+            success: function (data) {
+                if (data === true){
+                    alert("绑定支付宝成功");
+                    window.location.reload();
+                }
+                else
+                    alert("绑定支付宝失败");
+            },
+            error: function () {
+                alert("绑定支付宝失败");
+            }
+        });
+    });
+
+    /**
      * 修改密码监听
      */
     $("#modify_password_confirm_btn").on("click", function () {
-        alert("oldPassword: " + $("#oldPassword").val() + "newPassword: " + $("#newPassword").val());
+        console.log("oldPassword: " + $("#oldPassword").val() + "newPassword: " + $("#newPassword").val());
         $.ajax({
             url: "${pageContext.request.contextPath}/member/modifyPassword",
             method: "post",
@@ -214,9 +291,8 @@
                 "oldPassword": $("#oldPassword").val(),
                 "newPassword": $("#newPassword").val()
             },
-            dataType: "text",
-            success: function (data, value) {
-                if (data === "true")
+            success: function (data) {
+                if (data === true)
                     alert("密码修改成功");
                 else
                     alert("密码修改失败");
@@ -234,9 +310,8 @@
         $.ajax({
             url: "${pageContext.request.contextPath}/member/disqualify",
             method: "get",
-            dataType: "text",
-            success: function (data, value) {
-                if (data === "true")
+            success: function (data) {
+                if (data === true)
                     alert("取消资格成功");
                 else
                     alert("取消资格失败");

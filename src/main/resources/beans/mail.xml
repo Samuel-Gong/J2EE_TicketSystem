@@ -20,7 +20,7 @@
     </bean>
 
     <!-- 自定义电子邮件模版 -->
-    <bean id="customeMailMessage"
+    <bean id="customMailMessage"
           class="org.springframework.mail.SimpleMailMessage">
 
         <property name="from" value="a52212498@163.com"/>
@@ -37,7 +37,7 @@
 
     <bean id="mailUtil" class="edu.nju.util.MailUtil">
         <property name="mailSender" ref="mailSender"/>
-        <property name="simpleMailMessage" ref="customeMailMessage"/>
+        <property name="simpleMailMessage" ref="customMailMessage"/>
     </bean>
 
 </beans>

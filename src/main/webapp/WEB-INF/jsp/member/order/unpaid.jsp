@@ -148,7 +148,7 @@
     $("#order-container").on("click", ".cancel-btn", function () {
         let orderId = $(this).prev().val();
         console.log(orderId);
-        $(location).attr("href", "${pageContext.request.contextPath}/member/pay/" + orderId);
+        $(location).attr("href", "${pageContext.request.contextPath}/member/cancel/" + orderId);
     });
 
 </script>

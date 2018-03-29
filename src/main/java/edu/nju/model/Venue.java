@@ -63,6 +63,11 @@ public class Venue {
     private boolean auditing;
 
     /**
+     * 总收入
+     */
+    private int income;
+
+    /**
      * 座位分布
      */
     @OneToMany(mappedBy = "venue", cascade = {CascadeType.ALL}, orphanRemoval = true)
@@ -96,6 +101,14 @@ public class Venue {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public int getIncome() {
+        return income;
+    }
+
+    public void setIncome(int income) {
+        this.income = income;
     }
 
     public List<VenueSeat> getSeatMap() {

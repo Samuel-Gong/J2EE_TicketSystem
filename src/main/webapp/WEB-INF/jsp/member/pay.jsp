@@ -92,53 +92,35 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">总票价:</label>
+                                <label class="col-md-3 control-label">原票价:</label>
                                 <div class="col-md-2">
                                     <p class="form-control-static">
                                         <c:out value="${order.price}"/>元
                                     </p>
                                 </div>
+                                <label class="col-md-3 control-label">优惠票价:</label>
+                                <div class="col-md-2">
+                                    <p class="form-control-static">
+                                        <c:out value="${order.actualPrice}"/>元
+                                    </p>
+                                </div>
                             </div>
                         </form>
+                    </div>
+                    <div class="panel-footer">
+                        剩余时间:<span id="countdown-minute"></span>分<span id="countdown-second"></span>秒
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 col-md-offset-4">
-            <h3>剩余支付时间:<span id="countdown-minute"></span>分<span id="countdown-second"></span>秒</h3>
-        </div>
     </div>
+    <br>
     <div class="row">
-        <div id="pay-container" class="col-md-8 col-md-offset-2">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">支付</h3>
-                </div>
-                <div class="panel-body">
-                    <form class="form-horizontal">
-                        <div class="form-group">
-                            <div class="radio col-md-offset-1 col-md-2">
-                                <label>
-                                    <input type="radio" name="payTypes" id="alipay" value="alipay"
-                                           checked>支付宝
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="radio col-md-offset-1 col-md-2">
-                                <label>
-                                    <input type="radio" name="payTypes" id="bankpay" value="bankpay">网上银行
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-md-4 col-md-offset-4">
-                                <button id="pay-btn" type="button" class="btn btn-primary center-block">支付</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="col-md-2 col-md-offset-4">
+            <button id="pay-btn" type="button" class="btn btn-primary center-block">支付</button>
+        </div>
+        <div class="col-md-2">
+            <button id="cancel-btn" type="button" class="btn btn-primary center-block">取消</button>
         </div>
     </div>
 </div>
@@ -153,6 +135,9 @@
 <script src="${pageContext.request.contextPath}/js/moment.min.js"></script>
 <script>
 
+    /**
+     * 支付按钮监听
+     */
     $("#pay-btn").on("click", function () {
         $.get("${pageContext.request.contextPath}/member/order/pay/" + ${order.orderId},
             function (data) {
@@ -161,7 +146,28 @@
                     $(location).attr("href", "${pageContext.request.contextPath}/member/order/booked");
                 }
                 else {
-                    alert("订单支付失败");
+                    alert("订单支付失败，账户余额不足");
+                    //跳转到未支付订单
+                    $(location).attr("href", "${pageContext.request.contextPath}/member/order/unpaid");
+                }
+            }
+        );
+    });
+
+    /**
+     * 取消按钮监听
+     */
+    $("#cancel-btn").on("click", function () {
+        $.get("${pageContext.request.contextPath}/member/order/cancel/" + ${order.orderId},
+            function (data) {
+                if (data === true) {
+                    alert("订单取消成功");
+                    $(location).attr("href", "${pageContext.request.contextPath}/member/order/cancel");
+                }
+                else {
+                    alert("订单取消失败");
+                    //跳转到未支付订单
+                    $(location).attr("href", "${pageContext.request.contextPath}/member/order/unpaid");
                 }
             }
         );

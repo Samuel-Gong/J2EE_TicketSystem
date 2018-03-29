@@ -44,9 +44,14 @@ public class Order {
     private Integer seatNum;
 
     /**
-     * 订单总价
+     * 订单原价
      */
     private int price;
+
+    /**
+     * 优惠价格
+     */
+    private int actualPrice;
 
     /**
      * 订单状态
@@ -83,6 +88,16 @@ public class Order {
      * 退还票价
      */
     private double returnedMoney;
+
+    /**
+     * 是否使用会员折扣
+     */
+    private boolean memberDiscount;
+
+    /**
+     * 是否使用优惠券
+     */
+    private boolean useCoupon;
 
     /**
      * 多个订单可能对应一个会员，外键为会员id，可以不对应会员：现场购票（非会员）
@@ -123,14 +138,20 @@ public class Order {
     public Order(TakeOrderDTO takeOrderDTO) {
         //设定为当前时间
         this.setCreateTime(LocalDateTimeUtil.nowTillMinute());
-        //设置订单总价
+        //设置订单原价
         this.setPrice(takeOrderDTO.getPrice());
+        //设置订单优惠价格
+        this.setActualPrice(takeOrderDTO.getActualPrice());
         //订单是自选座位
         this.setSeatSettled(takeOrderDTO.getSeatSettled());
         //订单是否是现场购票
         this.setBoughtOnline(takeOrderDTO.getBoughtOnline());
         //订单是否是会员购票
         this.setMemberOrder(takeOrderDTO.getMemberOrder());
+        //订单是否使用了会员优惠
+        this.setMemberDiscount(takeOrderDTO.isMemberDiscount());
+        //订单是否使用了会员折扣
+        this.setUseCoupon(takeOrderDTO.isUseCoupon());
     }
 
     public Integer getOrderId() {
@@ -163,6 +184,14 @@ public class Order {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getActualPrice() {
+        return actualPrice;
+    }
+
+    public void setActualPrice(int actualPrice) {
+        this.actualPrice = actualPrice;
     }
 
     public OrderStatus getOrderStatus() {
@@ -227,6 +256,30 @@ public class Order {
 
     public void setReturnedMoney(double returnedMoney) {
         this.returnedMoney = returnedMoney;
+    }
+
+    public boolean isMemberDiscount() {
+        return memberDiscount;
+    }
+
+    public void setMemberDiscount(boolean memberDiscount) {
+        this.memberDiscount = memberDiscount;
+    }
+
+    public boolean isUseCoupon() {
+        return useCoupon;
+    }
+
+    public void setUseCoupon(boolean useCoupon) {
+        this.useCoupon = useCoupon;
+    }
+
+    public Coupon getCoupon() {
+        return coupon;
+    }
+
+    public void setCoupon(Coupon coupon) {
+        this.coupon = coupon;
     }
 
     public Member getMemberFK() {

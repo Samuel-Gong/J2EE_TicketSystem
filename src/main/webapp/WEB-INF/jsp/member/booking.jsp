@@ -22,10 +22,16 @@
 
     <style>
         table {
+            text-align: center;
             table-layout: fixed;
         }
 
+        caption {
+            text-align: center;
+        }
+
         td {
+            text-align: center;
             font-size: 12px;
             white-space: nowrap;
             overflow: scroll;
@@ -115,7 +121,55 @@
                     <p class="help-block">最多不超过20个座位</p>
                 </div>
             </form>
-            <h5>总票价:<span id="total-price">0</span></h5>
+            <div>
+                <h4 class="text-center">优惠方式</h4>
+            </div>
+            <form id="offer-type-form">
+                <div class="radio">
+                    <label>
+                        <input id="discount-radio" type="radio" name="offer-type-options" value="discount" checked>会员折扣
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input id="coupon-radio" type="radio" name="offer-type-options" value="coupon">优惠券
+                    </label>
+                </div>
+                <p id="no-coupon-tip" class="help-block hidden">无可用优惠券</p>
+            </form>
+            <form id="discount-info" class="form-horizontal">
+                <div class="form-group">
+                    <label class="control-label col-md-6">会员等级:</label>
+                    <div class="col-md-6">
+                        <p class="form-control-static">Lv.<span id="member-level"></span></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-md-6">享受折扣:</label>
+                    <div class="col-md-6">
+                        <p class="form-control-static"><span id="member-discount">折</span></p>
+                    </div>
+                </div>
+            </form>
+            <table id="coupon-table" class="hidden">
+                <caption>优惠券</caption>
+                <thead>
+                <tr>
+                    <th>面额</th>
+                    <th>剩余</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="remain-coupon">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            <h5>原票价:<span id="raw-price">0</span></h5>
+            <h5>优惠票价:<span id="actual-price">0</span></h5>
             <button id="buy-btn" type="button" class="btn btn-primary center-block">下单</button>
         </div>
     </div>
@@ -177,6 +231,28 @@
     }
 
     /**
+     * 更新优惠票价
+     */
+    function updateActualPrice(rawPrice) {
+        //会员折扣
+        if ($("#discount-radio").is(":checked")) {
+            let discount = parseInt($("#member-discount").text());
+            console.log(discount);
+            console.log(discount / 10 * rawPrice);
+            $("#actual-price").text(discount / 10 * rawPrice);
+        }
+        //优惠券方式
+        else {
+            //当总价不为0的时候才减价
+            if (rawPrice !== 0) {
+                let decreasePrice = $("input:radio[name='coupon-value-options']:checked").val();
+                console.log(decreasePrice);
+                $("#actual-price").text(rawPrice - decreasePrice);
+            }
+        }
+    }
+
+    /**
      * 选票购买时，应该添加点击座位的监听
      */
     function seatClick() {
@@ -186,9 +262,7 @@
                 return 'available';
             }
             else {
-                if (selectedSeats.length === 0) {
-                    $("#pick-seat-btn").removeClass("hidden");
-                }
+
                 let id = this.node().attr("id");
                 let rowAndColumn = id.split("_");
                 let row = rowAndColumn[0];
@@ -201,17 +275,17 @@
                 );
 
                 //更新总票价
-                let totalPriceNode = $("#total-price");
+                let totalPriceNode = $("#raw-price");
                 let typeChar = this.char();
                 let totalPrice = parseInt(totalPriceNode.text()) + parseInt(seatTypes[findIndexInSeatTypes(typeChar)].price);
                 totalPriceNode.text(totalPrice);
+                updateActualPrice(totalPrice);
+
                 return 'selected';
             }
         }
         else if (this.status() === 'selected') {
-            if (selectedSeats.length === 1) {
-                $("#selected-seat-btn").addClass("hidden");
-            }
+
             let id = this.node().attr("id");
             let rowAndColumn = id.split("_");
             let row = rowAndColumn[0];
@@ -230,10 +304,11 @@
             });
 
             //更新总票价
-            let totalPriceNode = $("#total-price");
+            let totalPriceNode = $("#raw-price");
             let typeChar = this.char();
             let totalPrice = parseInt(totalPriceNode.text()) - parseInt(seatTypes[findIndexInSeatTypes(typeChar)].price);
             totalPriceNode.text(totalPrice);
+            updateActualPrice(totalPrice);
 
             return 'available';
         }
@@ -258,7 +333,7 @@
         console.log(singleSeatPrice);
         console.log(seatNum);
         //显示总价
-        $("#total-price").text(singleSeatPrice * seatNum);
+        $("#raw-price").text(singleSeatPrice * seatNum);
     });
 
     /**
@@ -267,7 +342,7 @@
     function buyNow2PickSeat() {
 
         //总价格初始化为0
-        $("#total-price").text(0);
+        $("#raw-price").text(0);
 
         //给座位添加点击监听
         seatChartsSetting.addClick(seatClick);
@@ -284,7 +359,7 @@
     function pickSeat2BuyNow() {
 
         //总价格初始化为0
-        $("#total-price").text(0);
+        $("#raw-price").text(0);
 
         //座位不可选择，已选座位状态改为available
         seatChartsSetting.clickDoNothing();
@@ -299,6 +374,30 @@
     }
 
     /**
+     * 会员折扣切换到优惠券
+     */
+    function discount2Coupon() {
+        $("#coupon-table").removeClass("hidden");
+        $("#discount-info").addClass("hidden");
+
+        //更新实际价格
+        let rawPrice = parseInt($("#raw-price").text());
+        updateActualPrice(rawPrice);
+    }
+
+    /**
+     * 优惠券切换到会员折扣
+     */
+    function coupon2Discount() {
+        $("#discount-info").removeClass("hidden");
+        $("#coupon-table").addClass("hidden");
+
+        //更新实际价格
+        let rawPrice = parseInt($("#raw-price").text());
+        updateActualPrice(rawPrice);
+    }
+
+    /**
      * 下单按钮监听
      */
     $("#buy-btn").on("click", function () {
@@ -308,7 +407,12 @@
             venueId: planDetail.venueId,
             venuePlanId: venuePlan.venuePlanId,
             createTime: moment().format("YYYY-MM-DD HH:mm:ss"),
-            price: parseInt($("#total-price").text()),
+            price: parseInt($("#raw-price").text()),
+            actualPrice: parseInt($("#actual-price").text()),
+            //是否使用会员折扣
+            memberDiscount: $("#discount-info").is(":checked"),
+            //是否使用优惠券
+            useCoupon: $("#coupon-radio").is(":checked"),
             //线上购买
             boughtOnline: true,
             //会员购票
@@ -370,6 +474,63 @@
 
     $(document).ready(function () {
 
+        /**
+         * 请求显示会员等级和折扣
+         */
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/discount",
+            method: "get",
+            data: {
+                memberId: "${sessionScope.mail}"
+            },
+            success: function (levelAndDiscount) {
+                //显示会员的邮箱和信息
+                $("#member-level").text(levelAndDiscount.level);
+                $("#member-discount").text(levelAndDiscount.discount);
+            },
+            error: function () {
+                alert("请求会员等级和折扣失败");
+            }
+        });
+
+        /**
+         * 获取会员所拥有的优惠券及积分
+         */
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/coupons",
+            method: "get",
+            data: {
+                memberId: "${sessionScope.mail}"
+            },
+            success: function (pointsAndCoupons) {
+                console.log(pointsAndCoupons);
+                $("#points").text(pointsAndCoupons.points);
+                let coupons = pointsAndCoupons.coupons;
+                if (Object.keys(coupons).length === 0) {
+                    $("#coupon-radio").attr("disabled", "disabled");
+                    $("#no-coupon-tip").removeClass("hidden");
+                }
+                else {
+                    $.each(coupons, function (value, remain) {
+                        $("#remain-coupon").append("" +
+                            "<tr>\n" +
+                            "   <td>" + value + "</td>\n" +
+                            "   <td>" + remain + "</td>\n" +
+                            "   <td>" +
+                            "       <input type='radio' name='coupon-value-options' value='" + value + "'>" +
+                            "   </td>\n" +
+                            "</tr>");
+                    });
+                }
+
+                //选中第一个选项
+                $("input:radio[name='coupon-value-options']:first").attr("checked", "checked");
+            },
+            error: function () {
+                alert("获取会员积分和优惠券失败");
+            }
+        });
+
         console.log(venuePlan);
 
         //设置基础信息
@@ -421,6 +582,20 @@
             } else {
                 pickSeat2BuyNow();
             }
+        });
+
+        $("input:radio[name='offer-type-options']").on("change", function () {
+            //会员折扣
+            if (this.value === 'discount') {
+                coupon2Discount();
+            } else {        //优惠券
+                discount2Coupon();
+            }
+        });
+
+        $("#coupon-table").on("change", "input:radio[name='coupon-value-options']", function () {
+            let rawPrice = parseInt($("#raw-price").text());
+            updateActualPrice(rawPrice);
         });
 
         seatChartsSetting.addClick(seatClick);

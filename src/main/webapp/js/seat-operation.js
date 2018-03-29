@@ -14,16 +14,17 @@ let seatMap = [
  * @param columnNum 座位列数
  */
 function initSeatMap(rowNum, columnNum) {
-    seatMap = new Array(rowNum);
-    $.each(seatMap, function (index, val) {
-        seatMap[index] = new Array(columnNum);
-        for (let i = 0; i < columnNum; i++) {
-            seatMap[index][i] = "";
+    seatMap = [];
+    for (let i = 0; i < rowNum; i++) {
+        seatMap[i] = [];
+        for (let j = 0; j < columnNum; j++) {
+            seatMap[i][j] = "";
         }
-    });
+    }
 }
 
 function fillSeatMapWithDefaultType(rowNum, columnNum, seats) {
+    console.log(seats);
     initSeatMap(rowNum, columnNum);
     $.each(seats, function (index, seat) {
         let seat_row = seat.row;

@@ -1,23 +1,23 @@
 package edu.nju.service.impl;
 
+import edu.nju.dao.AccountDao;
 import edu.nju.dao.CouponDao;
 import edu.nju.dao.MemberDao;
 import edu.nju.dto.LevelAndDiscount;
 import edu.nju.dto.PointsAndCoupons;
-import edu.nju.model.Coupon;
+import edu.nju.model.Account;
 import edu.nju.model.Member;
-import edu.nju.service.DiscountStrategy;
-import edu.nju.service.LevelStrategy;
+import edu.nju.service.strategy.DiscountStrategy;
+import edu.nju.service.strategy.LevelStrategy;
 import edu.nju.service.MemberService;
 import edu.nju.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * @author Shenmiu
@@ -35,10 +35,13 @@ public class MemberServiceImpl implements MemberService {
     @Autowired
     private CouponDao couponDao;
 
-    private static final String DOMAIN = "http://localhost:8888/member/confirmMail?";
+    @Autowired
+    private AccountDao accountDao;
+
+    private static final String DOMAIN = "http://localhost:8888/tickets/member/confirmMail?";
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class)
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 60000)
     public boolean register(Member member) {
 
         //生成密钥
@@ -112,20 +115,37 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberDao.getMember(memberId);
         pointsAndCoupons.setPoints(member.getPoints());
 
-        //todo 使用lambda简化
-        List<Coupon> couponList = couponDao.getUnusedCoupons(memberId);
-        Map<Integer, Integer> valueAndPoints = new TreeMap<>();
-        for (Coupon coupon : couponList) {
-            int value = coupon.getCouponType().getValue();
-            //如果存在就+1
-            valueAndPoints.computeIfPresent(value, (key, oldValue) -> oldValue + 1);
-            //如果不存在就赋值为1
-            valueAndPoints.putIfAbsent(value, 1);
-        }
+        Map<Integer, Long> valueAndRemain = couponDao.getUnusedCoupons(memberId).stream()
+                .collect(Collectors.groupingBy(coupon -> coupon.getCouponType().getValue(), Collectors.counting()));
 
-        pointsAndCoupons.setCoupons(valueAndPoints);
+        pointsAndCoupons.setCoupons(valueAndRemain);
 
         return pointsAndCoupons;
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean bindAccount(String mail, int accountId, String accountPassword) {
+        Member member = memberDao.getMember(mail);
+        assert member.getAccount() == null;
+        Account accountInDB = accountDao.getAccount(accountId);
+
+        //账户存在且密码相同，将支付宝账户绑定到会员上
+        if (accountInDB != null && accountInDB.getPassword().equals(accountPassword)) {
+            //建立联系
+            member.setAccount(accountInDB);
+            member.setBindAccount(true);
+            accountInDB.setMember(member);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public boolean checkAccount(String mail) {
+        Member member = memberDao.getMember(mail);
+        return member.getAccount() != null;
     }
 
     @Override

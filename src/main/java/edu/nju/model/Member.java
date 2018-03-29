@@ -41,6 +41,11 @@ public class Member {
     private int mailKey;
 
     /**
+     * 是否绑定账户
+     */
+    private boolean bindAccount;
+
+    /**
      * 和账户一对一
      */
     @OneToOne
@@ -108,6 +113,14 @@ public class Member {
 
     public void setMailKey(int key) {
         this.mailKey = key;
+    }
+
+    public boolean isBindAccount() {
+        return bindAccount;
+    }
+
+    public void setBindAccount(boolean bindAccount) {
+        this.bindAccount = bindAccount;
     }
 
     public Account getAccount() {

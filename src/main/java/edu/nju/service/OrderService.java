@@ -1,6 +1,7 @@
 package edu.nju.service;
 
 import edu.nju.dto.OrderShowDTO;
+import edu.nju.dto.RetreatTipDTO;
 import edu.nju.dto.TakeOrderDTO;
 import edu.nju.util.OrderStatus;
 
@@ -22,13 +23,6 @@ public interface OrderService {
      * @return 指定订单状态的订单列表
      */
     List<OrderShowDTO> getOrderShowDTOs(String mail, OrderStatus orderStatus);
-
-    /**
-     * 根据订单编号检查订单是否为未支付订单，若是未支付订单，则将订单状态改为已过期
-     *
-     * @param orderId 订单编号
-     */
-    void checkUnpaidOrder(int orderId);
 
     /**
      * 根据订单编号获取订单展示信息

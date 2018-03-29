@@ -18,7 +18,7 @@ public class PointsAndCoupons {
     /**
      * 优惠券的面额和张数
      */
-    private Map<Integer, Integer> coupons;
+    private Map<Integer, Long> coupons;
 
     public Integer getPoints() {
         return points;
@@ -28,11 +28,11 @@ public class PointsAndCoupons {
         this.points = points;
     }
 
-    public Map<Integer, Integer> getCoupons() {
+    public Map<Integer, Long> getCoupons() {
         return coupons;
     }
 
-    public void setCoupons(Map<Integer, Integer> coupons) {
+    public void setCoupons(Map<Integer, Long> coupons) {
         this.coupons = coupons;
     }
 

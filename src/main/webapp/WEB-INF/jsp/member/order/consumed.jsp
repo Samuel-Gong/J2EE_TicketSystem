@@ -99,6 +99,12 @@
                                             <c:out value="${order.price}"/>元
                                         </p>
                                     </div>
+                                    <label class="col-md-3 control-label">优惠票价:</label>
+                                    <div class="col-md-2">
+                                        <p class="form-control-static">
+                                            <c:out value="${order.actualPrice}"/>元
+                                        </p>
+                                    </div>
                                 </div>
                             </form>
                         </div>
