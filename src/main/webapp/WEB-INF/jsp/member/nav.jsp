@@ -29,6 +29,7 @@
                     <li><a href="${pageContext.request.contextPath}/member/myInfo">个人信息</a></li>
                     <li><a href="${pageContext.request.contextPath}/member/order/booked">我的订单</a></li>
                     <li><a href="${pageContext.request.contextPath}/member/myCoupon">我的优惠券</a></li>
+                    <li><a href="${pageContext.request.contextPath}/member/statistics">消费统计</a></li>
                 </ul>
             </li>
         </ul>

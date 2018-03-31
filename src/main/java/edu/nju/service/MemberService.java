@@ -1,8 +1,11 @@
 package edu.nju.service;
 
 import edu.nju.dto.LevelAndDiscount;
+import edu.nju.dto.MemberStatistics;
 import edu.nju.dto.PointsAndCoupons;
 import edu.nju.model.Member;
+
+import java.util.Map;
 
 /**
  * @author Shenmiu
@@ -105,4 +108,19 @@ public interface MemberService {
      * @return 绑定是否成功
      */
     boolean bindAccount(String mail, int accountId, String accountPassword);
+
+    /**
+     * 获取会员统计信息
+     *
+     * @param mail 会员邮箱
+     * @return 会员统计数据传输对象
+     */
+    MemberStatistics getMemberStatistics(String mail);
+
+    /**
+     * 会员等级及其人数分布
+     *
+     * @return 会员等级到人数的映射
+     */
+    Map<Integer, Long> getMemberDistribution();
 }

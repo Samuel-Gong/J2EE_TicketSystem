@@ -23,7 +23,7 @@ public class Manager {
     private int unsettleIncome;
 
     /**
-     * 已结算收入
+     * 已结算收入（就是tickets盈利）
      */
     private int settleIncome;
 

@@ -1,7 +1,6 @@
 package edu.nju.service;
 
 import edu.nju.dto.OrderShowDTO;
-import edu.nju.dto.RetreatTipDTO;
 import edu.nju.dto.TakeOrderDTO;
 import edu.nju.util.OrderStatus;
 

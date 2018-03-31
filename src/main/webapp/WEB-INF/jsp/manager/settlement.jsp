@@ -42,12 +42,6 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-offset-3 col-md-3">
-            <h4>已结算收入：<span id="settle-income"></span>元</h4>
-            <h4>未结算收入：<span id="unsettle-income"></span>元</h4>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-md-offset-2 col-md-8">
             <table class="table text-center">
                 <caption class="text-center">未结算场馆计划</caption>
@@ -170,25 +164,6 @@
     }
 
     $(document).ready(function () {
-
-        /**
-         * 获取网站收入
-         */
-        $.ajax({
-            url: "${pageContext.request.contextPath}/manager/income",
-            method: "get",
-            dataType: "json",
-            success: function (income) {
-                let settleIncome = income.settleIncome;
-                let unsettleIncome = income.unsettleIncome;
-
-                $("#settle-income").text(settleIncome);
-                $("#unsettle-income").text(unsettleIncome);
-            },
-            error: function () {
-                alert("获取网站收入错误");
-            }
-        });
 
         /**
          * 获取所有已结束、未结算的场馆计划

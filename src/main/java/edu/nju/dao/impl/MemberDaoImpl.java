@@ -8,6 +8,8 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Shenmiu
  * @date 2018/03/04
@@ -53,5 +55,12 @@ public class MemberDaoImpl implements MemberDao {
         Query<Integer> query = session.createQuery("select mailKey from Member where mail = :mail", Integer.class)
                 .setParameter("mail", mail);
         return query.getSingleResult();
+    }
+
+    @Override
+    public List<Integer> getAllMembersPoints() {
+        return sessionFactory.getCurrentSession()
+                .createQuery("select points from Member", Integer.class)
+                .list();
     }
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.spring.annotation.FastJsonFilter;
 import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
 import edu.nju.dto.LevelAndDiscount;
+import edu.nju.dto.MemberStatistics;
 import edu.nju.dto.PointsAndCoupons;
 import edu.nju.dto.TakeOrderDTO;
 import edu.nju.model.CouponType;
@@ -45,6 +46,22 @@ public class MemberController {
     @Autowired
     private CouponService couponService;
 
+    @GetMapping(path = "/statistics/details")
+    public @ResponseBody
+    MemberStatistics getStatistics(@SessionAttribute("mail") String mail){
+        return memberService.getMemberStatistics(mail);
+    }
+
+    @GetMapping(path = "/statistics")
+    public String statistics(){
+        return "/member/statistics";
+    }
+
+    /**
+     * 检查账户是否有绑定的支付宝
+     * @param mail
+     * @return
+     */
     @GetMapping(path = "/checkAccount")
     public @ResponseBody
     boolean checkAccount(@SessionAttribute("mail") String mail) {

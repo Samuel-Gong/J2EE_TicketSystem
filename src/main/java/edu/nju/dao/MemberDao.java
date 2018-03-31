@@ -2,6 +2,8 @@ package edu.nju.dao;
 
 import edu.nju.model.Member;
 
+import java.util.List;
+
 /**
  * @author Shenmiu
  * @date 2018/03/04
@@ -50,4 +52,10 @@ public interface MemberDao {
      * @return 邮箱密钥
      */
     int getMailKey(String mail);
+
+    /**
+     * 获取所有会员分数
+     * @return 获取
+     */
+    List<Integer> getAllMembersPoints();
 }

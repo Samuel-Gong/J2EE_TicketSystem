@@ -8,19 +8,6 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context-4.2.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <!--<mvc:annotation-driven conversion-service="myConversionService"/>-->
-
-    <!--<bean id="myConversionService"-->
-    <!--class="org.springframework.format.support.FormattingConversionServiceFactoryBean">-->
-    <!--<property name="converters">-->
-    <!--<set>-->
-    <!--<bean class="edu.nju.BindingTest.converters.LocalDateConverter">-->
-    <!--<constructor-arg value="yyyy-MM-dd"/>-->
-    <!--</bean>-->
-    <!--</set>-->
-    <!--</property>-->
-    <!--</bean>-->
-
     <!-- 设置default jsp -->
     <mvc:view-controller path="/" view-name="redirect:/index"/>
 

@@ -1,7 +1,5 @@
 package edu.nju.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import edu.nju.dto.TakeOrderDTO;
 import edu.nju.service.OrderService;
 import edu.nju.util.OrderStatus;
 import org.junit.jupiter.api.Assertions;

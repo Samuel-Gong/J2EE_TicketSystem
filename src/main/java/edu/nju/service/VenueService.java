@@ -1,9 +1,6 @@
 package edu.nju.service;
 
-import edu.nju.dto.SeatCheckInDTO;
-import edu.nju.dto.VenueAndPlanDTO;
-import edu.nju.dto.VenuePlanBriefDTO;
-import edu.nju.dto.VenuePlanDetailDTO;
+import edu.nju.dto.*;
 import edu.nju.model.Order;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
@@ -35,14 +32,6 @@ public interface VenueService {
      * @return 带有座位信息的场馆
      */
     Venue getVenueWithSeatMap(int venueId);
-
-    /**
-     * 查询场馆，带上计划信息
-     *
-     * @param venueId 场馆编号
-     * @return 带有场馆计划的场馆
-     */
-    Venue getVenueWithPlan(int venueId);
 
     /**
      * 场馆注册
@@ -183,4 +172,17 @@ public interface VenueService {
      * @return 已结束、为结算的场馆计划列表
      */
     List<VenueAndPlanDTO> getUnsettleVenuePlans();
+
+    /**
+     * 获取场馆统计信息
+     * @param venueId 场馆编号
+     * @return 场馆统计信息
+     */
+    VenueFinance getFinance(int venueId);
+
+    /**
+     * 获取各场馆统计信息
+     * @return 各场馆统计信息列表
+     */
+    List<VenueStatisticsDTO> getVenueStatistics();
 }

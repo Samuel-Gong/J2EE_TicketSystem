@@ -138,4 +138,10 @@ public interface VenueDao {
      * @return 已结束、为结算场馆计划列表
      */
     List<VenuePlan> getUnsettleVenuePlans();
+
+    /**
+     * 获取所有场馆
+     * @return 获取所有场馆
+     */
+    List<Venue> getVenues();
 }

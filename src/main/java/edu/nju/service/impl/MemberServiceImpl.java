@@ -4,19 +4,23 @@ import edu.nju.dao.AccountDao;
 import edu.nju.dao.CouponDao;
 import edu.nju.dao.MemberDao;
 import edu.nju.dto.LevelAndDiscount;
+import edu.nju.dto.MemberStatistics;
 import edu.nju.dto.PointsAndCoupons;
 import edu.nju.model.Account;
 import edu.nju.model.Member;
+import edu.nju.model.Order;
+import edu.nju.service.MemberService;
 import edu.nju.service.strategy.DiscountStrategy;
 import edu.nju.service.strategy.LevelStrategy;
-import edu.nju.service.MemberService;
 import edu.nju.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -139,6 +143,56 @@ public class MemberServiceImpl implements MemberService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public MemberStatistics getMemberStatistics(String mail) {
+
+        Member member = memberDao.getMember(mail);
+        List<Order> orders = member.getOrders();
+
+        //预订订单金额
+        int totalBooked = 0;
+        //消费订单金额
+        int totalConsumed = 0;
+
+        //退订订单退还金额
+        int totalRefund = 0;
+        //退订订单预订金额
+        int totalRefundBooked = 0;
+
+        for (Order order : orders) {
+            switch (order.getOrderStatus()) {
+                case BOOKED:
+                    totalBooked += order.getActualPrice();
+                    break;
+                case COMSUMPED:
+                    totalConsumed += order.getActualPrice();
+                    break;
+                case RETREAT:
+                    totalRefundBooked += order.getActualPrice();
+                    totalRefund += order.getRefund();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        //通过退订订单退还金额和预订金额计算总手续费
+        int totalFee = totalRefundBooked - totalRefund;
+
+        return new MemberStatistics(totalBooked, totalConsumed, totalRefund, totalFee);
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public Map<Integer, Long> getMemberDistribution() {
+        List<Integer> allMembersPoints = memberDao.getAllMembersPoints();
+
+        return allMembersPoints.stream()
+                .map(LevelStrategy::calculateLevel)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 
     @Override

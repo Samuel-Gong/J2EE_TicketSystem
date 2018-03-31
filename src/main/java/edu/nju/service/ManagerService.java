@@ -34,4 +34,11 @@ public interface ManagerService {
      * @return 是否结算成功
      */
     boolean settlePlan(int venuePlanId, int rate);
+
+    /**
+     * 获取Tickets财务情况
+     *
+     * @return 经理对象
+     */
+    Manager getFinance();
 }

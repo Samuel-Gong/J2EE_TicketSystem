@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import edu.nju.dto.LevelAndDiscount;
 import edu.nju.dto.SeatCheckInDTO;
 import edu.nju.dto.TakeOrderDTO;
+import edu.nju.dto.VenueFinance;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
 import edu.nju.service.MemberService;
@@ -33,6 +34,21 @@ public class VenueController {
 
     @Autowired
     private MemberService memberService;
+
+    @GetMapping(path = "/statistics/details")
+    public @ResponseBody
+    VenueFinance getStatistics(@SessionAttribute("venueId") int venueId){
+        return venueService.getFinance(venueId);
+    }
+
+    /**
+     * 查看场馆统计
+     * @return 场馆统计视图
+     */
+    @GetMapping(path = "/statistics")
+    public String statisticsView(){
+        return "/venue/statistics";
+    }
 
     @RequestMapping(path = "/discount")
     public @ResponseBody

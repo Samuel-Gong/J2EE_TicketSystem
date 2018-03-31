@@ -3,10 +3,7 @@ package edu.nju.service.impl;
 import edu.nju.dao.ManagerDao;
 import edu.nju.dao.OrderDao;
 import edu.nju.dao.VenueDao;
-import edu.nju.dto.SeatCheckInDTO;
-import edu.nju.dto.VenueAndPlanDTO;
-import edu.nju.dto.VenuePlanBriefDTO;
-import edu.nju.dto.VenuePlanDetailDTO;
+import edu.nju.dto.*;
 import edu.nju.model.*;
 import edu.nju.service.VenueService;
 import edu.nju.util.LocalDateTimeUtil;
@@ -56,15 +53,6 @@ public class VenueServiceImpl implements VenueService {
         Venue venue = venueDao.getVenue(venueId);
         //强制加载seatMap
         Hibernate.initialize(venue.getSeatMap());
-        return venue;
-    }
-
-    @Override
-    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public Venue getVenueWithPlan(int venueId) {
-        Venue venue = venueDao.getVenue(venueId);
-        //强制加载venuePlans
-        Hibernate.initialize(venue.getVenuePlans());
         return venue;
     }
 
@@ -337,6 +325,62 @@ public class VenueServiceImpl implements VenueService {
     public List<VenueAndPlanDTO> getUnsettleVenuePlans() {
         return venueDao.getUnsettleVenuePlans().stream()
                 .map(venuePlan -> new VenueAndPlanDTO(venuePlan, venuePlan.getVenue()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public VenueFinance getFinance(int venueId) {
+        Venue venue = venueDao.getVenue(venueId);
+
+        List<Order> orders = venue.getOrders();
+
+        //总预订票价
+        int totalBooked = 0;
+        //总退订票价
+        int totalRefund = 0;
+
+        for (Order order : orders) {
+            switch (order.getOrderStatus()) {
+                case BOOKED:
+                    totalBooked += order.getActualPrice();
+                    break;
+                case RETREAT:
+                    totalRefund += order.getActualPrice();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        List<VenuePlan> venuePlans = venue.getVenuePlans();
+
+        //未结算
+        int totalUnsettle = 0;
+        //已结算
+        int totalSettle = 0;
+
+        for (VenuePlan venuePlan : venuePlans) {
+            if (venuePlan.isSettle()) {
+                totalSettle += venuePlan.getActualIncome();
+            } else {
+                totalUnsettle += venuePlan.getTotalIncome();
+            }
+        }
+
+        return new VenueFinance(totalBooked, totalRefund, totalSettle, totalUnsettle);
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public List<VenueStatisticsDTO> getVenueStatistics() {
+        List<Venue> venues = venueDao.getVenues();
+        return venues.stream()
+                .map(venue ->
+                new VenueStatisticsDTO(venue, venue.getVenuePlans().stream()
+                        .filter(VenuePlan::isSettle)
+                        .mapToInt(VenuePlan::getActualIncome)
+                        .sum()))
                 .collect(Collectors.toList());
     }
 

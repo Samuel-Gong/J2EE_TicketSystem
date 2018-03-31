@@ -20,7 +20,9 @@
         <ul class="nav navbar-nav">
             <li><a href="${pageContext.request.contextPath}/manager/audit">审批</a></li>
             <li><a href="${pageContext.request.contextPath}/manager/settlement">结算中心</a></li>
-            <li><a href="#">统计信息</a></li>
+            <li><a href="${pageContext.request.contextPath}/manager/statistics/venue">各场馆统计</a></li>
+            <li><a href="${pageContext.request.contextPath}/manager/statistics/member">会员统计</a></li>
+            <li><a href="${pageContext.request.contextPath}/manager/statistics/finance">财务统计</a></li>
         </ul>
 
         <ul class="nav navbar-nav pull-right">

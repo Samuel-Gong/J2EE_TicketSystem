@@ -87,7 +87,7 @@ public class Order {
     /**
      * 退还票价
      */
-    private double returnedMoney;
+    private int refund;
 
     /**
      * 是否使用会员折扣
@@ -250,12 +250,12 @@ public class Order {
         this.bookedSeatStr = seatBooked;
     }
 
-    public double getReturnedMoney() {
-        return returnedMoney;
+    public int getRefund() {
+        return refund;
     }
 
-    public void setReturnedMoney(double returnedMoney) {
-        this.returnedMoney = returnedMoney;
+    public void setRefund(int returnedMoney) {
+        this.refund = returnedMoney;
     }
 
     public boolean isMemberDiscount() {

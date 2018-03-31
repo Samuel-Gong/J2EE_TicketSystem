@@ -66,4 +66,10 @@ public class ManagerServiceImpl implements ManagerService {
 
         return true;
     }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public Manager getFinance() {
+        return managerDao.getManager(MEMBER_ID);
+    }
 }

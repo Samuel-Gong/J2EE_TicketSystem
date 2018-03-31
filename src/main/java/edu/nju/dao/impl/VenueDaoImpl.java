@@ -160,4 +160,11 @@ public class VenueDaoImpl implements VenueDao {
                 .list();
     }
 
+    @Override
+    public List<Venue> getVenues() {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Venue ", Venue.class)
+                .list();
+    }
+
 }
