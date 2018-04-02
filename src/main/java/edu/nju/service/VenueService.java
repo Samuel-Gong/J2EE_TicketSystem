@@ -52,11 +52,10 @@ public interface VenueService {
     /**
      * 场馆登录
      *
-     * @param venueId       场馆编号
-     * @param venuePassword 场馆密码
-     * @return 是否登录成功
+     *
+     * @param venue@return 是否登录成功
      */
-    boolean login(int venueId, String venuePassword);
+    boolean login(Venue venue);
 
     //场馆计划
 

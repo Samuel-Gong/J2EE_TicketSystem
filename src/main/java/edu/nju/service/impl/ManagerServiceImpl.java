@@ -32,9 +32,10 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public boolean login(int id, String password) {
-        Manager manager = managerDao.getManager(id);
-        return manager != null && manager.getPassword().equals(password);
+    public boolean login(Manager manager) {
+        Manager persistentManager = managerDao.getManager(manager.getId());
+        //当经理不为空且密码相同时就返回true
+        return persistentManager != null && persistentManager.getPassword().equals(manager.getPassword());
     }
 
     @Override

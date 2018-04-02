@@ -119,10 +119,10 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public boolean login(int venueId, String venuePassword) {
-        Venue venue = venueDao.getVenue(venueId);
-        //当场馆密码正确且没有在审批的时候才允许登录
-        return venue.getPassword().equals(venuePassword) && !venue.isAuditing();
+    public boolean login(Venue venue) {
+        Venue persistentVenue = venueDao.getVenue(venue.getId());
+        //当场馆存在且场馆密码正确且没有在审批的时候才允许登录
+        return persistentVenue != null && persistentVenue.getPassword().equals(venue.getPassword()) && !venue.isAuditing();
     }
 
     @Override
@@ -377,10 +377,10 @@ public class VenueServiceImpl implements VenueService {
         List<Venue> venues = venueDao.getVenues();
         return venues.stream()
                 .map(venue ->
-                new VenueStatisticsDTO(venue, venue.getVenuePlans().stream()
-                        .filter(VenuePlan::isSettle)
-                        .mapToInt(VenuePlan::getActualIncome)
-                        .sum()))
+                        new VenueStatisticsDTO(venue, venue.getVenuePlans().stream()
+                                .filter(VenuePlan::isSettle)
+                                .mapToInt(VenuePlan::getActualIncome)
+                                .sum()))
                 .collect(Collectors.toList());
     }
 

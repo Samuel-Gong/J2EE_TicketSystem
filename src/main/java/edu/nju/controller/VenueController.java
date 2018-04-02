@@ -37,16 +37,17 @@ public class VenueController {
 
     @GetMapping(path = "/statistics/details")
     public @ResponseBody
-    VenueFinance getStatistics(@SessionAttribute("venueId") int venueId){
+    VenueFinance getStatistics(@SessionAttribute("venueId") int venueId) {
         return venueService.getFinance(venueId);
     }
 
     /**
      * 查看场馆统计
+     *
      * @return 场馆统计视图
      */
     @GetMapping(path = "/statistics")
-    public String statisticsView(){
+    public String statisticsView() {
         return "/venue/statistics";
     }
 
@@ -201,20 +202,18 @@ public class VenueController {
     /**
      * 场馆登录
      *
-     * @param venueId       场馆编号
-     * @param venuePassword 场馆密码
-     * @return 重定向至信息界面或者错误界面
+     * @param venue 场馆登陆信息
+     * @return 场馆登陆是否成功
      */
     @PostMapping(value = "/login")
-    public String login(@RequestParam("venue-id") int venueId, @RequestParam("venue-password") String venuePassword, Model model) {
-        if (venueService.login(venueId, venuePassword)) {
+    public @ResponseBody
+    boolean login(@RequestBody Venue venue, Model model) {
+        if (venueService.login(venue)) {
             //在Session中加入场馆编号
-            model.addAttribute("venueId", venueId);
-            return "redirect:/venue/infoView";
-        } else {
-            model.addAttribute("errorMsg", "密码错误或正在审批中，不可登陆");
-            return "/venue/error";
+            model.addAttribute("venueId", venue.getId());
+            return true;
         }
+        return false;
     }
 
     /**

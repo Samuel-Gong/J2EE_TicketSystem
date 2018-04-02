@@ -12,11 +12,10 @@ public interface ManagerService {
     /**
      * 经理登录
      *
-     * @param id       经理id
-     * @param password 经理密码
-     * @return 登录是否成功
+     *
+     * @param manager@return 登录是否成功
      */
-    boolean login(int id, String password);
+    boolean login(Manager manager);
 
     /**
      * 根据经理id获取经理信息

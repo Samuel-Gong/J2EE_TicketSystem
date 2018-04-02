@@ -67,8 +67,10 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public boolean logIn(String mail, String password) {
-        return password.equals(memberDao.getMember(mail).getPassword());
+    public boolean logIn(Member member) {
+        Member persistentMember = memberDao.getMember(member.getMail());
+        //会员存在且密码正确返回true
+        return persistentMember != null && persistentMember.getPassword().equals(member.getPassword());
     }
 
     @Override

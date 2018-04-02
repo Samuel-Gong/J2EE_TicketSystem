@@ -48,17 +48,18 @@ public class MemberController {
 
     @GetMapping(path = "/statistics/details")
     public @ResponseBody
-    MemberStatistics getStatistics(@SessionAttribute("mail") String mail){
+    MemberStatistics getStatistics(@SessionAttribute("mail") String mail) {
         return memberService.getMemberStatistics(mail);
     }
 
     @GetMapping(path = "/statistics")
-    public String statistics(){
+    public String statistics() {
         return "/member/statistics";
     }
 
     /**
      * 检查账户是否有绑定的支付宝
+     *
      * @param mail
      * @return
      */
@@ -316,29 +317,28 @@ public class MemberController {
      * 用户注册
      *
      * @param member 用户信息
-     * @return 重定向首页
+     * @return 用户注册是否成功
      */
     @PostMapping(path = "/register")
-    public String register(Member member) {
-        memberService.register(member);
-        return "redirect:/index";
+    public @ResponseBody
+    boolean register(@RequestBody Member member) {
+        return memberService.register(member);
     }
 
     /**
      * 会员登录
      *
-     * @param mail     会员邮箱
-     * @param password 会员密码
+     * @param member 会员邮箱及密码
      * @return 重定向至会员浏览场馆计划的界面
      */
     @PostMapping(path = "/login")
-    public String login(@RequestParam("mail") String mail, @RequestParam("password") String password, ModelMap modelMap) {
-        if (memberService.logIn(mail, password)) {
-            modelMap.addAttribute("mail", mail);
-            return "redirect:scanShow";
+    public @ResponseBody
+    boolean login(@RequestBody Member member, ModelMap modelMap) {
+        if (memberService.logIn(member)) {
+            modelMap.addAttribute("mail", member.getMail());
+            return true;
         }
-        //TODO  错误界面
-        return "redirect:/error.html";
+        return false;
     }
 
     /**

@@ -117,7 +117,7 @@
                 <h4 class="modal-title text-center">会员登录</h4>
             </div>
             <div class="modal-body">
-                <form id="login_form" action="${pageContext.request.contextPath}/member/login" method="post">
+                <form id="login_form">
                     <div class="input-group">
                         <span class="input-group-addon">邮箱</span>
                         <input type="text" class="form-control" name="mail" placeholder="请输入邮箱">
@@ -146,14 +146,14 @@
                 <h4 class="modal-title text-center">会员注册</h4>
             </div>
             <div class="modal-body">
-                <form id="reg_form" action="${pageContext.request.contextPath}/member/register" method="post">
+                <form id="reg_form">
                     <div class="input-group">
                         <span class="input-group-addon">邮箱</span>
-                        <input type="email" class="form-control" name="mail" placeholder="请输入验证邮箱">
+                        <input id="member-register-mail" type="email" class="form-control" placeholder="请输入验证邮箱">
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">密码</span>
-                        <input type="password" class="form-control" name="password" placeholder="请输入密码">
+                        <input id="member-register-password" type="password" class="form-control" placeholder="请输入密码">
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">确认密码</span>
@@ -179,18 +179,17 @@
                 <h4 class="modal-title text-center">场馆登录</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="venue-login-form"
-                      action="${pageContext.request.contextPath}/venue/login" method="post">
+                <form class="form-horizontal" id="venue-login-form">
                     <div class="form-group">
                         <label class="col-md-offset-1 col-md-3 control-label">编号</label>
                         <div class="col-md-7">
-                            <input type="text" class="form-control" name="venue-id" placeholder="请输入编号">
+                            <input type="text" id="venue-id" class="form-control" placeholder="请输入编号">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-offset-1 col-md-3 control-label">密码</label>
                         <div class="col-md-7">
-                            <input type="password" class="form-control" name="venue-password" placeholder="请输入密码">
+                            <input type="password" id="venue-password" class="form-control" placeholder="请输入密码">
                         </div>
                     </div>
                 </form>
@@ -221,14 +220,13 @@
                     <div class="form-group">
                         <label class="col-md-offset-1 col-md-3 control-label">账号</label>
                         <div class="col-md-7">
-                            <input id="manager-id" type="text" class="form-control" name="manager-id"
+                            <input id="manager-id" type="text" class="form-control"
                                    placeholder="请输入账号">
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-md-offset-1 col-md-3 control-label">密码</label>
                         <div class="col-md-7"><input id="manager-password" type="password" class="form-control"
-                                                     name="manager-password"
                                                      placeholder="请输入密码">
                         </div>
                     </div>
@@ -251,17 +249,96 @@
 
     //会员登录
     $("#login_btn").on("click", function () {
-        $("#login_form").submit();
+        let member = {
+            mail: $("#member-mail").val(),
+            password: $("#member-password").val()
+        };
+
+        console.log(JSON.stringify(member));
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/login",
+            method: "post",
+            data: JSON.stringify(member),
+            contentType: 'application/json;charset=UTF-8',
+            processData: false,
+            success: function (data) {
+                if (data === true) {
+                    //模态框隐藏
+                    $("#loginModal").modal("hide");
+                    alert("登陆成功");
+                    //跳转到近期演出界面
+                    $(location).attr("href", "${pageContext.request.contextPath}/member/scanShow")
+                }
+                else {
+                    alert("登陆失败，密码错误或未激活会员资格");
+                }
+            },
+            error: function () {
+                alert("登陆失败，会员不存在");
+            }
+        });
     });
 
     //会员注册
     $("#reg_btn").on("click", function () {
-        $("#reg_form").submit();
+        let member = {
+            mail: $("#member-register-mail").val(),
+            password: $("#member-register-password").val()
+        };
+
+        console.log(JSON.stringify(member));
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/register",
+            method: "post",
+            data: JSON.stringify(member),
+            contentType: 'application/json;charset=UTF-8',
+            processData: false,
+            success: function (data) {
+                if (data === true) {
+                    //模态框隐藏
+                    $("#registerModal").modal("hide");
+                    alert("注册成功，请前往邮箱验证");
+                }
+                else {
+                    alert("注册失败，邮箱已被人注册");
+                }
+            },
+            error: function () {
+                alert("注册失败");
+            }
+        });
     });
 
     //场馆登录
     $("#venue-login-btn").on("click", function () {
-        $("#venue-login-form").submit();
+        let venue = {
+            id: $("#venue-id").val(),
+            password: $("#venue-password").val()
+        };
+
+        console.log(JSON.stringify(venue));
+        $.ajax({
+            url: "${pageContext.request.contextPath}/venue/login",
+            method: "post",
+            data: JSON.stringify(venue),
+            contentType: 'application/json;charset=UTF-8',
+            processData: false,
+            success: function (data) {
+                if (data === true) {
+                    //模态框隐藏
+                    $("#venueModal").modal("hide");
+                    alert("场馆登陆成功");
+                    //跳转到场馆信息视图
+                    $(location).attr("href", "${pageContext.request.contextPath}/venue/infoView");
+                }
+                else {
+                    alert("场馆登陆失败，场馆未注册、密码错误或场馆正在审批中");
+                }
+            },
+            error: function () {
+                alert("场馆登陆失败");
+            }
+        });
     });
 
     //场馆注册
@@ -271,7 +348,34 @@
 
     //经理登录
     $("#manager-login-btn").on("click", function () {
-        $("#manager-login-form").submit();
+        let manager = {
+            id: $("#manager-id").val(),
+            password: $("#manager-password").val()
+        };
+
+        console.log(JSON.stringify(manager));
+        $.ajax({
+            url: "${pageContext.request.contextPath}/manager/login",
+            method: "post",
+            data: JSON.stringify(manager),
+            contentType: 'application/json;charset=UTF-8',
+            processData: false,
+            success: function (data) {
+                if (data === true) {
+                    //模态框隐藏
+                    $("#managerModal").modal("hide");
+                    alert("经理登陆成功");
+                    //跳转到经理审批视图
+                    $(location).attr("href", "${pageContext.request.contextPath}/manager/audit");
+                }
+                else {
+                    alert("经理登陆失败，密码错误");
+                }
+            },
+            error: function () {
+                alert("经理登陆失败");
+            }
+        });
     });
 </script>
 </body>

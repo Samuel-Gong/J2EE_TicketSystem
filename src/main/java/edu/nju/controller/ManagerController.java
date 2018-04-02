@@ -212,18 +212,17 @@ public class ManagerController {
     /**
      * 经理登录
      *
-     * @param id       经理id
-     * @param password 经理密码
+     * @param manager 经理登陆信息
      * @return 经理登录成功则跳转到审批界面，若未成功则报错
      */
     @PostMapping(path = "/login")
-    public String login(@RequestParam("manager-id") int id, @RequestParam("manager-password") String password, Model model) {
-        if (managerService.login(id, password)) {
-            model.addAttribute("managerId", id);
-            return "redirect:/manager/audit";
+    public @ResponseBody
+    boolean login(@RequestBody Manager manager, Model model) {
+        if (managerService.login(manager)) {
+            model.addAttribute("managerId", manager.getId());
+            return true;
         } else {
-            model.addAttribute("errorMsg", "账户或密码错误");
-            return "/manager/error";
+            return false;
         }
     }
 

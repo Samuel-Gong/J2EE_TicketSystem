@@ -35,11 +35,10 @@ public interface MemberService {
     /**
      * 登录
      *
-     * @param mail     会员邮箱
-     * @param password 密码
+     * @param member 会员实体
      * @return 是否登录成功
      */
-    boolean logIn(String mail, String password);
+    boolean logIn(Member member);
 
     /**
      * 修改密码

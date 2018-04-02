@@ -22,11 +22,6 @@ class VenueServiceImplTest {
     }
 
     @Test
-    void getVenuePlanDetail() {
-        VenuePlanDetailDTO venuePlanDetailDTO = venueService.getVenuePlanDetail(1);
-    }
-
-    @Test
     void getVenuePlanOrders() {
         Assertions.assertEquals(1, venueService.getVenuePlanOrders(1).size());
     }
