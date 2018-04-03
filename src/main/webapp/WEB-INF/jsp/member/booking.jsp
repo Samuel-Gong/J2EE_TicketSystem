@@ -184,8 +184,6 @@
 <script src="${pageContext.request.contextPath}/js/jquery-seat-charts.js"></script>
 <!-- 对座位操作的js -->
 <script src="${pageContext.request.contextPath}/js/seat-operation.js"></script>
-<!-- date -->
-<script src="${pageContext.request.contextPath}/js/date-format.js"></script>
 <!-- 专门处理日期的js -->
 <script src="${pageContext.request.contextPath}/js/moment.min.js"></script>
 

@@ -89,7 +89,7 @@
             <ul id="selected-seats-list"></ul>
             <h5>总票价:<span id="total-price">0</span></h5>
             <button id="buy-btn" type="button" class="btn btn-primary center-block hidden" data-toggle="modal"
-                    data-target="#buyModal">下单
+                    data-target="#buyModal">购买
             </button>
         </div>
     </div>
@@ -154,7 +154,7 @@
             </div>
             <div class="modal-footer">
                 <div class="col-md-offset-4 col-md-2">
-                    <button type="button" id="buy-comfirm" class="btn btn-primary center-block">确认</button>
+                    <button type="button" id="buy-confirm" class="btn btn-primary center-block">确认</button>
                 </div>
                 <div class="col-md-2">
                     <button type="button" id="buy-cancel" class="btn btn-primary center-block" data-dismiss="modal">取消
@@ -174,8 +174,8 @@
 <script src="${pageContext.request.contextPath}/js/jquery-seat-charts.js"></script>
 <!-- 对座位操作的js -->
 <script src="${pageContext.request.contextPath}/js/seat-operation.js"></script>
-<!-- date -->
-<script src="${pageContext.request.contextPath}/js/date-format.js"></script>
+<!-- 专门处理日期的js -->
+<script src="${pageContext.request.contextPath}/js/moment.min.js"></script>
 
 <script>
 
@@ -283,8 +283,10 @@
             selectedSeats.splice(findIndexInSelectedSeats(id), 1);
             $("#selected-seats-list").children().each(function () {
                 let text = $(this).text();
-                let rowInText = text[0];
-                let columnInText = text[2];
+                let rowColumnArr = text.split("排");
+                let rowInText = rowColumnArr[0];
+                let columnText = rowColumnArr[1];
+                let columnInText = columnText.split("座")[0];
                 if (row === rowInText && column === columnInText) {
                     $(this).remove();
                     return false;
@@ -347,7 +349,7 @@
     /**
      * 确认购买按钮监听
      */
-    $("#buy-comfirm").on("click", function () {
+    $("#buy-confirm").on("click", function () {
 
         let orderSeats = [];
         $.each(selectedSeats, function (index, rawId) {
@@ -366,21 +368,29 @@
         let isMember = $("#is-member-radio").is(":checked");
         let data = {
             mail: $("#member-id").val(),
-            //会员购买
-            memberOrder: isMember,
-            //非线上购买
-            boughtOnline: false,
             venueId: planDetail.venueId,
             venuePlanId: venuePlan.venuePlanId,
-            createTime: new Date().Format("yyyy-MM-dd hh:mm:ss"),
+            createTime: moment().format("YYYY-MM-DD HH:mm:ss"),
             orderSeats: orderSeats,
-            price: parseInt($("#actual-price").text().trim())
+            //订单原价格
+            price: parseInt($("#raw-price").text().trim()),
+            //订单优惠价格
+            actualPrice: parseInt($("#actual-price").text().trim()),
+            seatSettled: true,
+            //非线上购买
+            boughtOnline: false,
+            //会员购买
+            memberOrder: isMember,
+            //若是会员购买，必使用会员折扣
+            memberDiscount: isMember,
+            //使用优惠券
+            useCoupon: false
         };
 
         console.log(JSON.stringify(data));
 
         $.ajax({
-            url: '/venue/buyOnSite',
+            url: '${pageContext.request.contextPath}/venue/buyOnSite',
             method: 'post',
             contentType: 'application/json;charset=UTF-8',
             data: JSON.stringify(data),

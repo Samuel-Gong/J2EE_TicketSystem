@@ -36,7 +36,7 @@
 <!-- container begin -->
 <div id="venue-register-container" class="container">
     <div class="row">
-        <h2 class="text-center">计划详情</h2>
+        <h2 id="plan-description" class="text-center"></h2>
     </div>
     <div id="all-venue-info" class="row">
         <div class="col-md-2">
@@ -76,11 +76,6 @@
                         <label class="control-label">演出类型</label>
                         <input id="plan-showType" class="form-control" type="text" value="" readonly>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label">描述</label>
-                        <textarea id="plan-description" class="form-control" rows="5"
-                                  style="overflow: scroll; resize: none;" readonly></textarea>
-                    </div>
                 </form>
             </div>
         </div>
@@ -115,7 +110,7 @@
         $("#plan-begin").val(venuePlan.begin);
         $("#plan-end").val(venuePlan.end);
         $("#plan-showType").val(venuePlan.showType);
-        $("#plan-description").val(venuePlan.description);
+        $("#plan-description").text(venuePlan.description);
 
         //设置左侧座位类型表格的内容
         let seatTypes = venuePlan.seatTypes;

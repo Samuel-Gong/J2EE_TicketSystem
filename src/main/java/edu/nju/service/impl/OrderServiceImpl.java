@@ -57,9 +57,11 @@ public class OrderServiceImpl implements OrderService {
         if (order.isBoughtOnline()) {
             order.setOrderStatus(OrderStatus.UNPAID);
         }
-        //现场购买，设置状态为已支付
+        //现场购买，设置状态为已支付，并将收入转入到经理账户
         else {
             order.setOrderStatus(OrderStatus.BOOKED);
+            Manager manager = managerDao.getManager(MANAGER_ID);
+            manager.setSettleIncome(manager.getUnsettleIncome() + order.getActualPrice());
         }
 
         //如果是会员购票
@@ -109,10 +111,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public List<OrderShowDTO> getOrderShowDTOs(String mail, OrderStatus orderStatus) {
-        List<Order> unpaidOrders = orderDao.getOrders(mail, orderStatus);
+        List<Order> orders = orderDao.getOrders(mail, orderStatus);
         //懒加载每个Order对应选择的座位
-        unpaidOrders.forEach(unpaidOrder -> Hibernate.initialize(unpaidOrder.getVenuePlanSeats()));
-        return unpaidOrders.stream()
+        orders.forEach(unpaidOrder -> Hibernate.initialize(unpaidOrder.getVenuePlanSeats()));
+        return orders.stream()
                 .map(unpaidOrder -> new OrderShowDTO(unpaidOrder, new VenuePlanBriefDTO(unpaidOrder.getVenuePlan())))
                 .collect(Collectors.toList());
     }
@@ -137,9 +139,15 @@ public class OrderServiceImpl implements OrderService {
             return false;
         }
 
-        if (account.getBalance() >= order.getPrice()) {
+        //多于优惠价格即可支付
+        if (account.getBalance() >= order.getActualPrice()) {
             //减少账户余额
-            account.setBalance(account.getBalance() - order.getPrice());
+            account.setBalance(account.getBalance() - order.getActualPrice());
+
+            //将收入转入经理账户
+            Manager manager = managerDao.getManager(MANAGER_ID);
+            manager.setUnsettleIncome(order.getActualPrice());
+
             //改变订单状态为已预订
             assert OrderStatus.UNPAID == order.getOrderStatus();
             order.setOrderStatus(OrderStatus.BOOKED);

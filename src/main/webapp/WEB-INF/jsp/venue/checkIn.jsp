@@ -134,6 +134,47 @@
     let planDetail = ${planDetail};
     let venuePlan = planDetail.venuePlan;
 
+    /**
+     * 选票购买时，应该添加点击座位的监听
+     */
+    function seatClick() {
+        if (this.status() === 'available') {
+
+            let id = this.node().attr("id");
+            let rowAndColumn = id.split("_");
+            let row = rowAndColumn[0];
+            let column = rowAndColumn[1];
+
+            //更新selectedSeats数组以及右侧已选座位列表
+            selectedSeats.push(id);
+            $("#selected-seats-list").append(
+                "<li>" + row + "排" + column + "座</li>"
+            );
+
+            //更新总票价
+            let totalPriceNode = $("#raw-price");
+            let typeChar = this.char();
+            let totalPrice = parseInt(totalPriceNode.text()) + parseInt(seatTypes[findIndexInSeatTypes(typeChar)].price);
+            totalPriceNode.text(totalPrice);
+            updateActualPrice(totalPrice);
+
+            return 'selected';
+        }
+        else if (this.status() === 'selected') {
+
+            let id = this.node().attr("id");
+            let rowAndColumn = id.split("_");
+            let row = rowAndColumn[0];
+            let column = rowAndColumn[1];
+
+            return 'available';
+        }
+        //如果座位不可用，那么不允许更改样式
+        else if (this.status() === 'unavailable') {
+            return 'unavailable';
+        }
+    }
+
     $("#checkIn-btn").on("click", function () {
         let row = $("#row").val();
         let column = $("#column").val();
@@ -184,7 +225,7 @@
         fillSeatMapWithType(planDetail.rowNum, planDetail.columnNum, venuePlan.venuePlanSeats);
 
         //点击座位，不反应
-        seatChartsSetting.clickDoNothing();
+        seatChartsSetting.addClick(seatClick);
 
         //对检票登记的座位图进行渲染
         checkInRender(venuePlan.venuePlanSeats);

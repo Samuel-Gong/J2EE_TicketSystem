@@ -105,15 +105,15 @@
 
 <script>
     $("#plans-container").on("click", ".detail-btn", function () {
-        $(location).attr("href", "${pageContext.request.contextPath}${pageContext.request.contextPath}/venue/planView/" + $(this).prev().val());
+        $(location).attr("href", "${pageContext.request.contextPath}/venue/planView/" + $(this).prev().val());
     });
 
     $("#plans-container").on("click", ".buy-on-site-btn", function () {
-        $(location).attr("href", "${pageContext.request.contextPath}${pageContext.request.contextPath}/venue/buy/" + $(this).prev().val());
+        $(location).attr("href", "${pageContext.request.contextPath}/venue/buy/" + $(this).prev().val());
     });
 
     $("#plans-container").on("click", ".check-in-btn", function () {
-        $(location).attr("href", "${pageContext.request.contextPath}${pageContext.request.contextPath}/venue/checkIn/" + $(this).prev().val());
+        $(location).attr("href", "${pageContext.request.contextPath}/venue/checkIn/" + $(this).prev().val());
     });
 </script>
 </body>
