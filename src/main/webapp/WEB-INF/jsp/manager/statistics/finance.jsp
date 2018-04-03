@@ -87,7 +87,7 @@
                 financeChartOption.series[0].data =
                     [
                         {
-                            value: statistics.profits,
+                            value: statistics.settleIncome,
                             name: "已盈利收入"
                         },
                         {

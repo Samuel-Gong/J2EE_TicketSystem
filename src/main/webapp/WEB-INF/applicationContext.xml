@@ -92,5 +92,9 @@
     if the bean name of the PlatformTransactionManager that you want to wire in has the name transactionManager -->
     <!-- enable the configuration of transactional behavior based on annotations -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
+
+
+    <!-- 防止不同task不能同时运行 -->
+    <task:scheduler id="scheduler" pool-size="3"/>
 </beans>
 

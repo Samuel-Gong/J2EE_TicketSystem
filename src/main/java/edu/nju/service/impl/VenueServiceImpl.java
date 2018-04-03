@@ -314,21 +314,21 @@ public class VenueServiceImpl implements VenueService {
         assert manager != null;
 
         completePlan.forEach(venuePlan -> {
-            //将每个场馆的状态设置为已完成
+            //将每个场馆计划的状态设置为已完成
             venuePlan.setComplete(true);
             venuePlan.getOrders().stream()
                     .filter(order -> order.getOrderStatus() == OrderStatus.BOOKED)
                     .forEach(order -> {
                         //将场馆计划下的已注册订单的状态改为已消费订单，并给会员增加积分
                         order.setOrderStatus(OrderStatus.COMSUMPED);
-                        Member member = order.getMemberFK();
-                        member.setPoints(member.getPoints() + order.getActualPrice());
+                        //如果是会员订单则给会员增加积分，否则不增加
+                        if (order.isMemberOrder()) {
+                            Member member = order.getMemberFK();
+                            member.setPoints(member.getPoints() + order.getActualPrice());
+                        }
 
                         //累加该计划的票价总收入
                         venuePlan.setTotalIncome(venuePlan.getTotalIncome() + order.getActualPrice());
-
-                        //增加经理的账户余额
-                        manager.setUnsettleIncome(manager.getUnsettleIncome() + order.getActualPrice());
                     });
         });
     }

@@ -60,8 +60,9 @@ public class OrderServiceImpl implements OrderService {
         //现场购买，设置状态为已支付，并将收入转入到经理账户
         else {
             order.setOrderStatus(OrderStatus.BOOKED);
+            //增加经理的未结算收入
             Manager manager = managerDao.getManager(MANAGER_ID);
-            manager.setSettleIncome(manager.getUnsettleIncome() + order.getActualPrice());
+            manager.setUnsettleIncome(manager.getUnsettleIncome() + order.getActualPrice());
         }
 
         //如果是会员购票
@@ -146,7 +147,7 @@ public class OrderServiceImpl implements OrderService {
 
             //将收入转入经理账户
             Manager manager = managerDao.getManager(MANAGER_ID);
-            manager.setUnsettleIncome(order.getActualPrice());
+            manager.setUnsettleIncome(manager.getUnsettleIncome() + order.getActualPrice());
 
             //改变订单状态为已预订
             assert OrderStatus.UNPAID == order.getOrderStatus();

@@ -1,8 +1,6 @@
 package edu.nju.service.impl;
 
-import edu.nju.dto.VenuePlanDetailDTO;
 import edu.nju.service.VenueService;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -22,8 +20,13 @@ class VenueServiceImplTest {
     }
 
     @Test
-    void sendTickets(){
+    void sendTickets() {
         venueService.sendTickets();
+    }
+
+    @Test
+    void checkCompleteVenuePlans() {
+        venueService.checkCompleteVenuePlans();
     }
 
 }

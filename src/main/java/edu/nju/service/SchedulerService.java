@@ -23,25 +23,25 @@ public class SchedulerService {
      * 定时检查所有未支付订单，如果订单超时，则将订单设置为过期订单
      * 时间间隔为5s检查一次
      */
-//    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 5000)
     public void checkUnpaidOrders() {
         orderService.checkUnpaidOrders();
     }
 
     /**
      * 定时检查所有需要配送票的场馆计划，对距离演出开始不足两周的计划，开始配票
-     * 每2分钟检查一次
+     * 每1分钟检查一次
      */
-//    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void sendTickets() {
         venueService.sendTickets();
     }
 
     /**
      * 定时检查已经结束的场馆计划
-     * 每4分钟检查一次
+     * 每2分钟检查一次
      */
-//    @Scheduled(cron = "0 0/2 * * * ?")
+    @Scheduled(cron = "0 0/2 * * * ?")
     public void consumeOrder() {
         venueService.checkCompleteVenuePlans();
     }

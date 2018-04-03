@@ -165,11 +165,14 @@
 
     $("#check-in-btn").on("click", function () {
 
+        let row = $("#check-in-row").text();
+        let column = $("#check-in-column").text();
+
         let seatCheckIn = {
             venuePlanId: venuePlan.venuePlanId,
             rowAndColumnDTO: {
-                row: $("#check-in-row").text(),
-                column: $("#check-in-column").text()
+                row: row,
+                column: column
             }
         };
 
@@ -185,8 +188,11 @@
             success: function (data) {
                 if (data === true) {
                     alert("检票成功");
-                    //刷新页面
-                    window.location.reload();
+
+                    //模态框隐藏
+                    $("#check-in-modal").modal("hide");
+                    //将座位状态更新为已选择
+                    sc.status(row + "_" + column, "selected");
                 }
                 else {
                     alert("检票失败，该座位还未被预订");
