@@ -148,7 +148,20 @@
     $("#order-container").on("click", ".cancel-btn", function () {
         let orderId = $(this).prev().val();
         console.log(orderId);
-        $(location).attr("href", "${pageContext.request.contextPath}/member/cancel/" + orderId);
+        $.get("${pageContext.request.contextPath}/member/order/cancel/" + orderId,
+            function (data) {
+                if (data === true) {
+                    alert("订单取消成功");
+                    //跳转到订单取消界面
+                    $(location).attr("href", "${pageContext.request.contextPath}/member/order/cancel");
+                }
+                else {
+                    alert("订单取消失败");
+                    //跳转到未支付订单
+                    $(location).attr("href", "${pageContext.request.contextPath}/member/order/unpaid");
+                }
+            }
+        );
     });
 
 </script>

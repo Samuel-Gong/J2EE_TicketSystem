@@ -35,14 +35,14 @@ public class VenuePlan {
      * 场馆计划开始时间，每个计划的开始时间不可以相同
      */
     @JSONField(name = "begin", format = "yyyy-MM-dd HH:mm")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private LocalDateTime begin;
 
     /**
      * 场馆计划结束时间，每个计划的结束时间不可以相同
      */
     @JSONField(name = "end", format = "yyyy-MM-dd HH:mm")
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private LocalDateTime endTime;
 
     /**

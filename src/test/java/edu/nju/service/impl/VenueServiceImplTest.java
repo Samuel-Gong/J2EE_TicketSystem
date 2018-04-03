@@ -22,8 +22,8 @@ class VenueServiceImplTest {
     }
 
     @Test
-    void getVenuePlanOrders() {
-        Assertions.assertEquals(1, venueService.getVenuePlanOrders(1).size());
+    void sendTickets(){
+        venueService.sendTickets();
     }
 
 }

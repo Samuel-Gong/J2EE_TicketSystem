@@ -136,13 +136,19 @@ public class VenueServiceImpl implements VenueService {
         for (SeatType seatType : venuePlan.getSeatTypes()) {
             seatType.setVenuePlan(venuePlan);
         }
-        //场馆计划座位与场馆计划建立联系
-        for (VenuePlanSeat venuePlanSeat : venuePlan.getVenuePlanSeats()) {
-            venuePlanSeat.setVenuePlan(venuePlan);
-        }
+
+        venuePlan.getVenuePlanSeats().forEach(venuePlanSeat ->
+                {
+                    //如果场馆计划座位表示字符为_，说明也不可用
+                    if (venuePlanSeat.getTypeChar() == '_') {
+                        venuePlanSeat.setAvailable(false);
+                    }
+                    //场馆计划座位与场馆计划建立联系
+                    venuePlanSeat.setVenuePlan(venuePlan);
+                }
+        );
 
         venueDao.addVenuePlan(venuePlan);
-
         return true;
     }
 
@@ -258,11 +264,11 @@ public class VenueServiceImpl implements VenueService {
 
             //找出所有该场馆计划下还可用的座位
             List<VenuePlanSeat> availableSeats = venuePlan.getVenuePlanSeats().stream()
-                    .filter(VenuePlanSeat::isAvailable)
+                    .filter(venuePlanSeat -> venuePlanSeat.isAvailable() && venuePlanSeat.getTypeChar() != '_')
                     .collect(Collectors.toList());
 
             for (int j = 0; j < seatUnsettledOrders.size(); j++) {
-                Order order = seatUnsettledOrders.get(i);
+                Order order = seatUnsettledOrders.get(j);
                 //获取指定座位类型的座位
                 List<VenuePlanSeat> specificTypeSeats = availableSeats.stream()
                         .filter(venuePlanSeat -> venuePlanSeat.getTypeChar() == order.getSeatType())

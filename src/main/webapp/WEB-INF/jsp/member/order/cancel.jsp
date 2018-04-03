@@ -83,7 +83,7 @@
                                                     </span>
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <span class="form-control-static">还未配票</span>
+                                                    <span class="form-control-static">未配票</span>
                                                 </c:otherwise>
                                             </c:choose>
                                         </p>

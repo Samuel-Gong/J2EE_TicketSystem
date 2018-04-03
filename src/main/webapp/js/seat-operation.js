@@ -272,7 +272,7 @@ function organizeRenderSeatInfo() {
 
 function setBookedSeatsUnavailable(venuePlanSeats) {
     $.each(venuePlanSeats, function (index, seat) {
-        if (seat.available !== true) {
+        if (seat.available !== true && seat.typeChar !== '_') {
             sc.status(seat.row + "_" + seat.column, 'unavailable');
         }
     });
@@ -297,6 +297,7 @@ function checkInRender(venuePlanSeats) {
  * 渲染座位
  */
 function renderSeats(venuePlanSeats) {
+    console.log(venuePlanSeats);
     sc = $("#seat-map").seatCharts(organizeRenderSeatInfo());
     //将已被锁定（包括未支付）的座位设置为unavailable
     setBookedSeatsUnavailable(venuePlanSeats);

@@ -292,8 +292,10 @@
                 "newPassword": $("#newPassword").val()
             },
             success: function (data) {
-                if (data === true)
+                if (data === true) {
                     alert("密码修改成功");
+                    window.location.reload();
+                }
                 else
                     alert("密码修改失败");
             },
