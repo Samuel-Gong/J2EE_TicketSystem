@@ -19,7 +19,7 @@ public class LevelStrategy {
      */
     public static Integer calculateLevel(int point) {
         int index = 0;
-        while (point > points[index]) {
+        while (index < points.length && point > points[index]) {
             index++;
         }
         return levels[index];
