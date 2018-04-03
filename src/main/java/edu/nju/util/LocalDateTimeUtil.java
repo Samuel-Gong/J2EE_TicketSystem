@@ -31,7 +31,7 @@ public class LocalDateTimeUtil {
      * @return 当前时间，精确到秒
      */
     public static LocalDateTime nowTillSecond() {
-        return LocalDateTime.parse(dtfTillMinute.format(LocalDateTime.now()), dtfTillSecond);
+        return LocalDateTime.parse(dtfTillSecond.format(LocalDateTime.now()), dtfTillSecond);
     }
 
     /**

@@ -330,10 +330,10 @@
         //座位数量
         let seatNum = $(this).val();
 
-        console.log(singleSeatPrice);
-        console.log(seatNum);
+        let totalPrice = singleSeatPrice * seatNum;
         //显示总价
-        $("#raw-price").text(singleSeatPrice * seatNum);
+        $("#raw-price").text(totalPrice);
+        updateActualPrice(totalPrice);
     });
 
     /**

@@ -71,8 +71,7 @@
                 type: 'pie',
                 radius: '55%',
                 center: ['50%', '60%'],
-                data:
-                ,
+                data: [],
                 itemStyle: {
                     emphasis: {
                         shadowBlur: 10,

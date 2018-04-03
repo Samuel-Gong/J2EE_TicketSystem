@@ -162,6 +162,7 @@
             function (data) {
                 if (data === true) {
                     alert("订单取消成功");
+                    //跳转到订单取消界面
                     $(location).attr("href", "${pageContext.request.contextPath}/member/order/cancel");
                 }
                 else {

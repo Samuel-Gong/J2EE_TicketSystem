@@ -393,6 +393,6 @@ public class VenueServiceImpl implements VenueService {
     private boolean allPlansPassOver(List<VenuePlan> venuePlans) {
         return venuePlans.stream()
                 //所有计划都满足计划结束时间早于当前时间
-                .allMatch(venuePlan -> venuePlan.getEndTime().isBefore(LocalDateTimeUtil.nowTillSecond()));
+                .allMatch(venuePlan -> venuePlan.getEndTime().isBefore(LocalDateTimeUtil.nowTillMinute()));
     }
 }

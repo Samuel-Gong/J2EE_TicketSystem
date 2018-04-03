@@ -3,10 +3,7 @@ package edu.nju.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.support.spring.annotation.FastJsonFilter;
 import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
-import edu.nju.dto.LevelAndDiscount;
-import edu.nju.dto.MemberStatistics;
-import edu.nju.dto.PointsAndCoupons;
-import edu.nju.dto.TakeOrderDTO;
+import edu.nju.dto.*;
 import edu.nju.model.CouponType;
 import edu.nju.model.Member;
 import edu.nju.service.CouponService;
@@ -18,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -154,16 +150,30 @@ public class MemberController {
     }
 
     /**
+     * 获取票退订的提示，手续费率，可以退还的钱
+     *
+     * @param mail    会员邮箱
+     * @param orderId 订单编号
+     * @return 退订票的提示
+     */
+    @GetMapping(path = "/order/retreat/tip/{orderId}")
+    public @ResponseBody
+    RefundTipDTO retreatOrderTip(@SessionAttribute("mail") String mail, @PathVariable("orderId") int orderId) {
+        return orderService.getRetreatOrderTip(mail, orderId);
+    }
+
+    /**
      * 订单退订
      *
      * @param mail    会员邮箱
      * @param orderId 订单编号
+     * @param refund 应该退订的钱
      * @return 订单退订是否成功
      */
     @GetMapping(path = "/order/retreat/{orderId}")
     public @ResponseBody
-    boolean retreatOrder(@SessionAttribute("mail") String mail, @PathVariable("orderId") int orderId) {
-        return orderService.retreatOrder(mail, orderId);
+    boolean retreatOrder(@SessionAttribute("mail") String mail, @PathVariable("orderId") int orderId, @RequestParam("refund") int refund) {
+        return orderService.refund(mail, orderId, refund);
     }
 
     /**
@@ -333,9 +343,9 @@ public class MemberController {
      */
     @PostMapping(path = "/login")
     public @ResponseBody
-    boolean login(@RequestBody Member member, ModelMap modelMap) {
+    boolean login(@RequestBody Member member, Model model) {
         if (memberService.logIn(member)) {
-            modelMap.addAttribute("mail", member.getMail());
+            model.addAttribute("mail", member.getMail());
             return true;
         }
         return false;

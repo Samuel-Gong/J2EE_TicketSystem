@@ -120,11 +120,11 @@
                 <form id="login_form">
                     <div class="input-group">
                         <span class="input-group-addon">邮箱</span>
-                        <input type="text" class="form-control" name="mail" placeholder="请输入邮箱">
+                        <input id="member-mail" type="text" class="form-control" placeholder="请输入邮箱">
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon">密码</span>
-                        <input type="password" class="form-control" name="password" placeholder="请输入密码">
+                        <input id="member-password" type="password" class="form-control" placeholder="请输入密码">
                     </div>
                 </form>
             </div>

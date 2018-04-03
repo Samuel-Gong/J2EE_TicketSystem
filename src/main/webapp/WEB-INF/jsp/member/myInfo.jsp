@@ -221,7 +221,7 @@
                 $("#member-points").text(info.points);
 
                 //已经绑定支付宝账户，去绑定支付宝账户按钮隐藏
-                if (info.bindAccount === "true") {
+                if (info.bindAccount === true) {
                     $("#bind-account-btn").addClass("hidden");
                 }
                 else {
@@ -266,7 +266,7 @@
                 "password": $("#account-password").val()
             },
             success: function (data) {
-                if (data === true){
+                if (data === true) {
                     alert("绑定支付宝成功");
                     window.location.reload();
                 }

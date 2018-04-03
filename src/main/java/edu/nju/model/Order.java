@@ -137,7 +137,7 @@ public class Order {
 
     public Order(TakeOrderDTO takeOrderDTO) {
         //设定为当前时间
-        this.setCreateTime(LocalDateTimeUtil.nowTillMinute());
+        this.setCreateTime(LocalDateTimeUtil.nowTillSecond());
         //设置订单原价
         this.setPrice(takeOrderDTO.getPrice());
         //设置订单优惠价格

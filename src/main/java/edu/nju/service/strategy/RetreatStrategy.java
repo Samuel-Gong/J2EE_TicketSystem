@@ -1,5 +1,7 @@
 package edu.nju.service.strategy;
 
+import edu.nju.dto.RefundTipDTO;
+
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -14,7 +16,7 @@ public class RetreatStrategy {
     /**
      * 距离演出开始天数
      */
-    private final static int[] MILESTONE_DAYS = {5, 10, 20};
+    private final static int[] MILESTONE_DAYS = {5, 10, 14};
 
     /**
      * 天数对应的退款折扣
@@ -28,19 +30,39 @@ public class RetreatStrategy {
      * @param totalMoney    订单总价
      * @return 应该退款的数目
      */
-    public static int calculateReturnMoney(LocalDateTime planBeginTime, int totalMoney) {
+    public static RefundTipDTO calculateRefund(LocalDateTime planBeginTime, int totalMoney) {
+        RefundTipDTO refundTipDTO = new RefundTipDTO();
+
+        //退款折扣的index
         int feeRateIndex = findMilestoneDay(planBeginTime);
+
+        //比最大的天数还大
+        if (feeRateIndex == MILESTONE_DAYS.length) {
+            refundTipDTO.setMoreThanMaxDay(true);
+            refundTipDTO.setMilestoneDay(MILESTONE_DAYS[feeRateIndex - 1]);
+        }
+        //没有最大天数大
+        else {
+            refundTipDTO.setMoreThanMaxDay(false);
+            refundTipDTO.setMilestoneDay(MILESTONE_DAYS[feeRateIndex]);
+        }
 
         //找到应收手续费费率，总退款费用
         int feeRate = FEE_RATE[feeRateIndex];
+        refundTipDTO.setFeeRate(feeRate);
 
-        return totalMoney * 100 / (100 - feeRate);
+        //设置原价
+        refundTipDTO.setActualPrice(totalMoney);
+        //设置该退还的钱
+        refundTipDTO.setRefund(totalMoney * (100 - feeRate) / 100);
+
+        return refundTipDTO;
     }
 
     private static int findMilestoneDay(LocalDateTime planBeginTime) {
         long remainDay = LocalDateTime.now().until(planBeginTime, ChronoUnit.DAYS);
         int index = 0;
-        while (remainDay > MILESTONE_DAYS[index]) {
+        while (index < MILESTONE_DAYS.length && remainDay >= MILESTONE_DAYS[index]) {
             index++;
         }
         return index;

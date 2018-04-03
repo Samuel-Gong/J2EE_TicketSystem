@@ -5,6 +5,7 @@ import edu.nju.dao.MemberDao;
 import edu.nju.dao.OrderDao;
 import edu.nju.dao.VenueDao;
 import edu.nju.dto.OrderShowDTO;
+import edu.nju.dto.RefundTipDTO;
 import edu.nju.dto.TakeOrderDTO;
 import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.model.*;
@@ -151,19 +152,31 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public boolean retreatOrder(String mail, int orderId) {
-        Member member = memberDao.getMember(mail);
-        Account account = member.getAccount();
+    public RefundTipDTO getRetreatOrderTip(String mail, int orderId) {
+
         Order order = orderDao.getOrder(orderId);
 
         //计算退还票价，给账户余额加上退还的票价
-        int returnMoney = RetreatStrategy.calculateReturnMoney(order.getVenuePlan().getBegin(), order.getActualPrice());
-        account.setBalance(account.getBalance() + returnMoney);
+        return RetreatStrategy.calculateRefund(order.getVenuePlan().getBegin(), order.getActualPrice());
+    }
+
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class)
+    public boolean refund(String mail, int orderId, int refund) {
+
+        Order order = orderDao.getOrder(orderId);
+        Member member = memberDao.getMember(mail);
+        Account account = member.getAccount();
+
+        //给订单记录退还金额
+        order.setRefund(refund);
+        //给账户退还钱
+        account.setBalance(account.getBalance() + refund);
 
         //扣除经理账户余额
         Manager manager = managerDao.getManager(MANAGER_ID);
-        assert manager != null && manager.getUnsettleIncome() >= order.getPrice();
-        manager.setUnsettleIncome(manager.getUnsettleIncome() - order.getPrice());
+        assert manager != null && manager.getUnsettleIncome() >= order.getActualPrice();
+        manager.setUnsettleIncome(manager.getUnsettleIncome() - order.getActualPrice());
 
         //改变订单状态
         order.setOrderStatus(OrderStatus.RETREAT);

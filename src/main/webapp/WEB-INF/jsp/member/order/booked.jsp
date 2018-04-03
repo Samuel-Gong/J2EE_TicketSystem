@@ -110,7 +110,8 @@
                                 <div class="form-group">
                                     <div class="col-md-offset-4 col-md-4">
                                         <input type="text" value="${order.orderId}" hidden>
-                                        <button type="button" class="btn btn-primary center-block retreat-btn">退订
+                                        <button type="button" class="btn btn-primary center-block retreat-btn"
+                                                data-toggle="modal" data-target="#refund-tip">退订
                                         </button>
                                     </div>
                                 </div>
@@ -125,6 +126,36 @@
 
 <footer></footer>
 
+<!-- refund-tip 模态框 -->
+<div class="modal fade" id="refund-tip" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- data-dismiss：关闭模态窗口 -->
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title text-center">确认退订</h4>
+            </div>
+            <div class="modal-body">
+                <p id="more-than-max" class="hidden">距离演出开始多于14天，全款退还票价</p>
+                <p id="less-than-max" class="hidden">距离演出不足
+                    <span id="milestone-day"></span>天,收取已收票价的
+                    <span id="fee-rate"></span>%,作为手续费
+                </p>
+                <p>已收票价：<span id="order-price"></span></p>
+                <p>退还票价：<span id="refund"></span></p>
+
+            </div>
+            <div class="modal-footer">
+                <div class="col-md-offset-4 col-md-4">
+                    <input id="refund-order-id" type="text" class="hidden">
+                    <button type="button" id="refund-confirm" class="btn btn-primary center-block">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- login 模态框end -->
+
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
@@ -136,16 +167,60 @@
     //左侧导航栏active
     $("#booked-li").addClass("active");
 
-    $("#booked-container").on("click", ".retreat-btn", function () {
-        let orderId = $(this).prev().val();
-        $.get("/member/order/retreat/" + orderId,
-            function (data) {
-                if (data === "true") {
-                    alert("退订订单成功");
+    function retreat(orderId, refund) {
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/order/retreat/" + orderId,
+            method: "get",
+            data: {
+                refund: refund
+            },
+            success: function (data) {
+                if (data === true) {
+                    alert("订单退订成功")
+                    //跳转到退订订单界面
                     $(location).attr("href", "${pageContext.request.contextPath}/member/order/retreat");
                 }
+                else {
+                    alert("订单退订失败");
+                }
             }
-        );
+        });
+    }
+
+    $("#booked-container").on("click", ".retreat-btn", function () {
+        let orderId = $(this).prev().val();
+        //获取退订订单的信息
+        $.ajax({
+            url: "${pageContext.request.contextPath}/member/order/retreat/tip/" + orderId,
+            method: "get",
+            success: function (refundTip) {
+                console.log(refundTip);
+
+                if (refundTip.moreThanMaxDay) {
+                    $("#more-than-max").removeClass("hidden");
+                    $("#less-than-max").addClass("hidden");
+                }
+                else {
+                    $("#less-than-max").removeClass("hidden");
+                    $("#more-than-max").addClass("hidden");
+
+                    $("#milestone-day").text(refundTip.milestoneDay);
+                    $("#fee-rate").text(refundTip.feeRate);
+                }
+
+                $("#refund-order-id").val(orderId);
+
+                $("#order-price").text(refundTip.actualPrice);
+                $("#refund").text(refundTip.refund);
+            }
+        });
+    });
+
+    $("#refund-confirm").on("click", function () {
+        let orderId = $("#refund-order-id").val();
+        let refund = $("#refund").text();
+        // 退订
+        retreat(orderId, refund);
     });
 </script>
 </body>
