@@ -129,7 +129,7 @@ public class Order {
     /**
      * 一个订单对应一个优惠券
      */
-    @OneToOne(mappedBy = "orderFK")
+    @OneToOne
     private Coupon coupon;
 
     public Order() {

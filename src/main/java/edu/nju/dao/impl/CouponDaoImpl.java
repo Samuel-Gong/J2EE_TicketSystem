@@ -29,9 +29,18 @@ public class CouponDaoImpl implements CouponDao {
     }
 
     @Override
+    public List<Coupon> getUnusedCoupons(String memberId, int couponValue) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from Coupon where memberFK.id = :memberId and used = false and couponType.value = :couponValue", Coupon.class)
+                .setParameter("memberId", memberId)
+                .setParameter("couponValue", couponValue)
+                .list();
+    }
+
+    @Override
     public List<Coupon> getUnusedCoupons(String memberId) {
         return sessionFactory.getCurrentSession()
-                .createQuery("from Coupon where memberFK.id = :memberId and orderFK = null ", Coupon.class)
+                .createQuery("from Coupon where memberFK.id = :memberId and used = false ", Coupon.class)
                 .setParameter("memberId", memberId)
                 .list();
     }

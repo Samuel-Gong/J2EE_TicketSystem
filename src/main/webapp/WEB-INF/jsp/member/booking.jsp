@@ -291,12 +291,17 @@
             let row = rowAndColumn[0];
             let column = rowAndColumn[1];
 
+            console.log("已选择座位:" + row + "排" + column + "座");
+
+            console.log(selectedSeats);
             //更新selectedSeats数组以及右侧已选座位列表
             selectedSeats.splice(findIndexInSelectedSeats(id), 1);
             $("#selected-seats-list").children().each(function () {
                 let text = $(this).text();
-                let rowInText = text[0];
-                let columnInText = text[2];
+                let rowColumnArr = text.split("排");
+                let rowInText = rowColumnArr[0];
+                let columnText = rowColumnArr[1];
+                let columnInText = columnText.split("座")[0];
                 if (row === rowInText && column === columnInText) {
                     $(this).remove();
                     return false;
@@ -411,8 +416,6 @@
             actualPrice: parseInt($("#actual-price").text()),
             //是否使用会员折扣
             memberDiscount: $("#discount-info").is(":checked"),
-            //是否使用优惠券
-            useCoupon: $("#coupon-radio").is(":checked"),
             //线上购买
             boughtOnline: true,
             //会员购票
@@ -443,12 +446,21 @@
         }
         //立即购买
         else {
-            let seatNum = $("#buy-now-seat-num").val();
             data["seatSettled"] = false;
             data["seatType"] = $("#seat-type-list").val();
             data["seatNum"] = $("#buy-now-seat-num").val();
             console.log("立即购买:\n" + JSON.stringify(data));
         }
+
+        //是否使用优惠券
+        let useCoupon = $("#coupon-radio").is(":checked");
+        data["useCoupon"] = useCoupon;
+        //使用优惠券
+        if (useCoupon) {
+            data["couponValue"] = $("input:radio[name='coupon-value-options']:checked").val();
+        }
+
+        console.log(data);
 
         $.ajax({
             url: '${pageContext.request.contextPath}/member/takeOrder',

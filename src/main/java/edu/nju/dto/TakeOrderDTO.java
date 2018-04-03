@@ -77,12 +77,17 @@ public class TakeOrderDTO {
     /**
      * 是否使用会员折扣
      */
-    private boolean memberDiscount;
+    private Boolean memberDiscount;
 
     /**
      * 是否使用优惠券
      */
-    private boolean useCoupon;
+    private Boolean useCoupon;
+
+    /**
+     * 优惠券面额
+     */
+    private Integer couponValue;
 
     public String getMail() {
         return mail;
@@ -200,6 +205,30 @@ public class TakeOrderDTO {
         this.useCoupon = useCoupon;
     }
 
+    public Boolean getMemberDiscount() {
+        return memberDiscount;
+    }
+
+    public void setMemberDiscount(Boolean memberDiscount) {
+        this.memberDiscount = memberDiscount;
+    }
+
+    public Boolean getUseCoupon() {
+        return useCoupon;
+    }
+
+    public void setUseCoupon(Boolean useCoupon) {
+        this.useCoupon = useCoupon;
+    }
+
+    public Integer getCouponValue() {
+        return couponValue;
+    }
+
+    public void setCouponValue(Integer couponValue) {
+        this.couponValue = couponValue;
+    }
+
     @Override
     public String toString() {
         return "TakeOrderDTO{" +
@@ -211,11 +240,13 @@ public class TakeOrderDTO {
                 ", seatType=" + seatType +
                 ", seatNum=" + seatNum +
                 ", price=" + price +
+                ", actualPrice=" + actualPrice +
                 ", seatSettled=" + seatSettled +
                 ", boughtOnline=" + boughtOnline +
                 ", memberOrder=" + memberOrder +
                 ", memberDiscount=" + memberDiscount +
                 ", useCoupon=" + useCoupon +
+                ", couponValue=" + couponValue +
                 '}';
     }
 }

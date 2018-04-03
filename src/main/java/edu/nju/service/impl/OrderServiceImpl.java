@@ -1,9 +1,6 @@
 package edu.nju.service.impl;
 
-import edu.nju.dao.ManagerDao;
-import edu.nju.dao.MemberDao;
-import edu.nju.dao.OrderDao;
-import edu.nju.dao.VenueDao;
+import edu.nju.dao.*;
 import edu.nju.dto.OrderShowDTO;
 import edu.nju.dto.RefundTipDTO;
 import edu.nju.dto.TakeOrderDTO;
@@ -43,6 +40,9 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ManagerDao managerDao;
 
+    @Autowired
+    private CouponDao couponDao;
+
     private static int MANAGER_ID = 1;
 
     @Override
@@ -67,6 +67,17 @@ public class OrderServiceImpl implements OrderService {
             //设置与会员的关联
             Member member = memberDao.getMember(takeOrderDTO.getMail());
             order.setMemberFK(member);
+        }
+
+        //如果是优惠券购票，找出一张指定面额的优惠券
+        if (order.isUseCoupon()) {
+            List<Coupon> coupons = couponDao.getUnusedCoupons(takeOrderDTO.getMail(), takeOrderDTO.getCouponValue());
+            assert coupons.size() != 0;
+            Coupon coupon = coupons.get(0);
+            coupon.setUsed(true);
+
+            order.setUseCoupon(true);
+            order.setCoupon(coupon);
         }
 
         order.setVenue(venue);

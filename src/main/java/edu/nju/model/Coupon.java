@@ -36,9 +36,13 @@ public class Coupon {
     /**
      * 优惠券与订单，一对一，优惠券还未使用，即可不与order绑定
      */
-    @OneToOne
-    @JoinColumn(name = "`order`", foreignKey = @ForeignKey(name = "FK_ORDER"))
-    private Order orderFK;
+    @OneToOne(mappedBy = "coupon")
+    private Order order;
+
+    /**
+     * 是否已经使用
+     */
+    private boolean used = false;
 
     public int getId() {
         return id;
@@ -64,11 +68,19 @@ public class Coupon {
         this.memberFK = member;
     }
 
-    public Order getOrderFK() {
-        return orderFK;
+    public Order getOrder() {
+        return order;
     }
 
-    public void setOrderFK(Order order) {
-        this.orderFK = order;
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
     }
 }

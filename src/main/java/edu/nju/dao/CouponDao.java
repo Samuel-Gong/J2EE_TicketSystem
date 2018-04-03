@@ -21,6 +21,14 @@ public interface CouponDao {
     List<CouponType> getCouponTypes();
 
     /**
+     * 获取会员指定面额的优惠券
+     * @param memberId    会员编号
+     * @param couponValue 优惠券面额
+     * @return 指定面额的优惠券列表
+     */
+    List<Coupon> getUnusedCoupons(String memberId, int couponValue);
+
+    /**
      * 根据会员ID，获取该会员所有未使用的优惠券
      *
      * @param memberId 会员id
