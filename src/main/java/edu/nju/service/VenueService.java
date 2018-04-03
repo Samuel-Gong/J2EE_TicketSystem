@@ -52,7 +52,6 @@ public interface VenueService {
     /**
      * 场馆登录
      *
-     *
      * @param venue@return 是否登录成功
      */
     boolean login(Venue venue);
@@ -127,10 +126,10 @@ public interface VenueService {
     /**
      * 场馆检票登记
      *
-     * @param seatCheckInDTO 检票登记数据传输对象
+     * @param venuePlanSeat 场馆计划座位
      * @return 检票登记是否成功
      */
-    boolean seatCheckIn(SeatCheckInDTO seatCheckInDTO);
+    boolean seatCheckIn(SeatCheckInDTO venuePlanSeat);
 
     /**
      * 获取所有正在审批的场馆
@@ -174,6 +173,7 @@ public interface VenueService {
 
     /**
      * 获取场馆统计信息
+     *
      * @param venueId 场馆编号
      * @return 场馆统计信息
      */
@@ -181,6 +181,7 @@ public interface VenueService {
 
     /**
      * 获取各场馆统计信息
+     *
      * @return 各场馆统计信息列表
      */
     List<VenueStatisticsDTO> getVenueStatistics();

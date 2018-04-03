@@ -213,11 +213,17 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public boolean seatCheckIn(SeatCheckInDTO seatCheckInDTO) {
-        int venuePlanId = seatCheckInDTO.getVenuePlanId();
-        int row = seatCheckInDTO.getRowAndColumnDTO().getRow();
-        int column = seatCheckInDTO.getRowAndColumnDTO().getColumn();
+    public boolean seatCheckIn(SeatCheckInDTO venuePlanSeat) {
+        int venuePlanId = venuePlanSeat.getVenuePlanId();
+        int row = venuePlanSeat.getRowAndColumnDTO().getRow();
+        int column = venuePlanSeat.getRowAndColumnDTO().getColumn();
         VenuePlanSeat checkedInSeat = venueDao.getVenuePlanSeat(venuePlanId, row, column);
+
+        //如果座位可用（表示该座位未被预订，则不能被登记）
+        if (checkedInSeat.isAvailable()) {
+            return false;
+        }
+
         checkedInSeat.setCheckIn(true);
         return true;
     }

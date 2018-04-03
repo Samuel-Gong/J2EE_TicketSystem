@@ -58,20 +58,21 @@
                     </thead>
                     <tbody>
                     <tr id="sold-tr">
-                        <td style="background-color: #472B34"></td>
-                        <td>可以登记</td>
-                    </tr>
-                    <tr>
-                        <td style="background-color: #3a78c3"></td>
-                        <td>不能登记</td>
+                        <td style="background-color: #3a78c3;"></td>
+                        <td>未登记</td>
                     </tr>
                     <tr>
                         <td style="background-color: red"></td>
-                        <td>已经登记</td>
+                        <td>已登记</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
+        <div class="col-md-8">
+            <%@include file="../../../html/venue/seat-map-container.html" %>
+        </div>
+        <div class="col-md-2">
             <div id="plan-basic-info">
                 <h3 class="text-center">演出信息</h3>
                 <form id="venue-plan-info-form">
@@ -92,30 +93,31 @@
                 </form>
             </div>
         </div>
-        <div class="col-md-8">
-            <%@include file="../../../html/venue/seat-map-container.html" %>
-        </div>
-        <div class="col-md-2">
-            <h4 class="text-center">检票登记</h4>
-            <form>
-                <div class="form-group">
-                    <label class="control-label">行数</label>
-                    <input id="row" class="form-control" type="text" placeholder="行数">
-                </div>
-                <div class="form-group">
-                    <label class="control-label">列数</label>
-                    <input id="column" class="form-control" type="text" placeholder="列数">
-                </div>
-                <div class="form-group">
-                    <button id="checkIn-btn" type="button" class="btn btn-primary center-block">登记</button>
-                </div>
-            </form>
-        </div>
     </div>
 </div>
 <!-- container end -->
 
 <footer></footer>
+
+<!-- check-in 模态框 -->
+<div class="modal fade" id="check-in-modal" data-backdrop="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- data-dismiss：关闭模态窗口 -->
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title text-center">确认检票</h4>
+            </div>
+            <div class="modal-body">
+                <p>确认<span id="check-in-row"></span>排<span id="check-in-column"></span>座检票入场</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="check-in-btn" class="btn btn-primary login_btn center-block">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- check-in 模态框end -->
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="${pageContext.request.contextPath}/js/jquery-3.3.1.min.js"></script>
@@ -145,70 +147,55 @@
             let row = rowAndColumn[0];
             let column = rowAndColumn[1];
 
-            //更新selectedSeats数组以及右侧已选座位列表
-            selectedSeats.push(id);
-            $("#selected-seats-list").append(
-                "<li>" + row + "排" + column + "座</li>"
-            );
+            //显示确认检票的模态框
+            $("#check-in-row").text(row);
+            $("#check-in-column").text(column);
+            $("#check-in-modal").modal("show")
 
-            //更新总票价
-            let totalPriceNode = $("#raw-price");
-            let typeChar = this.char();
-            let totalPrice = parseInt(totalPriceNode.text()) + parseInt(seatTypes[findIndexInSeatTypes(typeChar)].price);
-            totalPriceNode.text(totalPrice);
-            updateActualPrice(totalPrice);
-
+            return "available";
+        }
+        //已被检票的座位不可再点击
+        else if (this.status() === 'selected') {
             return 'selected';
         }
-        else if (this.status() === 'selected') {
-
-            let id = this.node().attr("id");
-            let rowAndColumn = id.split("_");
-            let row = rowAndColumn[0];
-            let column = rowAndColumn[1];
-
-            return 'available';
-        }
-        //如果座位不可用，那么不允许更改样式
         else if (this.status() === 'unavailable') {
             return 'unavailable';
         }
     }
 
-    $("#checkIn-btn").on("click", function () {
-        let row = $("#row").val();
-        let column = $("#column").val();
+    $("#check-in-btn").on("click", function () {
 
-        //判断是否在座位图中
-        if (isInSeatMap(row, column)) {
-            //判断该座位是否已被预订，isAvailable表示该座位未被预订
-            if (isAvailable(row, column)) {
-                alert("该座位还未预订，不能检票登记");
-            } else {
-                $.ajax({
-                    url: "${pageContext.request.contextPath}/venue/checkIn",
-                    method: "post",
-                    data:
-                        {
-                            venuePlanId: venuePlan.venuePlanId,
-                            row: row,
-                            column: column
-                        },
-                    success: function (data) {
-                        if (data === true) {
-                            console.log(row + "排" + column + "座" + "登记成功");
-                            seatCheckIn(row, column);
-                        }
-                        else {
-                            console.log(row + "排" + column + "座" + "登记失败");
-                        }
-                    }
-                });
+        let seatCheckIn = {
+            venuePlanId: venuePlan.venuePlanId,
+            rowAndColumnDTO: {
+                row: $("#check-in-row").text(),
+                column: $("#check-in-column").text()
             }
-        }
-        else {
-            alert("所选座位不在座位图中");
-        }
+        };
+
+        console.log(JSON.stringify(seatCheckIn));
+
+        //登记检票
+        $.ajax({
+            url: "${pageContext.request.contextPath}/venue/checkIn",
+            method: "post",
+            data: JSON.stringify(seatCheckIn),
+            contentType: 'application/json;charset=UTF-8',
+            processData: false,
+            success: function (data) {
+                if (data === true) {
+                    alert("检票成功");
+                    //刷新页面
+                    window.location.reload();
+                }
+                else {
+                    alert("检票失败，该座位还未被预订");
+                }
+            },
+            error: function () {
+                alert("检票失败");
+            }
+        });
     });
 
     $(document).ready(function () {

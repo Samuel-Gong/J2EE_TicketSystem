@@ -184,10 +184,6 @@ div.seatCharts-seat.unavailable {
     background-color: #472B34;
 }
 
-div.seatCharts-seat.unavailable.checked {
-    background-color: red;
-}
-
 div.seatCharts-legend {
     padding-left: 0px;
 }

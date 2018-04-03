@@ -286,9 +286,9 @@ let sc = null;
 function checkInRender(venuePlanSeats) {
     sc = $("#seat-map").seatCharts(organizeRenderSeatInfo());
     $.each(venuePlanSeats, function (index, seat) {
-        //已经检票登记的座位，加上一个checked类，进行渲染
+        //已经检票登记的座位，设置为检票登记过的座位
         if (seat.checkIn === true) {
-            sc.get(seat.row + "_" + seat.column).node().addClass("checked");
+            sc.status(seat.row + "_" + seat.column, "selected");
         }
     });
 }
@@ -297,7 +297,6 @@ function checkInRender(venuePlanSeats) {
  * 渲染座位
  */
 function renderSeats(venuePlanSeats) {
-    console.log(venuePlanSeats);
     sc = $("#seat-map").seatCharts(organizeRenderSeatInfo());
     //将已被锁定（包括未支付）的座位设置为unavailable
     setBookedSeatsUnavailable(venuePlanSeats);
@@ -317,34 +316,4 @@ function rerenderSeats(venuePlanSeats) {
     $("#seat-map-container").append(newSeatMap);
     //重新渲染座位图
     renderSeats(venuePlanSeats);
-}
-
-/**
- * 对一个座位检票登记，设置它的类
- * @param row 座位行数
- * @param column 座位列数
- */
-function seatCheckIn(row, column) {
-    sc.get(row + "_" + column).node().addClass("checked");
-}
-
-
-/**
- * 判断一个座位是否被预订
- * @param row 座位行数
- * @param column 座位列数
- * @returns {boolean} 是否被预订
- */
-function isAvailable(row, column) {
-    return sc.get(row + "_" + column).status === "available";
-}
-
-/**
- * 检查该行列是否在
- * @param row 座位行数
- * @param column 座位列数
- * @returns {boolean}
- */
-function isInSeatMap(row, column) {
-    return (1 <= row && row <= seatMap.length) && (1 <= column && column <= seatMap[0].length);
 }

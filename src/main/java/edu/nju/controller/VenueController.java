@@ -70,7 +70,13 @@ public class VenueController {
         return venueService.modifyCheck(venueId);
     }
 
-    @PostMapping(value = "/checkIn")
+    /**
+     * 检票
+     *
+     * @param seatCheckInDTO 检票的数据传输对象
+     * @return 检票是否成功
+     */
+    @PostMapping(value = "/checkIn", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public @ResponseBody
     boolean seatCheckIn(@RequestBody SeatCheckInDTO seatCheckInDTO) {
         return venueService.seatCheckIn(seatCheckInDTO);
