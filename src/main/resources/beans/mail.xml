@@ -4,10 +4,10 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="smtp.163.com"/>
-        <property name="port" value="25"/>
-        <property name="username" value="a52212498@163.com"/>
-        <property name="password" value="gong15123537637"/>
+        <property name="host" value="smtp.qq.com"/>
+        <!--<property name="port" value="25"/>-->
+        <property name="username" value="335931662@qq.com"/>
+        <property name="password" value="twhspzwxabbubhig"/>
 
         <property name="javaMailProperties">
             <props>
@@ -15,6 +15,9 @@
                 <prop key="mail.smtp.starttls.enable">true</prop>
                 <prop key="mail.smtp.starttls.required">true</prop>
                 <prop key="mail.smtp.timeout">25000</prop>
+
+                <prop key="mail.debug">true</prop>
+                <!--<prop key="mail.smtp.localhost">localhost</prop>-->
             </props>
         </property>
     </bean>
@@ -23,7 +26,7 @@
     <bean id="customMailMessage"
           class="org.springframework.mail.SimpleMailMessage">
 
-        <property name="from" value="a52212498@163.com"/>
+        <property name="from" value="335931662@qq.com"/>
         <property name="subject" value="注册验证"/>
         <property name="text">
             <value>
