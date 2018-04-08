@@ -130,7 +130,7 @@ public class MemberController {
      * @param memberId 会员id
      * @return 会员基本信息
      */
-    @FastJsonView(include = @FastJsonFilter(clazz = Member.class, props = {"mail", "points", "bindAccount"}))
+    @FastJsonView(include = @FastJsonFilter(clazz = Member.class, props = {"mail", "points", "bindAccount", "totalConsumption"}))
     @GetMapping(path = "/info")
     public @ResponseBody
     Member getInfo(@RequestParam("memberId") String memberId) {
@@ -167,7 +167,7 @@ public class MemberController {
      *
      * @param mail    会员邮箱
      * @param orderId 订单编号
-     * @param refund 应该退订的钱
+     * @param refund  应该退订的钱
      * @return 订单退订是否成功
      */
     @GetMapping(path = "/order/retreat/{orderId}")

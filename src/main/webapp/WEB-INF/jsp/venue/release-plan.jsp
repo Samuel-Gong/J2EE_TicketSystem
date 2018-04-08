@@ -580,7 +580,7 @@
                 processData: false,
                 success: function (data) {
                     alert("计划发布成功");
-                    $(location).attr("href", "${pageContext.request.contextPath}/venue/planView")
+                    $(location).attr("href", "${pageContext.request.contextPath}/venue/plan/coming")
                 },
                 error: function () {
                     alert("出错了");

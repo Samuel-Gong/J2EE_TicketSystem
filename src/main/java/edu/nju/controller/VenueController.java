@@ -1,6 +1,8 @@
 package edu.nju.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.support.spring.annotation.FastJsonFilter;
+import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
 import edu.nju.dto.LevelAndDiscount;
 import edu.nju.dto.SeatCheckInDTO;
 import edu.nju.dto.TakeOrderDTO;
@@ -148,14 +150,41 @@ public class VenueController {
     }
 
     /**
-     * 场馆查看计划视图
+     * 场馆未完成计划视图
      *
-     * @return 场馆所有计划列表
+     * @param venueId 场馆id
+     * @return 场馆未完成计划列表
      */
-    @GetMapping(value = "/planView")
-    public String planView(@SessionAttribute("venueId") int venueId, Model model) {
-        model.addAttribute("venuePlans", venueService.getAllBriefVenuePlan(venueId));
-        return "venue/plan-brief";
+    @GetMapping(value = "/plan/coming")
+    public String comingPlan(@SessionAttribute("venueId") int venueId, Model model) {
+        model.addAttribute("venuePlans", venueService.getComingVenuePlans(venueId));
+        return "venue/plan/coming";
+    }
+
+    /**
+     * 场馆未结算计划视图
+     *
+     * @param venueId 场馆id
+     * @param model   场馆未结算计划列表
+     * @return 场馆未结算计划列表
+     */
+    @GetMapping(value = "/plan/unsettle")
+    public String unsettlePlan(@SessionAttribute("venueId") int venueId, Model model) {
+        model.addAttribute("venuePlans", venueService.getUnsettlePlans(venueId));
+        return "venue/plan/unsettle";
+    }
+
+    /**
+     * 场馆已结算计划视图
+     *
+     * @param venueId 场馆id
+     * @param model   场馆已结算计划列表
+     * @return 场馆已结算计划列表
+     */
+    @GetMapping(value = "/plan/settle")
+    public String settlePlan(@SessionAttribute("venueId") int venueId, Model model) {
+        model.addAttribute("venuePlans", venueService.getSettlePlans(venueId));
+        return "venue/plan/settle";
     }
 
     /**
@@ -163,7 +192,7 @@ public class VenueController {
      *
      * @return 场馆计划详情
      */
-    @GetMapping(value = "/planView/{venuePlanId}")
+    @GetMapping(value = "/plan/{venuePlanId}")
     public String planDetailView(@PathVariable("venuePlanId") int venuePlanId, Model model) {
         model.addAttribute("planDetail", JSON.toJSONString(venueService.getVenuePlanDetail(venuePlanId)));
         return "/venue/plan-detail";

@@ -80,13 +80,6 @@ public interface VenueDao {
     void deleteVenuePlan(VenuePlan venuePlan);
 
     /**
-     * 获取所有即将到来的场馆计划总数
-     *
-     * @return 即将到来的所有场馆计划总数
-     */
-    int getComingVenuePlanTotalNum();
-
-    /**
      * 获取所有即将到来场馆计划
      *
      * @return 指定大小的场馆计划列表
@@ -128,6 +121,7 @@ public interface VenueDao {
 
     /**
      * 获取应该配票的场馆
+     *
      * @param sendTicketsWeek 演出前多少周开始配票
      * @return 现在应该配票的场馆
      */
@@ -135,13 +129,39 @@ public interface VenueDao {
 
     /**
      * 获取所有已结束、未结算的场馆计划
-     * @return 已结束、为结算场馆计划列表
+     *
+     * @return 已结束、未结算场馆计划列表
      */
     List<VenuePlan> getUnsettleVenuePlans();
 
     /**
      * 获取所有场馆
+     *
      * @return 获取所有场馆
      */
     List<Venue> getVenues();
+
+    /**
+     * 获取所有已结算的场馆计划
+     *
+     * @param venueId 场馆id
+     * @return 该场馆已结算的场馆计划列表
+     */
+    List<VenuePlan> getSettlePlans(int venueId);
+
+    /**
+     * 获取指定场馆的即将到来的计划
+     *
+     * @param venueId 场馆id
+     * @return 指定场馆即将到来计划列表
+     */
+    List<VenuePlan> getComingVenuePlans(int venueId);
+
+    /**
+     * 获取指定场馆未结算的计划
+     *
+     * @param venueId 场馆id
+     * @return 指定场馆未结算的计划列表
+     */
+    List<VenuePlan> getUnsettlePlans(int venueId);
 }

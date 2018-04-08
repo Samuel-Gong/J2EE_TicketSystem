@@ -46,6 +46,16 @@ public class VenuePlanBriefDTO {
      */
     private String description;
 
+    /**
+     * 票价总收入
+     */
+    private Integer totalIncome;
+
+    /**
+     * 实际结算收入
+     */
+    private Integer actualIncome;
+
     public VenuePlanBriefDTO(VenuePlan venuePlan) {
         this.venuePlanId = venuePlan.getVenuePlanId();
         this.begin = LocalDateTimeUtil.formatTillMinute(venuePlan.getBegin());
@@ -54,6 +64,9 @@ public class VenuePlanBriefDTO {
         this.venueName = venuePlan.getVenue().getName();
         this.showType = venuePlan.getShowType().getValue();
         this.description = venuePlan.getDescription();
+
+        this.totalIncome = venuePlan.getTotalIncome();
+        this.actualIncome = venuePlan.getActualIncome();
     }
 
     public Integer getVenuePlanId() {
@@ -112,16 +125,34 @@ public class VenuePlanBriefDTO {
         this.description = description;
     }
 
+    public Integer getTotalIncome() {
+        return totalIncome;
+    }
+
+    public void setTotalIncome(Integer totalIncome) {
+        this.totalIncome = totalIncome;
+    }
+
+    public Integer getActualIncome() {
+        return actualIncome;
+    }
+
+    public void setActualIncome(Integer actualIncome) {
+        this.actualIncome = actualIncome;
+    }
+
     @Override
     public String toString() {
         return "VenuePlanBriefDTO{" +
                 "venuePlanId=" + venuePlanId +
-                ", begin=" + begin +
-                ", end=" + end +
+                ", begin='" + begin + '\'' +
+                ", end='" + end + '\'' +
                 ", city='" + city + '\'' +
                 ", venueName='" + venueName + '\'' +
-                ", showType=" + showType +
+                ", showType='" + showType + '\'' +
                 ", description='" + description + '\'' +
+                ", totalIncome=" + totalIncome +
+                ", actualIncome=" + actualIncome +
                 '}';
     }
 }

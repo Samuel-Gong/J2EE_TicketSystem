@@ -100,8 +100,9 @@ public class MemberServiceImpl implements MemberService {
             levelAndDiscount.setLevel(-1);
             levelAndDiscount.setDiscount(10);
         } else {
-            int points = member.getPoints();
-            int level = LevelStrategy.calculateLevel(points);
+            //根据会员总消费计算会员等级
+            int totalConsumption = member.getTotalConsumption();
+            int level = LevelStrategy.calculateLevel(totalConsumption);
             levelAndDiscount.setLevel(level);
             levelAndDiscount.setDiscount(DiscountStrategy.calculateDiscount(level));
         }

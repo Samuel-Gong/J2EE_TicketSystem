@@ -36,6 +36,11 @@ public class Member {
     private int points;
 
     /**
+     * 总消费，用于计算会员登记
+     */
+    private int totalConsumption;
+
+    /**
      * 验证密钥
      */
     private int mailKey;
@@ -105,6 +110,14 @@ public class Member {
 
     public void setPoints(int points) {
         this.points = points;
+    }
+
+    public int getTotalConsumption() {
+        return totalConsumption;
+    }
+
+    public void setTotalConsumption(int totalConsumption) {
+        this.totalConsumption = totalConsumption;
     }
 
     public int getMailKey() {

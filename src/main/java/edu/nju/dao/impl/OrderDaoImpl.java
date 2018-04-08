@@ -28,23 +28,6 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public List<Order> getOrders(String mail, OrderStatus orderStatus) {
-        Session session = sessionFactory.getCurrentSession();
-        return session.createQuery("from Order where memberFK.mail = :mail and orderStatus = :orderStatus ", Order.class)
-                .setParameter("mail", mail)
-                .setParameter("orderStatus", orderStatus)
-                .list();
-    }
-
-    @Override
-    public List<Order> getOrderByMemberId(String memberId) {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from Order where memberFK.mail = :mail ", Order.class)
-                .setParameter("mail", memberId)
-                .list();
-    }
-
-    @Override
     public List<Order> getOrdersByVenuePlanId(int venueId) {
         return sessionFactory.getCurrentSession()
                 .createQuery("from Order where venuePlan.id = :venuePlanId ", Order.class)
@@ -62,6 +45,15 @@ public class OrderDaoImpl implements OrderDao {
         return sessionFactory.getCurrentSession()
                 .createQuery("from Order where orderStatus = :orderStatus ", Order.class)
                 .setParameter("orderStatus", OrderStatus.UNPAID)
+                .list();
+    }
+
+    @Override
+    public List<Order> getOnlineOrders(String mail, OrderStatus orderStatus) {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createQuery("from Order where memberFK.mail = :mail and orderStatus = :orderStatus and boughtOnline = true ", Order.class)
+                .setParameter("mail", mail)
+                .setParameter("orderStatus", orderStatus)
                 .list();
     }
 }

@@ -65,6 +65,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label class="col-md-3 control-label">总消费</label>
+                            <div class="col-md-7">
+                                <p id="member-total-consumption" class="form-control-static"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="col-md-3 control-label">会员等级</label>
                             <div class="col-md-3">
                                 <p class="form-control-static"><span>Lv.</span><span id="member-level"></span></p>
@@ -216,9 +222,10 @@
             },
             success: function (info) {
                 console.log(info);
-                //显示会员的邮箱、余额、积分
+                //显示会员的邮箱、积分
                 $("#member-mail").text(info.mail);
                 $("#member-points").text(info.points);
+                $("#member-total-consumption").text(info.totalConsumption);
 
                 //已经绑定支付宝账户，去绑定支付宝账户按钮隐藏
                 if (info.bindAccount === true) {

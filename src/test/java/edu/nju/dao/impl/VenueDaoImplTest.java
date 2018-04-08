@@ -51,11 +51,4 @@ class VenueDaoImplTest {
 
     }
 
-    @Test
-    void getComingVenuePlansTotalNum() {
-
-        Assertions.assertEquals(0, venueDao.getComingVenuePlanTotalNum());
-
-    }
-
 }

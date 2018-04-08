@@ -12,7 +12,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,19 +82,10 @@ public class VenueDaoImpl implements VenueDao {
     }
 
     @Override
-    public int getComingVenuePlanTotalNum() {
-        Session session = sessionFactory.getCurrentSession();
-        //开始时间要在当前时间之后
-        return session.createQuery("select count(id) from VenuePlan where begin > :timeNow", Long.class)
-                .setParameter("timeNow", LocalDateTime.now())
-                .getSingleResult().intValue();
-    }
-
-    @Override
     public List<VenuePlan> getComingVenuePlans() {
         Session session = sessionFactory.getCurrentSession();
         Query<VenuePlan> query = session.createQuery("from VenuePlan where begin > :timeNow", VenuePlan.class);
-        return query.setParameter("timeNow", LocalDateTime.now()).list();
+        return query.setParameter("timeNow", LocalDateTimeUtil.nowTillMinute()).list();
 
     }
 
@@ -164,6 +154,31 @@ public class VenueDaoImpl implements VenueDao {
     public List<Venue> getVenues() {
         return sessionFactory.getCurrentSession()
                 .createQuery("from Venue ", Venue.class)
+                .list();
+    }
+
+    @Override
+    public List<VenuePlan> getSettlePlans(int venueId) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from VenuePlan where venue.id = :venueId and settle = true ", VenuePlan.class)
+                .setParameter("venueId", venueId)
+                .list();
+    }
+
+    @Override
+    public List<VenuePlan> getComingVenuePlans(int venueId) {
+        Session session = sessionFactory.getCurrentSession();
+        Query<VenuePlan> query = session.createQuery("from VenuePlan where venue.id = :venueId and endTime > :timeNow", VenuePlan.class);
+        return query.setParameter("venueId", venueId)
+                .setParameter("timeNow", LocalDateTimeUtil.nowTillMinute())
+                .list();
+    }
+
+    @Override
+    public List<VenuePlan> getUnsettlePlans(int venueId) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from VenuePlan where venue.id = :venueId and complete = true and settle = false", VenuePlan.class)
+                .setParameter("venueId", venueId)
                 .list();
     }
 

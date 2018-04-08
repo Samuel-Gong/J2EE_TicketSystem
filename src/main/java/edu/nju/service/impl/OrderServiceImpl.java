@@ -112,7 +112,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public List<OrderShowDTO> getOrderShowDTOs(String mail, OrderStatus orderStatus) {
-        List<Order> orders = orderDao.getOrders(mail, orderStatus);
+        List<Order> orders = orderDao.getOnlineOrders(mail, orderStatus);
         //懒加载每个Order对应选择的座位
         orders.forEach(unpaidOrder -> Hibernate.initialize(unpaidOrder.getVenuePlanSeats()));
         return orders.stream()
@@ -234,7 +234,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 过期、取消、退订订单需要与座位解绑前，将将订单预订的座位用字符串的形式保存下来
+     * 过期、取消、退订订单需要与座位解绑前，将订单预订的座位用字符串的形式保存下来
      */
     private void setBookedSeatStr(Order order) {
         String bookedSeatStr = order.getVenuePlanSeats().stream()

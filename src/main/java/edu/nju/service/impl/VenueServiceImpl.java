@@ -174,30 +174,6 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public List<VenuePlanBriefDTO> getAllBriefVenuePlan(int venueId) {
-        List<VenuePlan> venuePlans = venueDao.getAllVenuePlan(venueId);
-
-        return venuePlans.stream()
-                .map(VenuePlanBriefDTO::new)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional(rollbackFor = RuntimeException.class)
-    public boolean updateVenuePlan(VenuePlan venuePlan) {
-        venueDao.updateVenuePlan(venuePlan);
-        return true;
-    }
-
-    @Override
-    @Transactional(rollbackFor = RuntimeException.class)
-    public boolean deleteVenuePlan(VenuePlan venuePlan) {
-        venueDao.deleteVenuePlan(venuePlan);
-        return true;
-    }
-
-    @Override
-    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<VenuePlanBriefDTO> getComingVenueBriefPlan() {
         return venueDao.getComingVenuePlans()
                 .stream()
@@ -325,6 +301,8 @@ public class VenueServiceImpl implements VenueService {
                         if (order.isMemberOrder()) {
                             Member member = order.getMemberFK();
                             member.setPoints(member.getPoints() + order.getActualPrice());
+                            //会员总消费也增加
+                            member.setTotalConsumption(member.getTotalConsumption() + order.getActualPrice());
                         }
 
                         //累加该计划的票价总收入
@@ -393,6 +371,33 @@ public class VenueServiceImpl implements VenueService {
                                 .filter(VenuePlan::isSettle)
                                 .mapToInt(VenuePlan::getActualIncome)
                                 .sum()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public List<VenuePlanBriefDTO> getComingVenuePlans(int venueId) {
+        List<VenuePlan> venuePlans = venueDao.getComingVenuePlans(venueId);
+        return venuePlan2BriefDTO(venuePlans);
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public List<VenuePlanBriefDTO> getSettlePlans(int venueId) {
+        List<VenuePlan> venuePlans = venueDao.getSettlePlans(venueId);
+        return venuePlan2BriefDTO(venuePlans);
+    }
+
+    @Override
+    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
+    public List<VenuePlanBriefDTO> getUnsettlePlans(int venueId) {
+        List<VenuePlan> venuePlans = venueDao.getUnsettlePlans(venueId);
+        return venuePlan2BriefDTO(venuePlans);
+    }
+
+    private List<VenuePlanBriefDTO> venuePlan2BriefDTO(List<VenuePlan> venuePlans){
+        return venuePlans.stream()
+                .map(VenuePlanBriefDTO::new)
                 .collect(Collectors.toList());
     }
 

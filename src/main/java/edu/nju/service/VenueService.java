@@ -85,30 +85,6 @@ public interface VenueService {
     VenuePlanDetailDTO getVenuePlanDetail(int venuePlanId);
 
     /**
-     * 获取该场馆所有的场馆计划简介
-     *
-     * @param venueId 场馆编号
-     * @return 场馆计划列表
-     */
-    List<VenuePlanBriefDTO> getAllBriefVenuePlan(int venueId);
-
-    /**
-     * 更新场馆计划
-     *
-     * @param venuePlan 场馆计划
-     * @return 更新是否成功
-     */
-    boolean updateVenuePlan(VenuePlan venuePlan);
-
-    /**
-     * 删除场馆计划
-     *
-     * @param venuePlan 场馆计划
-     * @return 删除是否成功
-     */
-    boolean deleteVenuePlan(VenuePlan venuePlan);
-
-    /**
      * 获取当前时间往后的最近几场场馆计划简要信息
      *
      * @return 场馆计划传输对象
@@ -185,4 +161,28 @@ public interface VenueService {
      * @return 各场馆统计信息列表
      */
     List<VenueStatisticsDTO> getVenueStatistics();
+
+    /**
+     * 获取还未开始的场馆计划信息
+     *
+     * @param venueId 场馆id
+     * @return 还未开始的场馆计划信息列表
+     */
+    List<VenuePlanBriefDTO> getComingVenuePlans(int venueId);
+
+    /**
+     * 获取已经结算的场馆计划信息
+     *
+     * @param venueId 场馆id
+     * @return 已经结算的场馆计划信息列表
+     */
+    List<VenuePlanBriefDTO> getSettlePlans(int venueId);
+
+    /**
+     * 获取未结算的场馆计划信息
+     *
+     * @param venueId 场馆id
+     * @return 未结算的场馆计划信息列表
+     */
+    List<VenuePlanBriefDTO> getUnsettlePlans(int venueId);
 }

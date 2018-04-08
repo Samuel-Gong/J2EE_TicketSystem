@@ -131,6 +131,9 @@
             };
         });
 
+
+        //点击座位没有反应
+        seatChartsSetting.clickDoNothing();
         //填充seatMap
         fillSeatMapWithType(planDetail.rowNum, planDetail.columnNum, venuePlan.venuePlanSeats);
 
