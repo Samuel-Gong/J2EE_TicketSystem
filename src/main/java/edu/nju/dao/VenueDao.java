@@ -4,6 +4,7 @@ import edu.nju.model.Venue;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Shenmiu
@@ -28,7 +29,8 @@ public interface VenueDao extends JpaRepository<Venue, Integer>, VenueSeatDao {
      * @param venueId 场馆编号
      * @return 场馆信息
      */
-    Venue getOne(int venueId);
+    @Override
+    Optional<Venue> findById(Integer venueId);
 
     /**
      * 获取所有场馆

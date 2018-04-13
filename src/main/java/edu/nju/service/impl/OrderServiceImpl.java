@@ -45,8 +45,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public int addOrder(TakeOrderDTO takeOrderDTO) {
-        Venue venue = venueDao.getOne(takeOrderDTO.getVenueId());
-        VenuePlan venuePlan = venuePlanDao.getOne(takeOrderDTO.getVenuePlanId());
+        Venue venue = venueDao.findById(takeOrderDTO.getVenueId()).get();
+        VenuePlan venuePlan = venuePlanDao.findById(takeOrderDTO.getVenuePlanId()).get();
 
         Order order = new Order(takeOrderDTO);
 
@@ -58,14 +58,14 @@ public class OrderServiceImpl implements OrderService {
         else {
             order.setOrderStatus(OrderStatus.BOOKED);
             //增加经理的未结算收入
-            Manager manager = managerDao.getOne(MANAGER_ID);
+            Manager manager = managerDao.findById(MANAGER_ID).get();
             manager.setUnsettleIncome(manager.getUnsettleIncome() + order.getActualPrice());
         }
 
         //如果是会员购票
         if (order.isMemberOrder()) {
             //设置与会员的关联
-            Member member = memberDao.getOne(takeOrderDTO.getMail());
+            Member member = memberDao.findById(takeOrderDTO.getMail()).get();
             order.setMemberFk(member);
         }
 
@@ -120,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public OrderShowDTO getOrderShowDTO(int orderId) {
-        Order unpaidOrder = orderDao.getOne(orderId);
+        Order unpaidOrder = orderDao.findById(orderId).get();
         Hibernate.initialize(unpaidOrder.getVenuePlanSeats());
         return new OrderShowDTO(unpaidOrder, new VenuePlanBriefDTO(unpaidOrder.getVenuePlan()));
     }
@@ -128,9 +128,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean payOrder(String mail, int orderId) {
-        Member member = memberDao.getOne(mail);
+        Member member = memberDao.findById(mail).get();
         Account account = member.getAccount();
-        Order order = orderDao.getOne(orderId);
+        Order order = orderDao.findById(orderId).get();
 
         //订单支付的时候再次检查，是否已经过了支付时间
         if (passOverPayTime(order.getCreateTime())) {
@@ -143,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
             account.setBalance(account.getBalance() - order.getActualPrice());
 
             //将收入转入经理账户
-            Manager manager = managerDao.getOne(MANAGER_ID);
+            Manager manager = managerDao.findById(MANAGER_ID).get();
             manager.setUnsettleIncome(manager.getUnsettleIncome() + order.getActualPrice());
 
             //改变订单状态为已预订
@@ -158,7 +158,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean cancelOrder(int orderId) {
-        Order order = orderDao.getOne(orderId);
+        Order order = orderDao.findById(orderId).get();
         //改变订单状态
         order.setOrderStatus(OrderStatus.CANCELED);
 
@@ -171,7 +171,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = RuntimeException.class)
     public RefundTipDTO getRetreatOrderTip(String mail, int orderId) {
 
-        Order order = orderDao.getOne(orderId);
+        Order order = orderDao.findById(orderId).get();
 
         //计算退还票价，给账户余额加上退还的票价
         return RetreatStrategy.calculateRefund(order.getVenuePlan().getBegin(), order.getActualPrice());
@@ -181,8 +181,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean refund(String mail, int orderId, int refund) {
 
-        Order order = orderDao.getOne(orderId);
-        Member member = memberDao.getOne(mail);
+        Order order = orderDao.findById(orderId).get();
+        Member member = memberDao.findById(mail).get();
         Account account = member.getAccount();
 
         //给订单记录退还金额
@@ -191,7 +191,7 @@ public class OrderServiceImpl implements OrderService {
         account.setBalance(account.getBalance() + refund);
 
         //扣除经理账户余额
-        Manager manager = managerDao.getOne(MANAGER_ID);
+        Manager manager = managerDao.findById(MANAGER_ID).get();
         assert manager.getUnsettleIncome() >= order.getActualPrice();
         manager.setUnsettleIncome(manager.getUnsettleIncome() - order.getActualPrice());
 

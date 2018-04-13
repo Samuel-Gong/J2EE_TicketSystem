@@ -3,6 +3,8 @@ package edu.nju.dao;
 import edu.nju.model.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 /**
  * @author Shenmiu
  * @date 2018/03/29
@@ -18,6 +20,6 @@ public interface AccountDao extends JpaRepository<Account, Integer> {
      * @return 支付宝账户
      */
     @Override
-    Account getOne(Integer accountId);
+    Optional<Account> findById(Integer accountId);
 
 }

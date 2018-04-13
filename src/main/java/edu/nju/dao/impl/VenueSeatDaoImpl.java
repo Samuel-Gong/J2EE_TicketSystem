@@ -3,11 +3,11 @@ package edu.nju.dao.impl;
 import edu.nju.dao.VenueSeatDao;
 import edu.nju.dto.RowAndColumnDTO;
 import edu.nju.model.VenuePlanSeat;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +18,12 @@ import java.util.List;
 public class VenueSeatDaoImpl implements VenueSeatDao {
 
     @Autowired
-    private SessionFactory sessionFactory;
+    private EntityManagerFactory entityManagerFactory;
 
     @Override
     public List<VenuePlanSeat> getSpecificSeats(Integer venuePlanId, List<RowAndColumnDTO> orderPlanSeats) {
-        Session session = sessionFactory.getCurrentSession();
-        Query<VenuePlanSeat> query = session.createQuery("from VenuePlanSeat " +
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        TypedQuery<VenuePlanSeat> query = entityManager.createQuery("from VenuePlanSeat " +
                 "where venuePlan.id =:venuePlanId and row =:row and column =:column ", VenuePlanSeat.class);
 
         List<VenuePlanSeat> specificVenuePlanSeats = new ArrayList<>();
@@ -39,7 +39,7 @@ public class VenueSeatDaoImpl implements VenueSeatDao {
 
     @Override
     public VenuePlanSeat getVenuePlanSeat(int venuePlanId, int row, int column) {
-        return sessionFactory.getCurrentSession()
+        return entityManagerFactory.createEntityManager()
                 .createQuery("from VenuePlanSeat " +
                         "where venuePlan.id = :venuePlanId and row = :row and column = :column ", VenuePlanSeat.class)
                 .setParameter("venuePlanId", venuePlanId)
@@ -51,7 +51,7 @@ public class VenueSeatDaoImpl implements VenueSeatDao {
     @Override
     public void deleteSeatMap(int venueId) {
         //删除座位表中该场馆的所有座位
-        sessionFactory.getCurrentSession()
+        entityManagerFactory.createEntityManager()
                 .createQuery("delete from VenueSeat where venue.id = :venueId ")
                 .setParameter("venueId", venueId)
                 .executeUpdate();

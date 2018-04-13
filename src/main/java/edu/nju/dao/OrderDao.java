@@ -5,6 +5,7 @@ import edu.nju.util.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Shenmiu
@@ -38,7 +39,7 @@ public interface OrderDao extends JpaRepository<Order, Integer> {
      * @return 订单持久化对象
      */
     @Override
-    Order getOne(Integer orderId);
+    Optional<Order> findById(Integer orderId);
 
     /**
      * 根据订单状态获取该状态的所有订单

@@ -62,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean mailConfirm(String mail, int mailKey) {
-        return mailKey == memberDao.getOne(mail).getMailKey();
+        return mailKey == memberDao.findById(mail).get().getMailKey();
     }
 
     @Override
@@ -76,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean modifyPassword(String mail, String oldPassword, String newPassword) {
-        Member member = memberDao.getOne(mail);
+        Member member = memberDao.findById(mail).get();
         if (oldPassword.equals(member.getPassword())) {
             member.setPassword(newPassword);
             return updateInfo(member);
@@ -87,7 +87,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean disqualify(String mail) {
-        Member member = memberDao.getOne(mail);
+        Member member = memberDao.findById(mail).get();
         member.setQualified(false);
         return true;
     }
@@ -95,7 +95,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public LevelAndDiscount getLevelAndDiscount(String mail) {
-        Member member = memberDao.getOne(mail);
+        Member member = memberDao.findById(mail).get();
         LevelAndDiscount levelAndDiscount = new LevelAndDiscount();
         //如果会员不存在，将等级设置为-1
         if (member == null) {
@@ -114,14 +114,14 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Member getInfo(String memberId) {
-        return memberDao.getOne(memberId);
+        return memberDao.findById(memberId).get();
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public PointsAndCoupons getPointsAndCoupons(String memberId) {
         PointsAndCoupons pointsAndCoupons = new PointsAndCoupons();
-        Member member = memberDao.getOne(memberId);
+        Member member = memberDao.findById(memberId).get();
         pointsAndCoupons.setPoints(member.getPoints());
 
         Map<Integer, Long> valueAndRemain = couponDao.getCouponsByMemberFkMailAndUsedIsFalse(memberId).stream()
@@ -135,16 +135,21 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean bindAccount(String mail, int accountId, String accountPassword) {
-        Member member = memberDao.getOne(mail);
+        Member member = memberDao.findById(mail).get();
         assert member.getAccount() == null;
-        Account accountInDB = accountDao.getOne(accountId);
+        Optional<Account> optionalAccount = accountDao.findById(accountId);
 
-        //账户存在且密码相同，将支付宝账户绑定到会员上
-        if (accountInDB != null && accountInDB.getPassword().equals(accountPassword)) {
-            //建立联系
-            member.setAccount(accountInDB);
-            member.setBindAccount(true);
-            accountInDB.setMember(member);
+        //账户存在且密码相同
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+            //将支付宝账户绑定到会员上
+            if (account.getPassword().equals(accountPassword)) {
+                //建立联系
+                member.setAccount(account);
+                member.setBindAccount(true);
+                account.setMember(member);
+
+            }
             return true;
         }
         return false;
@@ -154,7 +159,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public MemberStatistics getMemberStatistics(String mail) {
 
-        Member member = memberDao.getOne(mail);
+        Member member = memberDao.findById(mail).get();
         List<Order> orders = member.getOrders();
 
         //预订订单金额
@@ -203,7 +208,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean checkAccount(String mail) {
-        Member member = memberDao.getOne(mail);
+        Member member = memberDao.findById(mail).get();
         return member.getAccount() != null;
     }
 

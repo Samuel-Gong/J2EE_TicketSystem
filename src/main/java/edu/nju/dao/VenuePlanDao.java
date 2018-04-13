@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Shenmiu
@@ -30,7 +31,7 @@ public interface VenuePlanDao extends JpaRepository<VenuePlan, Integer> {
      * @return 场馆计划信息
      */
     @Override
-    VenuePlan getOne(Integer venuePlanId);
+    Optional<VenuePlan> findById(Integer venuePlanId);
 
     /**
      * 获取该场馆所有的场馆计划，不含座位类型和座位表
@@ -86,8 +87,8 @@ public interface VenuePlanDao extends JpaRepository<VenuePlan, Integer> {
      * @param venueId 场馆id
      * @return 指定场馆即将到来计划列表
      */
-    @Query("from VenuePlan where venue.id = :venueId and endTime > :timeNow")
-    List<VenuePlan> getComingVenuePlans(int venueId);
+    @Query("from VenuePlan where venue.id = :venueId and begin > :timeNow")
+    List<VenuePlan> getComingVenuePlans(@Param("venueId") int venueId, @Param("timeNow") LocalDateTime timeNow);
 
     /**
      * 获取指定场馆未结算的计划

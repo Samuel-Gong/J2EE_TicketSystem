@@ -22,7 +22,7 @@ public interface CouponDao extends JpaRepository<Coupon, Integer> {
      * @param couponValue 优惠券面额
      * @return 指定面额的优惠券列表
      */
-    @Query("from Coupon where memberFK.id = :memberId and used = false and couponType.value = :couponValue")
+    @Query("from Coupon where memberFk.id = :memberId and used = false and couponType.value = :couponValue")
     List<Coupon> getUnusedCoupons(@Param("memberId") String memberId, @Param("couponValue") int couponValue);
 
     /**

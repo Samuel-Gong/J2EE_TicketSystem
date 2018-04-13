@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Shenmiu
@@ -41,8 +42,11 @@ public class CouponServiceImpl implements CouponService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean exchangeCoupon(String memberId, int couponValue) {
-        Member member = memberDao.getOne(memberId);
-        CouponType couponType = couponTypeDao.getOne(couponValue);
+        Member member = memberDao.findById(memberId).get();
+        Optional<CouponType> optionalCouponType = couponTypeDao.findById(couponValue);
+        assert optionalCouponType.isPresent();
+
+        CouponType couponType = optionalCouponType.get();
 
         //减去会员的积分
         member.setPoints(member.getPoints() - couponType.getRequiredPoints());

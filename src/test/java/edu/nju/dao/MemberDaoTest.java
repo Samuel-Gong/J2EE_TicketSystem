@@ -37,11 +37,11 @@ class MemberDaoTest {
 
     @Test
     void updateInfo() {
-        Member member = memberDao.getOne("335931662@qq.com");
+        Member member = memberDao.findById("335931662@qq.com").get();
         member.setPassword("1234567");
         memberDao.save(member);
 
-        Assertions.assertEquals("1234567", memberDao.getOne("335931662@qq.com").getPassword());
+        Assertions.assertEquals("1234567", memberDao.findById("335931662@qq.com").get().getPassword());
     }
 
     @Test

@@ -6,11 +6,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd   http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-
     <!-- 任务调度 -->
-    <!-- quartz方式未实现 -->
-    <!--<import resource="classpath:beans/quartz.xml"/>-->
-
     <!-- 使用spring内置的@Scheduled注解的方式 -->
     <task:annotation-driven/>
     <!-- 防止不同task不能同时运行 -->
@@ -24,11 +20,6 @@
     <import resource="classpath:beans/mail.xml"/>
     <import resource="classpath:springmvc.xml"/>
     <import resource="classpath:data.xml"/>
-
-    <!--这个类实例化我们可以得到sessionfactory。该类中有个属性configLocation通过这个属性我们就可以hibernate.cfg.xml建立联系了。-->
-    <!--<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">-->
-    <!--<property name="configLocation" value="classpath:hibernate.cfg.xml"/>-->
-    <!--</bean>-->
 
 </beans>
 

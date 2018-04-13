@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringJUnitWebConfig(locations = "file:src/main/webapp/WEB-INF/applicationContext.xml")
-class MemberControllerTest {
+class ManagerControllerTest {
 
     @Autowired
     private WebApplicationContext wac;
@@ -37,33 +37,15 @@ class MemberControllerTest {
     }
 
     @Test
-    void getInfo() {
-
+    void statisticsFinance() {
         try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/member/info")
-                    .param("memberId", "335931662@qq.com"))
+            mockMvc.perform(MockMvcRequestBuilders.get("/manager/statistics/finance/details"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
-                    .andExpect(jsonPath("$.totalConsumption").value("0"));
+                    .andExpect(jsonPath("$.unsettleIncome").value("1100"));
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-    }
-
-    @Test
-    void getCouponTypes() {
-
-        try {
-            mockMvc.perform(MockMvcRequestBuilders.get("/member/couponType")
-                    .param("memberId", "335931662@qq.com"))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
     }
 }

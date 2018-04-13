@@ -15,8 +15,8 @@ class AccountDaoTest {
     private AccountDao accountDao;
 
     @Test
-    void getOne() {
-        Account account = accountDao.getOne(2);
+    void findById() {
+        Account account = accountDao.findById(2).get();
         Assertions.assertEquals(20000, account.getBalance());
     }
 }

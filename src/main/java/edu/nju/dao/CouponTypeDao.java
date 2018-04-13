@@ -4,6 +4,7 @@ import edu.nju.model.CouponType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Shenmiu
@@ -26,5 +27,5 @@ public interface CouponTypeDao extends JpaRepository<CouponType, Integer> {
      * @return 优惠券的种类
      */
     @Override
-    CouponType getOne(Integer couponValue);
+    Optional<CouponType> findById(Integer couponValue);
 }

@@ -25,15 +25,6 @@ public interface MemberDao extends JpaRepository<Member, String> {
     Optional<Member> findById(String mail);
 
     /**
-     * 查看会员资料
-     *
-     * @param mail 会员邮箱
-     * @return 会员对象
-     */
-    @Override
-    Member getOne(String mail);
-
-    /**
      * 添加一个会员
      *
      * @param member 会员对象

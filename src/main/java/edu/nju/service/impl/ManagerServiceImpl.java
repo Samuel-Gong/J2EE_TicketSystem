@@ -1,7 +1,6 @@
 package edu.nju.service.impl;
 
 import edu.nju.dao.ManagerDao;
-import edu.nju.dao.VenueDao;
 import edu.nju.dao.VenuePlanDao;
 import edu.nju.model.Manager;
 import edu.nju.model.VenuePlan;
@@ -29,8 +28,6 @@ public class ManagerServiceImpl implements ManagerService {
     @Autowired
     private ManagerDao managerDao;
     @Autowired
-    private VenueDao venueDao;
-    @Autowired
     private VenuePlanDao venuePlanDao;
 
     @Override
@@ -44,13 +41,13 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Manager getManager(int managerId) {
-        return managerDao.getOne(managerId);
+        return managerDao.findById(managerId).get();
     }
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean settlePlan(int venuePlanId, int rate) {
-        VenuePlan venuePlan = venuePlanDao.getOne(venuePlanId);
+        VenuePlan venuePlan = venuePlanDao.findById(venuePlanId).get();
         int totalIncome = venuePlan.getTotalIncome();
         int actualIncome = totalIncome * rate / 10;
 
@@ -61,7 +58,7 @@ public class ManagerServiceImpl implements ManagerService {
         venuePlan.setActualIncome(actualIncome);
 
         //从未结算总收入中扣除票价总收入
-        Manager manager = managerDao.getOne(MEMBER_ID);
+        Manager manager = managerDao.findById(MEMBER_ID).get();
         manager.setUnsettleIncome(manager.getUnsettleIncome() - totalIncome);
         //系统赚取差价
         manager.setSettleIncome(manager.getSettleIncome() + totalIncome - actualIncome);
@@ -72,6 +69,6 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Manager getFinance() {
-        return managerDao.getOne(MEMBER_ID);
+        return managerDao.findById(MEMBER_ID).get();
     }
 }
