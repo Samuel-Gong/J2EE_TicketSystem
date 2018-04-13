@@ -31,7 +31,7 @@ public class Coupon {
      */
     @ManyToOne(optional = false)
     @JoinColumn(name = "member", foreignKey = @ForeignKey(name = "FK_MEMBER"))
-    private Member memberFK;
+    private Member memberFk;
 
     /**
      * 优惠券与订单，一对一，优惠券还未使用，即可不与order绑定
@@ -60,12 +60,12 @@ public class Coupon {
         this.couponType = couponType;
     }
 
-    public Member getMemberFK() {
-        return memberFK;
+    public Member getMemberFk() {
+        return memberFk;
     }
 
-    public void setMemberFK(Member member) {
-        this.memberFK = member;
+    public void setMemberFk(Member member) {
+        this.memberFk = member;
     }
 
     public Order getOrder() {

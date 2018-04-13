@@ -5,7 +5,7 @@ import com.alibaba.fastjson.annotation.JSONType;
 /**
  * @author Shenmiu
  * @date 2018/03/22
- *
+ * <p>
  * 表示订单的座位：行和列
  */
 @JSONType(orders = {"row", "column"})

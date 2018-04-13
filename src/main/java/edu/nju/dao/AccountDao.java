@@ -1,6 +1,7 @@
 package edu.nju.dao;
 
 import edu.nju.model.Account;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  * @author Shenmiu
@@ -8,7 +9,7 @@ import edu.nju.model.Account;
  * <p>
  * 支付宝账户的数据访问接口
  */
-public interface AccountDao {
+public interface AccountDao extends JpaRepository<Account, Integer> {
 
     /**
      * 根据支付宝账户的id获取账户
@@ -16,6 +17,7 @@ public interface AccountDao {
      * @param accountId 支付宝账户id
      * @return 支付宝账户
      */
-    Account getAccount(int accountId);
+    @Override
+    Account getOne(Integer accountId);
 
 }

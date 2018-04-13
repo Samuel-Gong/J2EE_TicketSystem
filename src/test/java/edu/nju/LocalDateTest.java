@@ -59,7 +59,7 @@ class LocalDateTest {
     }
 
     @Test
-    void nowPlus2Week(){
+    void nowPlus2Week() {
         System.out.println(LocalDateTimeUtil.nowTillMinute().plusWeeks(2));
     }
 }

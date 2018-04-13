@@ -28,28 +28,25 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = RuntimeException.class)
 public class OrderServiceImpl implements OrderService {
 
+    private static int MANAGER_ID = 1;
     @Autowired
     private OrderDao orderDao;
-
     @Autowired
     private MemberDao memberDao;
-
     @Autowired
     private VenueDao venueDao;
-
+    @Autowired
+    private VenuePlanDao venuePlanDao;
     @Autowired
     private ManagerDao managerDao;
-
     @Autowired
     private CouponDao couponDao;
-
-    private static int MANAGER_ID = 1;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public int addOrder(TakeOrderDTO takeOrderDTO) {
-        Venue venue = venueDao.getVenue(takeOrderDTO.getVenueId());
-        VenuePlan venuePlan = venueDao.getVenuePlan(takeOrderDTO.getVenuePlanId());
+        Venue venue = venueDao.getOne(takeOrderDTO.getVenueId());
+        VenuePlan venuePlan = venuePlanDao.getOne(takeOrderDTO.getVenuePlanId());
 
         Order order = new Order(takeOrderDTO);
 
@@ -61,15 +58,15 @@ public class OrderServiceImpl implements OrderService {
         else {
             order.setOrderStatus(OrderStatus.BOOKED);
             //增加经理的未结算收入
-            Manager manager = managerDao.getManager(MANAGER_ID);
+            Manager manager = managerDao.getOne(MANAGER_ID);
             manager.setUnsettleIncome(manager.getUnsettleIncome() + order.getActualPrice());
         }
 
         //如果是会员购票
         if (order.isMemberOrder()) {
             //设置与会员的关联
-            Member member = memberDao.getMember(takeOrderDTO.getMail());
-            order.setMemberFK(member);
+            Member member = memberDao.getOne(takeOrderDTO.getMail());
+            order.setMemberFk(member);
         }
 
         //如果是优惠券购票，找出一张指定面额的优惠券
@@ -104,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //添加一条订单
-        orderDao.addOrder(order);
+        orderDao.save(order);
 
         return order.getOrderId();
     }
@@ -112,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public List<OrderShowDTO> getOrderShowDTOs(String mail, OrderStatus orderStatus) {
-        List<Order> orders = orderDao.getOnlineOrders(mail, orderStatus);
+        List<Order> orders = orderDao.getOrdersByMemberFkMailAndOrderStatusAndBoughtOnlineIsTrue(mail, orderStatus);
         //懒加载每个Order对应选择的座位
         orders.forEach(unpaidOrder -> Hibernate.initialize(unpaidOrder.getVenuePlanSeats()));
         return orders.stream()
@@ -123,7 +120,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public OrderShowDTO getOrderShowDTO(int orderId) {
-        Order unpaidOrder = orderDao.getOrder(orderId);
+        Order unpaidOrder = orderDao.getOne(orderId);
         Hibernate.initialize(unpaidOrder.getVenuePlanSeats());
         return new OrderShowDTO(unpaidOrder, new VenuePlanBriefDTO(unpaidOrder.getVenuePlan()));
     }
@@ -131,9 +128,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean payOrder(String mail, int orderId) {
-        Member member = memberDao.getMember(mail);
+        Member member = memberDao.getOne(mail);
         Account account = member.getAccount();
-        Order order = orderDao.getOrder(orderId);
+        Order order = orderDao.getOne(orderId);
 
         //订单支付的时候再次检查，是否已经过了支付时间
         if (passOverPayTime(order.getCreateTime())) {
@@ -146,7 +143,7 @@ public class OrderServiceImpl implements OrderService {
             account.setBalance(account.getBalance() - order.getActualPrice());
 
             //将收入转入经理账户
-            Manager manager = managerDao.getManager(MANAGER_ID);
+            Manager manager = managerDao.getOne(MANAGER_ID);
             manager.setUnsettleIncome(manager.getUnsettleIncome() + order.getActualPrice());
 
             //改变订单状态为已预订
@@ -161,7 +158,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean cancelOrder(int orderId) {
-        Order order = orderDao.getOrder(orderId);
+        Order order = orderDao.getOne(orderId);
         //改变订单状态
         order.setOrderStatus(OrderStatus.CANCELED);
 
@@ -174,7 +171,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = RuntimeException.class)
     public RefundTipDTO getRetreatOrderTip(String mail, int orderId) {
 
-        Order order = orderDao.getOrder(orderId);
+        Order order = orderDao.getOne(orderId);
 
         //计算退还票价，给账户余额加上退还的票价
         return RetreatStrategy.calculateRefund(order.getVenuePlan().getBegin(), order.getActualPrice());
@@ -184,8 +181,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean refund(String mail, int orderId, int refund) {
 
-        Order order = orderDao.getOrder(orderId);
-        Member member = memberDao.getMember(mail);
+        Order order = orderDao.getOne(orderId);
+        Member member = memberDao.getOne(mail);
         Account account = member.getAccount();
 
         //给订单记录退还金额
@@ -194,8 +191,8 @@ public class OrderServiceImpl implements OrderService {
         account.setBalance(account.getBalance() + refund);
 
         //扣除经理账户余额
-        Manager manager = managerDao.getManager(MANAGER_ID);
-        assert manager != null && manager.getUnsettleIncome() >= order.getActualPrice();
+        Manager manager = managerDao.getOne(MANAGER_ID);
+        assert manager.getUnsettleIncome() >= order.getActualPrice();
         manager.setUnsettleIncome(manager.getUnsettleIncome() - order.getActualPrice());
 
         //改变订单状态
@@ -210,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void checkUnpaidOrders() {
-        List<Order> unpaidOrders = orderDao.getUnpaidOrders();
+        List<Order> unpaidOrders = orderDao.getOrdersByOrderStatus(OrderStatus.UNPAID);
         unpaidOrders.stream()
                 //筛选出那些超过支付时间的订单
                 .filter(unpaidOrder -> passOverPayTime(unpaidOrder.getCreateTime()))

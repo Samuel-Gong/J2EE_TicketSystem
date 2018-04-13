@@ -1,8 +1,11 @@
 package edu.nju.dao;
 
 import edu.nju.model.Member;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Shenmiu
@@ -10,7 +13,7 @@ import java.util.List;
  * <p>
  * 会员数据访问接口
  */
-public interface MemberDao {
+public interface MemberDao extends JpaRepository<Member, String> {
 
     /**
      * 查看会员资料
@@ -18,7 +21,17 @@ public interface MemberDao {
      * @param mail 会员邮箱
      * @return 会员对象
      */
-    Member getMember(String mail);
+    @Override
+    Optional<Member> findById(String mail);
+
+    /**
+     * 查看会员资料
+     *
+     * @param mail 会员邮箱
+     * @return 会员对象
+     */
+    @Override
+    Member getOne(String mail);
 
     /**
      * 添加一个会员
@@ -26,36 +39,14 @@ public interface MemberDao {
      * @param member 会员对象
      * @return 添加是否成功
      */
-    boolean addMember(Member member);
-
-    /**
-     * 会员取消资格
-     *
-     * @param mail 会员邮箱
-     * @return 取消资格影响行数
-     */
-    int disqulify(String mail);
-
-    /**
-     * 修改会员信息
-     *
-     * @param member 会员资料
-     * @return 修改是否成功
-     */
-    boolean updateMember(Member member);
-
-
-    /**
-     * 获取会员的邮箱密钥
-     *
-     * @param mail 会员邮箱
-     * @return 邮箱密钥
-     */
-    int getMailKey(String mail);
+    @Override
+    <S extends Member> S save(S member);
 
     /**
      * 获取所有会员分数
-     * @return 获取
+     *
+     * @return 所有会员分数列表
      */
+    @Query("select points from Member")
     List<Integer> getAllMembersPoints();
 }

@@ -128,7 +128,7 @@
                 rate: $("#rate").val()
             },
             success: function (data) {
-                if(data === true){
+                if (data === true) {
                     alert("结算成功");
                     window.location.reload();
                 }

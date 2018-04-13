@@ -1,8 +1,8 @@
 package edu.nju.service.impl;
 
-import edu.nju.dao.ManagerDao;
 import edu.nju.dao.OrderDao;
 import edu.nju.dao.VenueDao;
+import edu.nju.dao.VenuePlanDao;
 import edu.nju.dto.*;
 import edu.nju.model.*;
 import edu.nju.service.VenueService;
@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -33,24 +34,19 @@ public class VenueServiceImpl implements VenueService {
     private OrderDao orderDao;
 
     @Autowired
-    private ManagerDao managerDao;
-
-    /**
-     * 经理id
-     */
-    private static final int MANAGER_ID = 1;
+    private VenuePlanDao venuePlanDao;
 
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Venue getVenue(int venueId) {
-        return venueDao.getVenue(venueId);
+        return venueDao.getOne(venueId);
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Venue getVenueWithSeatMap(int venueId) {
-        Venue venue = venueDao.getVenue(venueId);
+        Venue venue = venueDao.getOne(venueId);
         //强制加载seatMap
         Hibernate.initialize(venue.getSeatMap());
         return venue;
@@ -63,7 +59,7 @@ public class VenueServiceImpl implements VenueService {
         for (VenueSeat venueSeat : venue.getSeatMap()) {
             venueSeat.setVenue(venue);
         }
-        venueDao.addVenue(venue);
+        venueDao.save(venue);
         //表示正在审批
         venue.setAuditing(true);
         return venue.getId();
@@ -73,7 +69,7 @@ public class VenueServiceImpl implements VenueService {
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean updateVenue(Venue venue) {
 
-        Venue oldVenue = venueDao.getVenue(venue.getId());
+        Venue oldVenue = venueDao.getOne(venue.getId());
         assert oldVenue != null;
 
         List<VenueSeat> oldSeatMap = oldVenue.getSeatMap();
@@ -120,9 +116,9 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean login(Venue venue) {
-        Venue persistentVenue = venueDao.getVenue(venue.getId());
+        Optional<Venue> optionalVenue = venueDao.findById(venue.getId());
         //当场馆存在且场馆密码正确且没有在审批的时候才允许登录
-        return persistentVenue != null && persistentVenue.getPassword().equals(venue.getPassword()) && !venue.isAuditing();
+        return optionalVenue.isPresent() && optionalVenue.get().getPassword().equals(venue.getPassword()) && !venue.isAuditing();
     }
 
     @Override
@@ -148,19 +144,19 @@ public class VenueServiceImpl implements VenueService {
                 }
         );
 
-        venueDao.addVenuePlan(venuePlan);
+        venuePlanDao.save(venuePlan);
         return true;
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public VenuePlan getVenuePlan(int venuePlanId) {
-        return venueDao.getVenuePlan(venuePlanId);
+        return venuePlanDao.getOne(venuePlanId);
     }
 
     @Override
     public VenuePlanDetailDTO getVenuePlanDetail(int venuePlanId) {
-        VenuePlan venuePlan = venueDao.getVenuePlan(venuePlanId);
+        VenuePlan venuePlan = venuePlanDao.getOne(venuePlanId);
         Hibernate.initialize(venuePlan.getSeatTypes());
         Hibernate.initialize(venuePlan.getVenuePlanSeats());
 
@@ -175,7 +171,7 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<VenuePlanBriefDTO> getComingVenueBriefPlan() {
-        return venueDao.getComingVenuePlans()
+        return venuePlanDao.getComingVenuePlans(LocalDateTimeUtil.nowTillMinute())
                 .stream()
                 .map(VenuePlanBriefDTO::new)
                 .collect(Collectors.toList());
@@ -184,7 +180,7 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<Order> getVenuePlanOrders(int venuePlanId) {
-        return orderDao.getOrdersByVenuePlanId(venuePlanId);
+        return orderDao.getOrdersByVenuePlanVenuePlanId(venuePlanId);
     }
 
     @Override
@@ -207,7 +203,7 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<Venue> getAuditingVenues() {
-        List<Venue> venueList = venueDao.getAuditingVenue();
+        List<Venue> venueList = venueDao.getVenuesByAuditingIsTrue();
         venueList.forEach(venue -> Hibernate.initialize(venue.getSeatMap()));
         return venueList;
     }
@@ -215,7 +211,7 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean auditPass(int venueId) {
-        Venue venue = venueDao.getVenue(venueId);
+        Venue venue = venueDao.getOne(venueId);
         venue.setAuditing(false);
         return true;
     }
@@ -223,7 +219,7 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean modifyCheck(int venueId) {
-        List<VenuePlan> venuePlans = venueDao.getAllVenuePlan(venueId);
+        List<VenuePlan> venuePlans = venuePlanDao.getVenuePlansByVenueId(venueId);
         return venuePlans.size() == 0 || allPlansPassOver(venuePlans);
     }
 
@@ -232,7 +228,7 @@ public class VenueServiceImpl implements VenueService {
     public void sendTickets() {
         final int sendTicketsWeek = 2;
 
-        List<VenuePlan> needSendTickets = venueDao.getNeedSendTickets(sendTicketsWeek);
+        List<VenuePlan> needSendTickets = venuePlanDao.getVenuePlansByBeginBeforeAndSendTicketsIsFalse(LocalDateTimeUtil.nowTillMinute().plusWeeks(2));
 
         for (int i = 0; i < needSendTickets.size(); i++) {
             VenuePlan venuePlan = needSendTickets.get(i);
@@ -271,7 +267,7 @@ public class VenueServiceImpl implements VenueService {
                     //剩余座位不足，订单的状态设为已取消，退还会员票价
                     order.setSeatEnough(false);
                     order.setOrderStatus(OrderStatus.CANCELED);
-                    Member member = order.getMemberFK();
+                    Member member = order.getMemberFk();
                     Account account = member.getAccount();
                     //全额退款
                     account.setBalance(account.getBalance() + order.getPrice());
@@ -284,10 +280,7 @@ public class VenueServiceImpl implements VenueService {
     @Transactional(rollbackFor = RuntimeException.class)
     public void checkCompleteVenuePlans() {
 
-        List<VenuePlan> completePlan = venueDao.getCompleteVenuePlans();
-
-        Manager manager = managerDao.getManager(MANAGER_ID);
-        assert manager != null;
+        List<VenuePlan> completePlan = venuePlanDao.getVenuePlansByEndTimeBeforeAndCompleteIsFalse(LocalDateTimeUtil.nowTillMinute());
 
         completePlan.forEach(venuePlan -> {
             //将每个场馆计划的状态设置为已完成
@@ -296,10 +289,10 @@ public class VenueServiceImpl implements VenueService {
                     .filter(order -> order.getOrderStatus() == OrderStatus.BOOKED)
                     .forEach(order -> {
                         //将场馆计划下的已注册订单的状态改为已消费订单，并给会员增加积分
-                        order.setOrderStatus(OrderStatus.COMSUMPED);
+                        order.setOrderStatus(OrderStatus.CONSUMED);
                         //如果是会员订单则给会员增加积分，否则不增加
                         if (order.isMemberOrder()) {
-                            Member member = order.getMemberFK();
+                            Member member = order.getMemberFk();
                             member.setPoints(member.getPoints() + order.getActualPrice());
                             //会员总消费也增加
                             member.setTotalConsumption(member.getTotalConsumption() + order.getActualPrice());
@@ -313,7 +306,7 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     public List<VenueAndPlanDTO> getUnsettleVenuePlans() {
-        return venueDao.getUnsettleVenuePlans().stream()
+        return venuePlanDao.getVenuePlansByCompleteIsTrueAndSettleIsFalse().stream()
                 .map(venuePlan -> new VenueAndPlanDTO(venuePlan, venuePlan.getVenue()))
                 .collect(Collectors.toList());
     }
@@ -321,7 +314,7 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public VenueFinance getFinance(int venueId) {
-        Venue venue = venueDao.getVenue(venueId);
+        Venue venue = venueDao.getOne(venueId);
 
         List<Order> orders = venue.getOrders();
 
@@ -364,7 +357,7 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<VenueStatisticsDTO> getVenueStatistics() {
-        List<Venue> venues = venueDao.getVenues();
+        List<Venue> venues = venueDao.findAll();
         return venues.stream()
                 .map(venue ->
                         new VenueStatisticsDTO(venue, venue.getVenuePlans().stream()
@@ -377,25 +370,25 @@ public class VenueServiceImpl implements VenueService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<VenuePlanBriefDTO> getComingVenuePlans(int venueId) {
-        List<VenuePlan> venuePlans = venueDao.getComingVenuePlans(venueId);
+        List<VenuePlan> venuePlans = venuePlanDao.getComingVenuePlans(venueId);
         return venuePlan2BriefDTO(venuePlans);
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<VenuePlanBriefDTO> getSettlePlans(int venueId) {
-        List<VenuePlan> venuePlans = venueDao.getSettlePlans(venueId);
+        List<VenuePlan> venuePlans = venuePlanDao.getVenuePlansByVenueIdAndSettleIsTrue(venueId);
         return venuePlan2BriefDTO(venuePlans);
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<VenuePlanBriefDTO> getUnsettlePlans(int venueId) {
-        List<VenuePlan> venuePlans = venueDao.getUnsettlePlans(venueId);
+        List<VenuePlan> venuePlans = venuePlanDao.getUnsettlePlans(venueId);
         return venuePlan2BriefDTO(venuePlans);
     }
 
-    private List<VenuePlanBriefDTO> venuePlan2BriefDTO(List<VenuePlan> venuePlans){
+    private List<VenuePlanBriefDTO> venuePlan2BriefDTO(List<VenuePlan> venuePlans) {
         return venuePlans.stream()
                 .map(VenuePlanBriefDTO::new)
                 .collect(Collectors.toList());

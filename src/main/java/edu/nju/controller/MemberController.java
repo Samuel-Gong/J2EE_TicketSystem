@@ -246,7 +246,7 @@ public class MemberController {
      */
     @GetMapping(path = "/order/consumed")
     public String consumedOrder(@SessionAttribute("mail") String mail, Model model) {
-        model.addAttribute("consumedOrders", orderService.getOrderShowDTOs(mail, OrderStatus.COMSUMPED));
+        model.addAttribute("consumedOrders", orderService.getOrderShowDTOs(mail, OrderStatus.CONSUMED));
         return "/member/order/consumed";
     }
 

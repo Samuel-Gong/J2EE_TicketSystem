@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,16 +34,13 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = RuntimeException.class)
 public class MemberServiceImpl implements MemberService {
 
+    private static final String DOMAIN = "http://localhost:8888/tickets/member/confirmMail?";
     @Autowired
     private MemberDao memberDao;
-
     @Autowired
     private CouponDao couponDao;
-
     @Autowired
     private AccountDao accountDao;
-
-    private static final String DOMAIN = "http://localhost:8888/tickets/member/confirmMail?";
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class, timeout = 60000)
@@ -55,28 +53,30 @@ public class MemberServiceImpl implements MemberService {
 
         String msg = DOMAIN + "mail" + "=" + member.getMail() + "&&" + "mailKey" + "=" + member.getMailKey();
 
+        memberDao.save(member);
+
         //返回是否注册成功，且邮件是否发送成功
-        return memberDao.addMember(member) && MailUtil.sendMail(member.getMail(), msg);
+        return MailUtil.sendMail(member.getMail(), msg);
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean mailConfirm(String mail, int mailKey) {
-        return mailKey == memberDao.getMember(mail).getMailKey();
+        return mailKey == memberDao.getOne(mail).getMailKey();
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean logIn(Member member) {
-        Member persistentMember = memberDao.getMember(member.getMail());
+        Optional<Member> optionalManager = memberDao.findById(member.getMail());
         //会员存在且密码正确返回true
-        return persistentMember != null && persistentMember.getPassword().equals(member.getPassword());
+        return optionalManager.isPresent() && optionalManager.get().getPassword().equals(member.getPassword());
     }
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean modifyPassword(String mail, String oldPassword, String newPassword) {
-        Member member = memberDao.getMember(mail);
+        Member member = memberDao.getOne(mail);
         if (oldPassword.equals(member.getPassword())) {
             member.setPassword(newPassword);
             return updateInfo(member);
@@ -87,13 +87,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean disqualify(String mail) {
-        return memberDao.disqulify(mail) > 0;
+        Member member = memberDao.getOne(mail);
+        member.setQualified(false);
+        return true;
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public LevelAndDiscount getLevelAndDiscount(String mail) {
-        Member member = memberDao.getMember(mail);
+        Member member = memberDao.getOne(mail);
         LevelAndDiscount levelAndDiscount = new LevelAndDiscount();
         //如果会员不存在，将等级设置为-1
         if (member == null) {
@@ -112,17 +114,17 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public Member getInfo(String memberId) {
-        return memberDao.getMember(memberId);
+        return memberDao.getOne(memberId);
     }
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public PointsAndCoupons getPointsAndCoupons(String memberId) {
         PointsAndCoupons pointsAndCoupons = new PointsAndCoupons();
-        Member member = memberDao.getMember(memberId);
+        Member member = memberDao.getOne(memberId);
         pointsAndCoupons.setPoints(member.getPoints());
 
-        Map<Integer, Long> valueAndRemain = couponDao.getUnusedCoupons(memberId).stream()
+        Map<Integer, Long> valueAndRemain = couponDao.getCouponsByMemberFkMailAndUsedIsFalse(memberId).stream()
                 .collect(Collectors.groupingBy(coupon -> coupon.getCouponType().getValue(), Collectors.counting()));
 
         pointsAndCoupons.setCoupons(valueAndRemain);
@@ -133,9 +135,9 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean bindAccount(String mail, int accountId, String accountPassword) {
-        Member member = memberDao.getMember(mail);
+        Member member = memberDao.getOne(mail);
         assert member.getAccount() == null;
-        Account accountInDB = accountDao.getAccount(accountId);
+        Account accountInDB = accountDao.getOne(accountId);
 
         //账户存在且密码相同，将支付宝账户绑定到会员上
         if (accountInDB != null && accountInDB.getPassword().equals(accountPassword)) {
@@ -152,7 +154,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public MemberStatistics getMemberStatistics(String mail) {
 
-        Member member = memberDao.getMember(mail);
+        Member member = memberDao.getOne(mail);
         List<Order> orders = member.getOrders();
 
         //预订订单金额
@@ -170,7 +172,7 @@ public class MemberServiceImpl implements MemberService {
                 case BOOKED:
                     totalBooked += order.getActualPrice();
                     break;
-                case COMSUMPED:
+                case CONSUMED:
                     totalConsumed += order.getActualPrice();
                     break;
                 case RETREAT:
@@ -201,14 +203,15 @@ public class MemberServiceImpl implements MemberService {
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public boolean checkAccount(String mail) {
-        Member member = memberDao.getMember(mail);
+        Member member = memberDao.getOne(mail);
         return member.getAccount() != null;
     }
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean updateInfo(Member member) {
-        return memberDao.updateMember(member);
+        memberDao.save(member);
+        return true;
     }
 
     /**

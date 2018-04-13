@@ -27,13 +27,17 @@ public enum OrderStatus {
     /**
      * 已消费
      */
-    COMSUMPED("已消费"),
+    CONSUMED("已消费"),
     /**
      * 已退订
      */
     RETREAT("已退订");
 
     private String value;
+
+    OrderStatus(String value) {
+        this.value = value;
+    }
 
     public static OrderStatus val2Status(String value) {
         if (UNPAID.value.equals(value)) {
@@ -48,17 +52,13 @@ public enum OrderStatus {
         if (BOOKED.value.equals(value)) {
             return BOOKED;
         }
-        if (COMSUMPED.value.equals(value)) {
-            return COMSUMPED;
+        if (CONSUMED.value.equals(value)) {
+            return CONSUMED;
         }
         if (RETREAT.value.equals(value)) {
             return RETREAT;
         }
         return null;
-    }
-
-    OrderStatus(String value) {
-        this.value = value;
     }
 
     public String getValue() {

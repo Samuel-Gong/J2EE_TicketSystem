@@ -2,6 +2,7 @@ package edu.nju.dao;
 
 import edu.nju.model.Order;
 import edu.nju.util.OrderStatus;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
@@ -11,14 +12,16 @@ import java.util.List;
  * <p>
  * order数据访问接口
  */
-public interface OrderDao {
+public interface OrderDao extends JpaRepository<Order, Integer> {
 
     /**
      * 添加一条订单记录
      *
      * @param order 订单信息
+     * @return 添加的订单记录
      */
-    void addOrder(Order order);
+    @Override
+    <S extends Order> S save(S order);
 
     /**
      * 根据场馆计划编号来查找对应的订单
@@ -26,7 +29,7 @@ public interface OrderDao {
      * @param venueId 场馆计划编号
      * @return 场馆计划对应的订单列表
      */
-    List<Order> getOrdersByVenuePlanId(int venueId);
+    List<Order> getOrdersByVenuePlanVenuePlanId(int venueId);
 
     /**
      * 根据订单编号获得订单持久化对象
@@ -34,14 +37,16 @@ public interface OrderDao {
      * @param orderId 订单编号
      * @return 订单持久化对象
      */
-    Order getOrder(int orderId);
+    @Override
+    Order getOne(Integer orderId);
 
     /**
      * 根据订单状态获取该状态的所有订单
      *
+     * @param orderStatus 订单状态
      * @return 所有未支付订单列表
      */
-    List<Order> getUnpaidOrders();
+    List<Order> getOrdersByOrderStatus(OrderStatus orderStatus);
 
     /**
      * 获取网上订单
@@ -50,5 +55,5 @@ public interface OrderDao {
      * @param orderStatus 订单状态
      * @return 网上指定订单状态的订单列表
      */
-    List<Order> getOnlineOrders(String mail, OrderStatus orderStatus);
+    List<Order> getOrdersByMemberFkMailAndOrderStatusAndBoughtOnlineIsTrue(String mail, OrderStatus orderStatus);
 }

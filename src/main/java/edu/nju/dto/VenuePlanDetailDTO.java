@@ -6,7 +6,7 @@ import edu.nju.model.VenuePlan;
 /**
  * @author Shenmiu
  * @date 2018/03/21
- *
+ * <p>
  * 演出详情数据传输对象:
  * 1. 座位行数
  * 2. 座位列数

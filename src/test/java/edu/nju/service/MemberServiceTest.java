@@ -5,18 +5,19 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import edu.nju.model.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SpringJUnitConfig(locations = "file:src/main/webapp/WEB-INF/applicationContext.xml")
 class MemberServiceTest {
 
-    private ApplicationContext context = null;
-    private MemberService memberService = null;
+    @Autowired
+    private MemberService memberService;
 
-    List<SerializerFeature> serializerFeatures;
+    private List<SerializerFeature> serializerFeatures;
 
 
     @BeforeEach
@@ -24,28 +25,24 @@ class MemberServiceTest {
         serializerFeatures = new ArrayList<>();
         serializerFeatures.add(SerializerFeature.PrettyFormat);
         serializerFeatures.add(SerializerFeature.WriteMapNullValue);
-
-        //如果是读取/WEB-INF/applicationContext.xml
-        context = new FileSystemXmlApplicationContext("file:src/main/webapp/WEB-INF/applicationContext.xml");
-        memberService = context.getBean("memberService", MemberService.class);
     }
 
     @Test
     void getLevelAndDiscount() {
         System.out.println(JSON.toJSONString(memberService.getLevelAndDiscount("335931662@qq.com")
-                , serializerFeatures.toArray(new SerializerFeature[serializerFeatures.size()])));
+                , serializerFeatures.toArray(new SerializerFeature[0])));
     }
 
     @Test
-    void getInfo(){
+    void getInfo() {
         Member member = memberService.getInfo("335931662@qq.com");
         System.out.println(member.getMail());
         System.out.println(member.getPoints());
     }
 
     @Test
-    void getPointsAndCoupons(){
+    void getPointsAndCoupons() {
         System.out.println(JSON.toJSONString(memberService.getPointsAndCoupons("335931662@qq.com")
-                , serializerFeatures.toArray(new SerializerFeature[serializerFeatures.size()])));
+                , serializerFeatures.toArray(new SerializerFeature[0])));
     }
 }

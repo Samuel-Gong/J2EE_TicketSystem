@@ -1,6 +1,7 @@
 package edu.nju.service.impl;
 
 import edu.nju.dao.CouponDao;
+import edu.nju.dao.CouponTypeDao;
 import edu.nju.dao.MemberDao;
 import edu.nju.model.Coupon;
 import edu.nju.model.CouponType;
@@ -28,17 +29,20 @@ public class CouponServiceImpl implements CouponService {
     @Autowired
     private MemberDao memberDao;
 
+    @Autowired
+    private CouponTypeDao couponTypeDao;
+
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
     public List<CouponType> getCouponTypes() {
-        return couponDao.getCouponTypes();
+        return couponTypeDao.findAll();
     }
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public boolean exchangeCoupon(String memberId, int couponValue) {
-        Member member = memberDao.getMember(memberId);
-        CouponType couponType = couponDao.getCouponType(couponValue);
+        Member member = memberDao.getOne(memberId);
+        CouponType couponType = couponTypeDao.getOne(couponValue);
 
         //减去会员的积分
         member.setPoints(member.getPoints() - couponType.getRequiredPoints());
@@ -46,10 +50,10 @@ public class CouponServiceImpl implements CouponService {
         Coupon coupon = new Coupon();
         //和优惠券类型以及会员建立联系
         coupon.setCouponType(couponType);
-        coupon.setMemberFK(member);
+        coupon.setMemberFk(member);
 
         //持久化
-        couponDao.addCoupon(coupon);
+        couponDao.save(coupon);
 
         return true;
     }

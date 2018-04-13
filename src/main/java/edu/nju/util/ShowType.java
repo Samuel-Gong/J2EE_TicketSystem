@@ -25,8 +25,10 @@ public enum ShowType {
      */
     SPORTS("体育比赛");
 
-    public String getValue() {
-        return value;
+    public final String value;
+
+    ShowType(String value) {
+        this.value = value;
     }
 
     public static ShowType val2name(String value) {
@@ -45,10 +47,8 @@ public enum ShowType {
         return null;
     }
 
-    public final String value;
-
-    ShowType(String value) {
-        this.value = value;
+    public String getValue() {
+        return value;
     }
 
 }

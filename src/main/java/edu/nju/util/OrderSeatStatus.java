@@ -18,6 +18,10 @@ public enum OrderSeatStatus {
 
     private String value;
 
+    OrderSeatStatus(String value) {
+        this.value = value;
+    }
+
     public static OrderSeatStatus val2Status(String value) {
         if (ALREADY_WITH_TICKETS.value.equals(value)) {
             return ALREADY_WITH_TICKETS;
@@ -29,10 +33,6 @@ public enum OrderSeatStatus {
             return TICKETS_NOT_ENOUGH;
         }
         return null;
-    }
-
-    OrderSeatStatus(String value) {
-        this.value = value;
     }
 
     public String getValue() {

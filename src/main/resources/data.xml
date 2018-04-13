@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!-- 数据库配置 -->
+
+    <!-- dataSource -->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="jdbcUrl"
+                  value="jdbc:mysql://localhost:3306/tickets?useSSL=false&amp;useUnicode=true&amp;createDatabaseIfNotExist=true&amp;characterEncoding=utf-8&amp;serverTimezone=GMT%2b8"/>
+        <property name="user" value="root"/>
+        <property name="password" value="123456"/>
+
+        <!-- these are C3P0 properties -->
+        <property name="maxPoolSize" value="20"/>
+        <property name="minPoolSize" value="5"/>
+        <property name="unreturnedConnectionTimeout" value="120"/>
+        <property name="maxStatements" value="100"/>
+        <property name="idleConnectionTestPeriod" value="300"/>
+        <property name="acquireIncrement" value="1"/>
+        <property name="testConnectionOnCheckout" value="true"/>
+
+    </bean>
+
+    <!-- sessionFactory -->
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+          destroy-method="destroy">
+        <!-- 指定数据源，此处是c3p0连接池 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 使用包扫描的方式, 推荐使用 -->
+        <property name="packagesToScan">
+            <list>
+                <value>edu.nju.model</value>
+            </list>
+        </property>
+        <!--&lt;!&ndash; 指定注解类所在位置 &ndash;&gt;-->
+        <!--<property name="annotatedPackages">-->
+        <!--<list>-->
+        <!--<value>edu.nju.model</value>-->
+        <!--</list>-->
+        <!--</property>-->
+        <!-- 指定注解类全名 -->
+        <!--<property name="annotatedClasses">-->
+        <!--<list>-->
+        <!--</list>-->
+        <!--</property>-->
+
+        <!-- 舍弃原hibernate.cfg.xml文档 -->
+        <property name="hibernateProperties">
+            <props>
+                <!-- hibernate的方言 -->
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <!-- 显示sql语句 -->
+                <prop key="hibernate.show_sql">true</prop>
+                <!-- 数据库自动更新 -->
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <!-- 格式化SQL语句 -->
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.current_session_context_class">
+                    org.springframework.orm.hibernate5.SpringSessionContext
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- transactionManager -->
+    <!--<bean id="transactionManager"-->
+    <!--class="org.springframework.orm.hibernate5.HibernateTransactionManager">-->
+    <!--<property name="sessionFactory" ref="sessionFactory"/>-->
+    <!--</bean>-->
+
+    <!-- You can omit the transaction-manager attribute in the <tx:annotation-driven/> tag
+    if the bean name of the PlatformTransactionManager that you want to wire in has the name transactionManager -->
+    <!-- enable the configuration of transactional behavior based on annotations -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <bean class="org.springframework.orm.jpa.JpaTransactionManager"
+          id="transactionManager">
+        <property name="entityManagerFactory"
+                  ref="entityManagerFactory"/>
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect"/>
+        </property>
+    </bean>
+
+    <bean id="entityManagerFactory"
+          class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="edu.nju.model"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="database" value="MYSQL"/>
+                <!-- 数据库自动更新 -->
+                <property name="generateDdl" value="true"/>
+                <!-- 显示sql语句 -->
+                <property name="showSql" value="false"/>
+                <!-- hibernate的方言 -->
+                <property name="databasePlatform" value="org.hibernate.dialect.MySQL5Dialect"/>
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.generate_statistics">true</prop>
+            </props>
+            <!--<value>-->
+            <!--hibernate.cache.use_second_level_cache = true-->
+            <!--hibernate.cache.region.factory_class = org.hibernate.cache.ehcache.EhCacheRegionFactory-->
+            <!--hibernate.cache.use_query_cache = true-->
+            <!--hibernate.generate_statistics = true-->
+            <!--</value>-->
+        </property>
+    </bean>
+
+    <jpa:repositories base-package="edu.nju.dao" repository-impl-postfix="Impl"/>
+
+</beans>

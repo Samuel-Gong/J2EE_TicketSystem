@@ -1,8 +1,6 @@
 package edu.nju.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.support.spring.annotation.FastJsonFilter;
-import com.alibaba.fastjson.support.spring.annotation.FastJsonView;
 import edu.nju.dto.LevelAndDiscount;
 import edu.nju.dto.SeatCheckInDTO;
 import edu.nju.dto.TakeOrderDTO;

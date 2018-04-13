@@ -104,7 +104,7 @@ public class Order {
      */
     @ManyToOne
     @JoinColumn(name = "memberId", foreignKey = @ForeignKey(name = "FK_MEMBER"))
-    private Member memberFK;
+    private Member memberFk;
 
     /**
      * 多个订单可能对应一个场馆，与场馆多对一，外键为场馆id
@@ -282,12 +282,12 @@ public class Order {
         this.coupon = coupon;
     }
 
-    public Member getMemberFK() {
-        return memberFK;
+    public Member getMemberFk() {
+        return memberFk;
     }
 
-    public void setMemberFK(Member member) {
-        this.memberFK = member;
+    public void setMemberFk(Member member) {
+        this.memberFk = member;
     }
 
     public Venue getVenue() {

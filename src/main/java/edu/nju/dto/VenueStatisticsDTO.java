@@ -5,7 +5,7 @@ import edu.nju.model.Venue;
 /**
  * @author Shenmiu
  * @date 2018/03/31
- *
+ * <p>
  * 各场馆统计数据传输对象
  */
 public class VenueStatisticsDTO {

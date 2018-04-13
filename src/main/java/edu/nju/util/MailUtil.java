@@ -20,14 +20,6 @@ public class MailUtil {
 
     private static SimpleMailMessage simpleMailMessage;
 
-    public void setMailSender(JavaMailSender mailSender) {
-        MailUtil.mailSender = mailSender;
-    }
-
-    public void setSimpleMailMessage(SimpleMailMessage simpleMailMessage) {
-        MailUtil.simpleMailMessage = simpleMailMessage;
-    }
-
     public static boolean sendMail(String to, String link) {
 
         MimeMessage message = mailSender.createMimeMessage();
@@ -54,5 +46,13 @@ public class MailUtil {
         }
         mailSender.send(message);
         return true;
+    }
+
+    public void setMailSender(JavaMailSender mailSender) {
+        MailUtil.mailSender = mailSender;
+    }
+
+    public void setSimpleMailMessage(SimpleMailMessage simpleMailMessage) {
+        MailUtil.simpleMailMessage = simpleMailMessage;
     }
 }

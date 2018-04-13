@@ -21,9 +21,9 @@
   -
   - $Id$
   -->
-<web-app version="2.4"
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         version="2.4"
          xmlns="http://java.sun.com/xml/ns/j2ee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
     <!-- 注册“ContextLoaderListener”作为第一个监听器，使Web应用程序知道Spring上下文加载程序 -->

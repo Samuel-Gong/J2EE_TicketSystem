@@ -60,13 +60,13 @@ public class Member {
     /**
      * 会员的订单
      */
-    @OneToMany(mappedBy = "memberFK")
+    @OneToMany(mappedBy = "memberFk")
     private List<Order> orders;
 
     /**
      * 会员的优惠券
      */
-    @OneToMany(mappedBy = "memberFK")
+    @OneToMany(mappedBy = "memberFk")
     private List<Coupon> coupons;
 
     public Member() {
