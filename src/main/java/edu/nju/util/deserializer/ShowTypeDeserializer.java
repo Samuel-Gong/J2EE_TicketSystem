@@ -3,7 +3,7 @@ package edu.nju.util.deserializer;
 import com.alibaba.fastjson.parser.DefaultJSONParser;
 import com.alibaba.fastjson.parser.JSONLexer;
 import com.alibaba.fastjson.parser.deserializer.ObjectDeserializer;
-import edu.nju.util.ShowType;
+import edu.nju.util.enums.ShowType;
 
 import java.lang.reflect.Type;
 

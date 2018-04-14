@@ -2,8 +2,8 @@ package edu.nju.model;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
-import edu.nju.util.ShowType;
 import edu.nju.util.deserializer.ShowTypeDeserializer;
+import edu.nju.util.enums.ShowType;
 import edu.nju.util.serializer.ShowTypeSerializer;
 
 import javax.persistence.*;

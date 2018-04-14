@@ -1,7 +1,7 @@
 package edu.nju.dao;
 
 import edu.nju.model.Order;
-import edu.nju.util.OrderStatus;
+import edu.nju.util.enums.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -2,7 +2,7 @@ package edu.nju.util.serializer;
 
 import com.alibaba.fastjson.serializer.JSONSerializer;
 import com.alibaba.fastjson.serializer.ObjectSerializer;
-import edu.nju.util.ShowType;
+import edu.nju.util.enums.ShowType;
 
 import java.io.IOException;
 import java.lang.reflect.Type;

@@ -1,4 +1,4 @@
-package edu.nju.util;
+package edu.nju.util.enums;
 
 /**
  * @author Shenmiu

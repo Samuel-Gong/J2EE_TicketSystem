@@ -1,6 +1,6 @@
 package edu.nju.dao;
 
-import edu.nju.util.OrderStatus;
+import edu.nju.util.enums.OrderStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

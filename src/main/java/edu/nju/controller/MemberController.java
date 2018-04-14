@@ -10,7 +10,7 @@ import edu.nju.service.CouponService;
 import edu.nju.service.MemberService;
 import edu.nju.service.OrderService;
 import edu.nju.service.VenueService;
-import edu.nju.util.OrderStatus;
+import edu.nju.util.enums.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;

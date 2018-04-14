@@ -12,7 +12,7 @@ class MailUtilTest {
 
     @BeforeEach
     void setUp() {
-        context = new ClassPathXmlApplicationContext("beans/mail.xml");
+        context = new ClassPathXmlApplicationContext("mail.xml");
         mailUtil = context.getBean("mailUtil", MailUtil.class);
     }
 

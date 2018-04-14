@@ -8,7 +8,7 @@ import edu.nju.dto.VenuePlanBriefDTO;
 import edu.nju.model.*;
 import edu.nju.service.OrderService;
 import edu.nju.service.strategy.RetreatStrategy;
-import edu.nju.util.OrderStatus;
+import edu.nju.util.enums.OrderStatus;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

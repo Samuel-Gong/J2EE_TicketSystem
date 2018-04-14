@@ -7,7 +7,7 @@ import edu.nju.dto.*;
 import edu.nju.model.*;
 import edu.nju.service.VenueService;
 import edu.nju.util.LocalDateTimeUtil;
-import edu.nju.util.OrderStatus;
+import edu.nju.util.enums.OrderStatus;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

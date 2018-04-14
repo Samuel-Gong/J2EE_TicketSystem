@@ -4,7 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 import com.alibaba.fastjson.annotation.JSONType;
 import edu.nju.dto.TakeOrderDTO;
 import edu.nju.util.LocalDateTimeUtil;
-import edu.nju.util.OrderStatus;
+import edu.nju.util.enums.OrderStatus;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

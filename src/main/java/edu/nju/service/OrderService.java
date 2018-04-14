@@ -3,7 +3,7 @@ package edu.nju.service;
 import edu.nju.dto.OrderShowDTO;
 import edu.nju.dto.RefundTipDTO;
 import edu.nju.dto.TakeOrderDTO;
-import edu.nju.util.OrderStatus;
+import edu.nju.util.enums.OrderStatus;
 
 import java.util.List;
 

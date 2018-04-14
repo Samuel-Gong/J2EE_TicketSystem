@@ -17,7 +17,7 @@
     <context:annotation-config/>
 
     <!-- 邮箱服务 -->
-    <import resource="classpath:beans/mail.xml"/>
+    <import resource="classpath:mail.xml"/>
     <import resource="classpath:springmvc.xml"/>
     <import resource="classpath:data.xml"/>
 

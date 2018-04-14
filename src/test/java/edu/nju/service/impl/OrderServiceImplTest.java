@@ -1,7 +1,7 @@
 package edu.nju.service.impl;
 
 import edu.nju.service.OrderService;
-import edu.nju.util.OrderStatus;
+import edu.nju.util.enums.OrderStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
