@@ -1,7 +1,6 @@
 package edu.nju.service;
 
 import edu.nju.dto.*;
-import edu.nju.model.Order;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
 
@@ -56,49 +55,6 @@ public interface VenueService {
      */
     boolean login(Venue venue);
 
-    //场馆计划
-
-    /**
-     * 添加一个场馆计划到指定编号的场馆里
-     *
-     * @param venueId   场馆编号
-     * @param venuePlan 新场馆计划
-     * @return 添加是否成功
-     */
-    boolean addVenuePlan(int venueId, VenuePlan venuePlan);
-
-    /**
-     * 获取场馆计划
-     *
-     * @param venuePlanId 场馆计划id
-     * @return 场馆计划信息
-     */
-    VenuePlan getVenuePlan(int venuePlanId);
-
-    /**
-     * 根据场馆计划id获取演出的具体信息
-     * 包括行数，列数，以及座位排布
-     *
-     * @param venuePlanId 场馆计划id
-     * @return 演出具体信息
-     */
-    VenuePlanDetailDTO getVenuePlanDetail(int venuePlanId);
-
-    /**
-     * 获取当前时间往后的最近几场场馆计划简要信息
-     *
-     * @return 场馆计划传输对象
-     */
-    List<VenuePlanBriefDTO> getComingVenueBriefPlan();
-
-    /**
-     * 根据场馆计划id访问该场馆计划对应的订单
-     *
-     * @param venuePlanId 场馆计划id
-     * @return 该场馆计划对应的订单列表
-     */
-    List<Order> getVenuePlanOrders(int venuePlanId);
-
     /**
      * 场馆检票登记
      *
@@ -136,24 +92,12 @@ public interface VenueService {
     void sendTickets();
 
     /**
-     * 检查已经结束的场馆计划，并将已预订订单置为已消费订单
-     */
-    void checkCompleteVenuePlans();
-
-    /**
-     * 获取所有已结束但是未结算的场馆计划
-     *
-     * @return 已结束、为结算的场馆计划列表
-     */
-    List<VenueAndPlanDTO> getUnsettleVenuePlans();
-
-    /**
      * 获取场馆统计信息
      *
      * @param venueId 场馆编号
      * @return 场馆统计信息
      */
-    VenueFinance getFinance(int venueId);
+    VenueFinanceDTO getFinance(int venueId);
 
     /**
      * 获取各场馆统计信息
@@ -161,6 +105,33 @@ public interface VenueService {
      * @return 各场馆统计信息列表
      */
     List<VenueStatisticsDTO> getVenueStatistics();
+
+    //场馆计划
+
+    /**
+     * 添加一个场馆计划到指定编号的场馆里
+     *
+     * @param venueId   场馆编号
+     * @param venuePlan 新场馆计划
+     * @return 添加是否成功
+     */
+    boolean addVenuePlan(int venueId, VenuePlan venuePlan);
+
+    /**
+     * 根据场馆计划id获取演出的具体信息
+     * 包括行数，列数，以及座位排布
+     *
+     * @param venuePlanId 场馆计划id
+     * @return 演出具体信息
+     */
+    VenuePlanDetailDTO getVenuePlanDetail(int venuePlanId);
+
+    /**
+     * 获取当前时间往后的最近几场场馆计划简要信息
+     *
+     * @return 场馆计划传输对象
+     */
+    List<VenuePlanBriefDTO> getComingVenueBriefPlan();
 
     /**
      * 获取还未开始的场馆计划信息
@@ -185,4 +156,16 @@ public interface VenueService {
      * @return 未结算的场馆计划信息列表
      */
     List<VenuePlanBriefDTO> getUnsettlePlans(int venueId);
+
+    /**
+     * 检查已经结束的场馆计划，并将已预订订单置为已消费订单
+     */
+    void checkCompleteVenuePlans();
+
+    /**
+     * 获取所有已结束但是未结算的场馆计划
+     *
+     * @return 已结束、为结算的场馆计划列表
+     */
+    List<VenueAndPlanDTO> getUnsettleVenuePlans();
 }

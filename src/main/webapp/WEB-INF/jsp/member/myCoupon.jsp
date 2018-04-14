@@ -129,10 +129,10 @@
             data: {
                 memberId: "${sessionScope.mail}"
             },
-            success: function (pointsAndCoupons) {
-                console.log(pointsAndCoupons);
-                $("#points").text(pointsAndCoupons.points);
-                let coupons = pointsAndCoupons.coupons;
+            success: function (pointsAndCouponsDTO) {
+                console.log(pointsAndCouponsDTO);
+                $("#points").text(pointsAndCouponsDTO.points);
+                let coupons = pointsAndCouponsDTO.coupons;
                 $.each(coupons, function (value, remain) {
                     //显示剩余张数
                     $("#" + value + "-yuan-coupon").text(remain);

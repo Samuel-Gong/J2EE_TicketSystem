@@ -3,9 +3,9 @@ package edu.nju.service.impl;
 import edu.nju.dao.AccountDao;
 import edu.nju.dao.CouponDao;
 import edu.nju.dao.MemberDao;
-import edu.nju.dto.LevelAndDiscount;
-import edu.nju.dto.MemberStatistics;
-import edu.nju.dto.PointsAndCoupons;
+import edu.nju.dto.LevelAndDiscountDTO;
+import edu.nju.dto.MemberStatisticsDTO;
+import edu.nju.dto.PointsAndCouponsDTO;
 import edu.nju.model.Account;
 import edu.nju.model.Member;
 import edu.nju.model.Order;
@@ -94,21 +94,21 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public LevelAndDiscount getLevelAndDiscount(String mail) {
+    public LevelAndDiscountDTO getLevelAndDiscount(String mail) {
         Member member = memberDao.findById(mail).get();
-        LevelAndDiscount levelAndDiscount = new LevelAndDiscount();
+        LevelAndDiscountDTO levelAndDiscountDTO = new LevelAndDiscountDTO();
         //如果会员不存在，将等级设置为-1
         if (member == null) {
-            levelAndDiscount.setLevel(-1);
-            levelAndDiscount.setDiscount(10);
+            levelAndDiscountDTO.setLevel(-1);
+            levelAndDiscountDTO.setDiscount(10);
         } else {
             //根据会员总消费计算会员等级
             int totalConsumption = member.getTotalConsumption();
             int level = LevelStrategy.calculateLevel(totalConsumption);
-            levelAndDiscount.setLevel(level);
-            levelAndDiscount.setDiscount(DiscountStrategy.calculateDiscount(level));
+            levelAndDiscountDTO.setLevel(level);
+            levelAndDiscountDTO.setDiscount(DiscountStrategy.calculateDiscount(level));
         }
-        return levelAndDiscount;
+        return levelAndDiscountDTO;
     }
 
     @Override
@@ -119,17 +119,17 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public PointsAndCoupons getPointsAndCoupons(String memberId) {
-        PointsAndCoupons pointsAndCoupons = new PointsAndCoupons();
+    public PointsAndCouponsDTO getPointsAndCoupons(String memberId) {
+        PointsAndCouponsDTO pointsAndCouponsDTO = new PointsAndCouponsDTO();
         Member member = memberDao.findById(memberId).get();
-        pointsAndCoupons.setPoints(member.getPoints());
+        pointsAndCouponsDTO.setPoints(member.getPoints());
 
         Map<Integer, Long> valueAndRemain = couponDao.getCouponsByMemberFkMailAndUsedIsFalse(memberId).stream()
                 .collect(Collectors.groupingBy(coupon -> coupon.getCouponType().getValue(), Collectors.counting()));
 
-        pointsAndCoupons.setCoupons(valueAndRemain);
+        pointsAndCouponsDTO.setCoupons(valueAndRemain);
 
-        return pointsAndCoupons;
+        return pointsAndCouponsDTO;
     }
 
     @Override
@@ -157,7 +157,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public MemberStatistics getMemberStatistics(String mail) {
+    public MemberStatisticsDTO getMemberStatistics(String mail) {
 
         Member member = memberDao.findById(mail).get();
         List<Order> orders = member.getOrders();
@@ -192,7 +192,7 @@ public class MemberServiceImpl implements MemberService {
         //通过退订订单退还金额和预订金额计算总手续费
         int totalFee = totalRefundBooked - totalRefund;
 
-        return new MemberStatistics(totalBooked, totalConsumed, totalRefund, totalFee);
+        return new MemberStatisticsDTO(totalBooked, totalConsumed, totalRefund, totalFee);
     }
 
     @Override

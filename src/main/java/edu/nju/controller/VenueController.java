@@ -1,10 +1,10 @@
 package edu.nju.controller;
 
 import com.alibaba.fastjson.JSON;
-import edu.nju.dto.LevelAndDiscount;
+import edu.nju.dto.LevelAndDiscountDTO;
 import edu.nju.dto.SeatCheckInDTO;
 import edu.nju.dto.TakeOrderDTO;
-import edu.nju.dto.VenueFinance;
+import edu.nju.dto.VenueFinanceDTO;
 import edu.nju.model.Venue;
 import edu.nju.model.VenuePlan;
 import edu.nju.service.MemberService;
@@ -37,7 +37,7 @@ public class VenueController {
 
     @GetMapping(path = "/statistics/details")
     public @ResponseBody
-    VenueFinance getStatistics(@SessionAttribute("venueId") int venueId) {
+    VenueFinanceDTO getStatistics(@SessionAttribute("venueId") int venueId) {
         return venueService.getFinance(venueId);
     }
 
@@ -53,9 +53,9 @@ public class VenueController {
 
     @RequestMapping(path = "/discount")
     public @ResponseBody
-    LevelAndDiscount getMemberDiscount(@RequestParam("mail") String mail) {
+    LevelAndDiscountDTO getMemberDiscount(@RequestParam("mail") String mail) {
         return memberService.getLevelAndDiscount(mail);
-//        return new LevelAndDiscount();
+//        return new LevelAndDiscountDTO();
     }
 
     /**

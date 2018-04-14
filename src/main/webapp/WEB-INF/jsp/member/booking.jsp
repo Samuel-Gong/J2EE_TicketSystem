@@ -493,10 +493,10 @@
             data: {
                 memberId: "${sessionScope.mail}"
             },
-            success: function (levelAndDiscount) {
+            success: function (levelAndDiscountDTO) {
                 //显示会员的邮箱和信息
-                $("#member-level").text(levelAndDiscount.level);
-                $("#member-discount").text(levelAndDiscount.discount);
+                $("#member-level").text(levelAndDiscountDTO.level);
+                $("#member-discount").text(levelAndDiscountDTO.discount);
             },
             error: function () {
                 alert("请求会员等级和折扣失败");
@@ -512,10 +512,10 @@
             data: {
                 memberId: "${sessionScope.mail}"
             },
-            success: function (pointsAndCoupons) {
-                console.log(pointsAndCoupons);
-                $("#points").text(pointsAndCoupons.points);
-                let coupons = pointsAndCoupons.coupons;
+            success: function (pointsAndCouponsDTO) {
+                console.log(pointsAndCouponsDTO);
+                $("#points").text(pointsAndCouponsDTO.points);
+                let coupons = pointsAndCouponsDTO.coupons;
                 if (Object.keys(coupons).length === 0) {
                     $("#coupon-radio").attr("disabled", "disabled");
                     $("#no-coupon-tip").removeClass("hidden");

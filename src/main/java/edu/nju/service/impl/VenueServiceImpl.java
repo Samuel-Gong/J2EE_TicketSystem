@@ -149,12 +149,6 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
-    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public VenuePlan getVenuePlan(int venuePlanId) {
-        return venuePlanDao.findById(venuePlanId).get();
-    }
-
-    @Override
     public VenuePlanDetailDTO getVenuePlanDetail(int venuePlanId) {
         VenuePlan venuePlan = venuePlanDao.findById(venuePlanId).get();
         Hibernate.initialize(venuePlan.getSeatTypes());
@@ -175,12 +169,6 @@ public class VenueServiceImpl implements VenueService {
                 .stream()
                 .map(VenuePlanBriefDTO::new)
                 .collect(Collectors.toList());
-    }
-
-    @Override
-    @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public List<Order> getVenuePlanOrders(int venuePlanId) {
-        return orderDao.getOrdersByVenuePlanVenuePlanId(venuePlanId);
     }
 
     @Override
@@ -313,7 +301,7 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     @Transactional(readOnly = true, rollbackFor = RuntimeException.class)
-    public VenueFinance getFinance(int venueId) {
+    public VenueFinanceDTO getFinance(int venueId) {
         Venue venue = venueDao.findById(venueId).get();
 
         List<Order> orders = venue.getOrders();
@@ -351,7 +339,7 @@ public class VenueServiceImpl implements VenueService {
             }
         }
 
-        return new VenueFinance(totalBooked, totalRefund, totalSettle, totalUnsettle);
+        return new VenueFinanceDTO(totalBooked, totalRefund, totalSettle, totalUnsettle);
     }
 
     @Override

@@ -6,7 +6,7 @@ package edu.nju.dto;
  * <p>
  * 场馆统计数据传输对象
  */
-public class VenueFinance {
+public class VenueFinanceDTO {
 
     /**
      * 总预订票价
@@ -29,7 +29,7 @@ public class VenueFinance {
     private Integer totalUnsettle;
 
 
-    public VenueFinance(int totalBooked, int totalRefund, int totalSettle, int totalUnsettle) {
+    public VenueFinanceDTO(int totalBooked, int totalRefund, int totalSettle, int totalUnsettle) {
         this.totalBooked = totalBooked;
         this.totalRefund = totalRefund;
         this.totalSettle = totalSettle;

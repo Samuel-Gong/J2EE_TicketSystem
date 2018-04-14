@@ -44,7 +44,7 @@ public class MemberController {
 
     @GetMapping(path = "/statistics/details")
     public @ResponseBody
-    MemberStatistics getStatistics(@SessionAttribute("mail") String mail) {
+    MemberStatisticsDTO getStatistics(@SessionAttribute("mail") String mail) {
         return memberService.getMemberStatistics(mail);
     }
 
@@ -112,7 +112,7 @@ public class MemberController {
      */
     @GetMapping(path = "coupons")
     public @ResponseBody
-    PointsAndCoupons getMemberWithCoupons(@RequestParam("memberId") String memberId) {
+    PointsAndCouponsDTO getMemberWithCoupons(@RequestParam("memberId") String memberId) {
         return memberService.getPointsAndCoupons(memberId);
     }
 
@@ -145,7 +145,7 @@ public class MemberController {
      */
     @GetMapping(path = "/discount")
     public @ResponseBody
-    LevelAndDiscount getDiscount(@RequestParam("memberId") String memberId) {
+    LevelAndDiscountDTO getDiscount(@RequestParam("memberId") String memberId) {
         return memberService.getLevelAndDiscount(memberId);
     }
 

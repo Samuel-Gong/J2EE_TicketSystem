@@ -1,8 +1,8 @@
 package edu.nju.service;
 
-import edu.nju.dto.LevelAndDiscount;
-import edu.nju.dto.MemberStatistics;
-import edu.nju.dto.PointsAndCoupons;
+import edu.nju.dto.LevelAndDiscountDTO;
+import edu.nju.dto.MemberStatisticsDTO;
+import edu.nju.dto.PointsAndCouponsDTO;
 import edu.nju.model.Member;
 
 import java.util.Map;
@@ -72,7 +72,7 @@ public interface MemberService {
      * @param mail 会员邮箱
      * @return 会员的等级以及折扣信息
      */
-    LevelAndDiscount getLevelAndDiscount(String mail);
+    LevelAndDiscountDTO getLevelAndDiscount(String mail);
 
     /**
      * 根据会员id获取会员信息
@@ -88,7 +88,7 @@ public interface MemberService {
      * @param memberId 会员id
      * @return
      */
-    PointsAndCoupons getPointsAndCoupons(String memberId);
+    PointsAndCouponsDTO getPointsAndCoupons(String memberId);
 
     /**
      * 检查会员是否有绑定的支付宝
@@ -114,7 +114,7 @@ public interface MemberService {
      * @param mail 会员邮箱
      * @return 会员统计数据传输对象
      */
-    MemberStatistics getMemberStatistics(String mail);
+    MemberStatisticsDTO getMemberStatistics(String mail);
 
     /**
      * 会员等级及其人数分布

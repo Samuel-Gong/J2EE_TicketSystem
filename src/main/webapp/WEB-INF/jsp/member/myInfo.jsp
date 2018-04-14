@@ -249,10 +249,10 @@
             data: {
                 memberId: "${sessionScope.mail}"
             },
-            success: function (levelAndDiscount) {
+            success: function (levelAndDiscountDTO) {
                 //显示会员的邮箱和信息
-                $("#member-level").text(levelAndDiscount.level);
-                $("#member-discount").text(levelAndDiscount.discount);
+                $("#member-level").text(levelAndDiscountDTO.level);
+                $("#member-discount").text(levelAndDiscountDTO.discount);
             },
             error: function () {
                 alert("请求会员等级和折扣失败");

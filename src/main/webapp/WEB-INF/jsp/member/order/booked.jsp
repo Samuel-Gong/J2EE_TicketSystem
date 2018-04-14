@@ -29,7 +29,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-2 col-md-offset-1">
-            <%@include file="../side-nav.jsp" %>
+            <%@include file="side-nav.jsp" %>
         </div>
         <div id="booked-container" class="col-md-8">
             <div id="order-container" class="col-md-offset-1 col-md-10">

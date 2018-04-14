@@ -6,7 +6,7 @@ package edu.nju.dto;
  * <p>
  * 显示会员的等级和折扣信息
  */
-public class LevelAndDiscount {
+public class LevelAndDiscountDTO {
 
     /**
      * 会员等级
@@ -36,7 +36,7 @@ public class LevelAndDiscount {
 
     @Override
     public String toString() {
-        return "LevelAndDiscount{" +
+        return "LevelAndDiscountDTO{" +
                 "level=" + level +
                 ", discount=" + discount +
                 '}';

@@ -6,7 +6,7 @@ package edu.nju.dto;
  * <p>
  * 会员统计数据传输对象
  */
-public class MemberStatistics {
+public class MemberStatisticsDTO {
 
     /**
      * 总预订
@@ -28,7 +28,7 @@ public class MemberStatistics {
      */
     private Integer totalRefund;
 
-    public MemberStatistics(int totalBooked, int totalConsumed, int totalRefund, int totalFee) {
+    public MemberStatisticsDTO(int totalBooked, int totalConsumed, int totalRefund, int totalFee) {
         this.totalBooked = totalBooked;
         this.totalConsumed = totalConsumed;
         this.totalRefund = totalRefund;

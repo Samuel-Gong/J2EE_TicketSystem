@@ -8,7 +8,7 @@ import java.util.Map;
  * <p>
  * 会员积分和优惠券的数据传输对象
  */
-public class PointsAndCoupons {
+public class PointsAndCouponsDTO {
 
     /**
      * 积分
@@ -38,7 +38,7 @@ public class PointsAndCoupons {
 
     @Override
     public String toString() {
-        return "PointsAndCoupons{" +
+        return "PointsAndCouponsDTO{" +
                 "points=" + points +
                 ", coupons=" + coupons +
                 '}';
