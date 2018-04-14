@@ -23,14 +23,14 @@ public class Coupon {
      * 优惠券与优惠券类型多对一，多张优惠券可能是同一种类型，但是必须有一张类型
      */
     @ManyToOne(optional = false)
-    @JoinColumn(name = "couponType", foreignKey = @ForeignKey(name = "FK_COUPON_TYPE"))
+    @JoinColumn(name = "couponType", foreignKey = @ForeignKey(name = "FK_COUPON_COUPON_TYPE"))
     private CouponType couponType;
 
     /**
      * 优惠券与会员多对一，多张优惠券可能属于同一个会员，但是必须属于某一个会员
      */
     @ManyToOne(optional = false)
-    @JoinColumn(name = "member", foreignKey = @ForeignKey(name = "FK_MEMBER"))
+    @JoinColumn(name = "member", foreignKey = @ForeignKey(name = "FK_COUPON_MEMBER"))
     private Member memberFk;
 
     /**

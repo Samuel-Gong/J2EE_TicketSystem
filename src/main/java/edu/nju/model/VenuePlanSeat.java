@@ -22,7 +22,7 @@ public class VenuePlanSeat implements Serializable {
      */
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "venuePlanId", foreignKey = @ForeignKey(name = "FK_VENUE_PLAN"))
+    @JoinColumn(name = "venuePlanId", foreignKey = @ForeignKey(name = "FK_VENUE_PLAN_SEAT_VENUE_PLAN"))
     private VenuePlan venuePlan;
 
     /**
@@ -58,7 +58,7 @@ public class VenuePlanSeat implements Serializable {
      */
     @JSONField(deserialize = false, serialize = false)
     @ManyToOne
-    @JoinColumn(name = "orderId", foreignKey = @ForeignKey(name = "FK_ORDER"))
+    @JoinColumn(name = "orderId", foreignKey = @ForeignKey(name = "FK_VENUE_PLAN_SEAT_ORDER"))
     private Order order;
 
     public VenuePlan getVenuePlan() {

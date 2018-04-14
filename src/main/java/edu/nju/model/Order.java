@@ -103,21 +103,21 @@ public class Order {
      * 多个订单可能对应一个会员，外键为会员id，可以不对应会员：现场购票（非会员）
      */
     @ManyToOne
-    @JoinColumn(name = "memberId", foreignKey = @ForeignKey(name = "FK_MEMBER"))
+    @JoinColumn(name = "memberId", foreignKey = @ForeignKey(name = "FK_ORDER_MEMBER"))
     private Member memberFk;
 
     /**
      * 多个订单可能对应一个场馆，与场馆多对一，外键为场馆id
      */
     @ManyToOne(optional = false)
-    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
+    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_ORDER_VENUE"))
     private Venue venue;
 
     /**
      * 多个订单可能对应一个场馆计划，外键为场馆计划id
      */
     @ManyToOne(optional = false)
-    @JoinColumn(name = "venuePlanId", foreignKey = @ForeignKey(name = "FK_VENUE_PLAN"))
+    @JoinColumn(name = "venuePlanId", foreignKey = @ForeignKey(name = "FK_ORDER_VENUE_PLAN"))
     private VenuePlan venuePlan;
 
     /**
@@ -130,6 +130,7 @@ public class Order {
      * 一个订单对应一个优惠券
      */
     @OneToOne
+    @JoinColumn(name = "couponId", foreignKey = @ForeignKey(name = "FK_ORDER_COUPON"))
     private Coupon coupon;
 
     public Order() {

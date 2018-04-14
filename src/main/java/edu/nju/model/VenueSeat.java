@@ -38,7 +38,7 @@ public class VenueSeat implements Serializable {
     @JSONField(serialize = false, deserialize = false)
     @Id
     @ManyToOne
-    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"))
+    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE_SEAT_VENUE"))
     private Venue venue;
 
     /**

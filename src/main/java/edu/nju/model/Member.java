@@ -54,7 +54,7 @@ public class Member {
      * 和账户一对一
      */
     @OneToOne
-    @JoinColumn(name = "accountId", foreignKey = @ForeignKey(name = "FK_ACCOUNT"))
+    @JoinColumn(name = "accountId", foreignKey = @ForeignKey(name = "FK_MEMBER_ACCOUNT"))
     private Account account;
 
     /**

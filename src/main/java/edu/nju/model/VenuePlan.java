@@ -85,7 +85,7 @@ public class VenuePlan {
      * 与场馆多对一，外键为场馆编号
      */
     @ManyToOne(optional = false)
-    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE"), nullable = false)
+    @JoinColumn(name = "venueId", foreignKey = @ForeignKey(name = "FK_VENUE_PLAN_VENUE"), nullable = false)
     private Venue venue;
 
     /**

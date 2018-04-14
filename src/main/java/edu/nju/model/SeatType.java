@@ -21,7 +21,7 @@ public class SeatType implements Serializable {
      */
     @Id
     @ManyToOne
-    @JoinColumn(name = "venuePlanId", foreignKey = @ForeignKey(name = "FK_VENUE_PLAN"))
+    @JoinColumn(name = "venuePlanId", foreignKey = @ForeignKey(name = "FK_SEAT_TYPE_VENUE_PLAN"))
     private VenuePlan venuePlan;
 
     @Id
